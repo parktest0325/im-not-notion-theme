@@ -2,7 +2,7 @@
 
 A Hugo theme with HugoBook-style blog sidebar and cyberpunk project portfolio.
 
-Built for [im-not-notion](https://github.com/donghyeonkim/im-not-notion) — a Tauri-based desktop CMS that manages Hugo sites over SSH. Write markdown, manage images, and deploy from a native app.
+Built for [im-not-notion](https://github.com/parktest0325/im-not-notion) — a Tauri-based desktop CMS that manages Hugo sites over SSH. Write markdown, manage images, and deploy from a native app.
 
 ## Features
 
@@ -21,7 +21,7 @@ Built for [im-not-notion](https://github.com/donghyeonkim/im-not-notion) — a T
 
 ### With im-not-notion (Recommended)
 
-[im-not-notion](https://github.com/donghyeonkim/im-not-notion) 앱에서 **deploy-theme** 플러그인으로 원클릭 배포할 수 있습니다.
+[im-not-notion](https://github.com/parktest0325/im-not-notion) 앱에서 **deploy-theme** 플러그인으로 원클릭 배포할 수 있습니다.
 
 1. im-not-notion 앱에서 플러그인 메뉴 열기
 2. **Deploy Theme** 실행
@@ -39,7 +39,7 @@ hugo new site my-site
 cd my-site
 
 # 2. 테마 설치
-git clone https://github.com/donghyeonkim/im-not-notion-theme themes/im-not-notion-theme
+git clone https://github.com/parktest0325/im-not-notion-theme themes/im-not-notion-theme
 
 # 3. 예제 설정 복사
 cp themes/im-not-notion-theme/exampleSite/hugo.toml hugo.toml
@@ -246,8 +246,8 @@ title: "Guestbook"
 
 ## Related
 
-- [im-not-notion](https://github.com/donghyeonkim/im-not-notion) — Desktop CMS for Hugo (Tauri + Svelte)
-- [deploy-theme plugin](https://github.com/donghyeonkim/inn-plugins/tree/main/deploy-theme) — One-click theme deployment plugin
+- [im-not-notion](https://github.com/parktest0325/im-not-notion) — Desktop CMS for Hugo (Tauri + Svelte)
+- [deploy-theme plugin](https://github.com/parktest0325/im-not-notion-plugins/tree/main/deploy-theme) — One-click theme deployment plugin
 
 ## License
 

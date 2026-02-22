@@ -1,10 +1,10 @@
 name = "im-not-notion-theme"
 license = "MIT"
-licenselink = "https://github.com/donghyeonkim/im-not-notion-theme/blob/main/LICENSE"
+licenselink = "https://github.com/parktest0325/im-not-notion-theme/blob/main/LICENSE"
 description = "A Hugo theme with HugoBook-style blog sidebar and cyberpunk project portfolio"
 tags = ["blog", "portfolio", "cyberpunk", "dark", "responsive", "sidebar"]
 features = ["blog", "projects", "dark mode", "syntax highlighting"]
 min_version = "0.112.0"
 
 [author]
-  name = "donghyeonkim"
+  name = "parktest0325"

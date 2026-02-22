@@ -19,7 +19,7 @@
   {{ $nextDepth := add $depth 1 }}
   {{ $colorIdx := mod $depth 4 }}
   {{ range .pages.ByWeight }}
-    {{ if .IsSection }}
+    {{ if and .IsSection (not .Params.bookHidden) }}
       {{ $isActive := or ($current.IsDescendant .) (eq $current.Page.RelPermalink .RelPermalink) }}
       {{ $isExact := eq $current.Page.RelPermalink .RelPermalink }}
       {{ $subSections := where .Pages "Kind" "section" }}

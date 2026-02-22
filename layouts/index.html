@@ -118,7 +118,7 @@
   </section>
 
   {{/* === Recent Posts === */}}
-  {{ $posts := where .Site.RegularPages "Section" "blog" }}
+  {{ $posts := where (where .Site.RegularPages "Section" "blog") ".Params.bookHidden" "ne" true }}
   {{ if $posts }}
   <section class="home-section">
     <div class="section-inner">

@@ -333,6 +333,10 @@ img {
   background: var(--bg-surface);
   border-radius: 0 6px 6px 0;
 }
+.content blockquote.hint.info    { border-left-color: #6bf; background: rgba(102,187,255,.08); }
+.content blockquote.hint.success { border-left-color: #6d6; background: rgba(102,221,102,.08); }
+.content blockquote.hint.warning { border-left-color: #fd6; background: rgba(255,221,102,.08); }
+.content blockquote.hint.danger  { border-left-color: #f66; background: rgba(255,102,102,.08); }
 
 .content code {
   background: var(--code-bg);

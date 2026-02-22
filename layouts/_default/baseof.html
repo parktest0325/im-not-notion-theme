@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode | default "en" }}">
+<head>
+  {{- partial "head.html" . -}}
+</head>
+<body>
+  {{- partial "header.html" . -}}
+  <main class="site-main">
+    {{- block "main" . }}{{ end -}}
+  </main>
+  {{- partial "footer.html" . -}}
+  {{- partial "search.html" . -}}
+  <script>
+    function getTheme() {
+      return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+    }
+
+    function syncGiscusTheme(theme) {
+      var frame = document.querySelector('iframe.giscus-frame');
+      if (frame) {
+        frame.contentWindow.postMessage(
+          { giscus: { setConfig: { theme: theme } } },
+          'https://giscus.app'
+        );
+      }
+    }
+
+    function toggleTheme() {
+      var html = document.documentElement;
+      var next = html.dataset.theme === 'dark' ? 'light' : 'dark';
+      html.dataset.theme = next;
+      localStorage.setItem('inn-theme', next);
+      syncGiscusTheme(next);
+      var isDark = next === 'dark';
+      var img = isDark ? html.dataset.bgDark : html.dataset.bgLight;
+      var op = isDark ? html.dataset.opDark : html.dataset.opLight;
+      var el = document.getElementById('site-bg-style');
+      if (el && img) {
+        el.textContent = 'body::before{background-image:url(\'' + img + '\');opacity:' + (op || '0') + '}';
+      }
+    }
+
+    // Sync Giscus theme when its iframe first loads
+    window.addEventListener('message', function(e) {
+      if (e.origin !== 'https://giscus.app') return;
+      syncGiscusTheme(getTheme());
+    });
+
+    // Mobile sidebar toggle
+    function toggleSidebar() {
+      var el = document.querySelector('.blog-sidebar');
+      if (el) el.classList.toggle('open');
+    }
+  </script>
+
+  {{/* GoatCounter analytics */}}
+  {{ with .Site.Params.goatcounterCode }}
+  <script data-goatcounter="https://{{ . }}.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+  <script>
+    (function() {
+      var base = 'https://{{ . }}.goatcounter.com';
+
+      function gcFetch(path, el) {
+        var r = new XMLHttpRequest();
+        r.open('GET', base + '/counter/' + encodeURIComponent(path) + '.json');
+        r.onload = function() {
+          if (r.status === 200) {
+            try {
+              var d = JSON.parse(r.responseText);
+              el.textContent = d.count_unique || d.count || '0';
+            } catch(e) {}
+          }
+        };
+        r.send();
+      }
+
+      setTimeout(function() {
+        // Footer: current page views
+        var footerEl = document.getElementById('goatcounter-visitors');
+        if (footerEl) gcFetch(location.pathname, footerEl);
+
+        // Homepage: total page views
+        var totalEl = document.getElementById('gc-total');
+        if (totalEl) gcFetch('TOTAL', totalEl);
+      }, 1500);
+    })();
+  </script>
+  {{ end }}
+
+</body>
+</html>

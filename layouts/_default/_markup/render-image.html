@@ -1,0 +1,43 @@
+{{- $dest := .Destination -}}
+{{- $alt := .Text -}}
+{{- $title := .Title -}}
+{{- $fragment := "" -}}
+{{- $cleanUrl := $dest -}}
+
+{{- if strings.Contains $dest "#" -}}
+  {{- $idx := split $dest "#" -}}
+  {{- $cleanUrl = index $idx 0 -}}
+  {{- if gt (len $idx) 1 -}}
+    {{- $fragment = index $idx 1 -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $layout := $fragment -}}
+{{- $width := "" -}}
+
+{{- if strings.Contains $fragment "-w" -}}
+  {{- $idx := split $fragment "-w" -}}
+  {{- $layout = index $idx 0 -}}
+  {{- if gt (len $idx) 1 -}}
+    {{- $width = index $idx 1 -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $class := "img-default" -}}
+{{- if eq $layout "center" -}}
+  {{- $class = "img-center" -}}
+{{- else if eq $layout "float-left" -}}
+  {{- $class = "img-float-left" -}}
+{{- else if eq $layout "float-right" -}}
+  {{- $class = "img-float-right" -}}
+{{- end -}}
+
+{{- $style := "" -}}
+{{- if ne $width "" -}}
+  {{- $style = printf "max-width:%s%%;" $width | safeCSS -}}
+{{- end -}}
+
+<figure class="{{ $class }}"{{ if ne $style "" }} style="{{ $style }}"{{ end }}>
+  <img src="{{ $cleanUrl }}" alt="{{ $alt }}"{{ with $title }} title="{{ . }}"{{ end }} loading="lazy">
+  {{- if ne $alt "" -}}<figcaption>{{ $alt }}</figcaption>{{- end -}}
+</figure>

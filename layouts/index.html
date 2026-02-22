@@ -1,0 +1,146 @@
+{{ define "main" }}
+<div class="home">
+  {{/* === Hero Section === */}}
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-glitch-container">
+        <h1 class="hero-title" data-text="{{ .Site.Params.heroTitle | default .Site.Title }}">
+          {{ .Site.Params.heroTitle | default .Site.Title }}
+        </h1>
+      </div>
+      <p class="hero-subtitle">{{ .Site.Params.heroSubtitle | default "Developer" }}</p>
+      <p class="hero-tagline">
+        <span class="typing-text">{{ .Site.Params.heroTagline | default "" }}</span>
+        <span class="typing-cursor">_</span>
+      </p>
+      <div class="hero-links">
+        <a href="/blog/" class="hero-btn">Blog</a>
+        <a href="/projects/" class="hero-btn hero-btn--accent">Projects</a>
+      </div>
+    </div>
+  </section>
+
+  {{/* === About Section === */}}
+  {{ with .Site.Params.about }}
+  <section class="home-section about-section">
+    <div class="section-inner">
+      <div class="about-card">
+        {{ with .avatar }}
+        <div class="about-avatar">
+          <img src="{{ . }}" alt="Avatar">
+        </div>
+        {{ end }}
+        <div class="about-body">
+          <h2 class="about-name">{{ .name | default $.Site.Params.author }}</h2>
+          {{ with .bio }}
+          <p class="about-bio">{{ . }}</p>
+          {{ end }}
+          {{ with .detail }}
+          <div class="about-detail">{{ . | markdownify }}</div>
+          {{ end }}
+          {{ if .links }}
+          <div class="about-links">
+            {{ range .links }}
+            <a href="{{ .url }}" target="_blank" rel="noopener" class="about-link-item" title="{{ .name }}">
+              {{ .name }}
+            </a>
+            {{ end }}
+          </div>
+          {{ end }}
+        </div>
+      </div>
+    </div>
+  </section>
+  {{ end }}
+
+  {{/* === Featured Projects === */}}
+  {{ $projects := where .Site.RegularPages "Section" "projects" }}
+  {{ if $projects }}
+  <section class="home-section">
+    <div class="section-inner">
+      <h2 class="section-title">
+        <span class="section-label">Featured</span> Projects
+      </h2>
+      <div class="project-grid project-grid--home">
+        {{ $limit := .Site.Params.homepage.featuredProjectsCount | default 4 }}
+        {{ range first $limit (sort $projects "Params.weight" "asc") }}
+          {{ partial "projects/card.html" . }}
+        {{ end }}
+      </div>
+      <div class="section-more">
+        <a href="/projects/" class="more-link">View all projects &rarr;</a>
+      </div>
+    </div>
+  </section>
+  {{ partial "projects/modal.html" . }}
+  {{ end }}
+
+  {{/* === Site Stats === */}}
+  <section class="home-section">
+    <div class="section-inner">
+      <h2 class="section-title">
+        <span class="section-label">Site</span> Stats
+      </h2>
+      <div class="stats-card">
+        {{ $blogPosts := where .Site.RegularPages "Section" "blog" }}
+        {{ $projectPages := where .Site.RegularPages "Section" "projects" }}
+        {{ $blogSections := 0 }}
+        {{ with .Site.GetPage "/blog" }}{{ $blogSections = len .Sections }}{{ end }}
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-value">{{ len $blogPosts }}</span>
+            <span class="stat-label">Blog Posts</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">{{ $blogSections }}</span>
+            <span class="stat-label">Categories</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-value">{{ len $projectPages }}</span>
+            <span class="stat-label">Projects</span>
+          </div>
+          {{ with .Site.Params.goatcounterCode }}
+          <div class="stat-item">
+            <span class="stat-value" id="gc-total">-</span>
+            <span class="stat-label">Page Views</span>
+          </div>
+          {{ end }}
+        </div>
+        {{ with .Site.Params.goatcounterCode }}
+        <div class="stats-footer">
+          <a href="https://{{ . }}.goatcounter.com" target="_blank" rel="noopener" class="stats-dashboard-link">
+            View visitor dashboard &rarr;
+          </a>
+        </div>
+        {{ end }}
+      </div>
+    </div>
+  </section>
+
+  {{/* === Recent Posts === */}}
+  {{ $posts := where .Site.RegularPages "Section" "blog" }}
+  {{ if $posts }}
+  <section class="home-section">
+    <div class="section-inner">
+      <h2 class="section-title">
+        <span class="section-label">Recent</span> Posts
+      </h2>
+      <ul class="recent-posts">
+        {{ $limit := .Site.Params.homepage.recentPostsCount | default 5 }}
+        {{ range first $limit $posts }}
+        <li class="recent-post-item">
+          <a href="{{ .RelPermalink }}" class="recent-post-link">
+            <span class="recent-post-title">{{ .Title }}</span>
+            <span class="recent-post-date">{{ .Date.Format "2006-01-02" }}</span>
+          </a>
+        </li>
+        {{ end }}
+      </ul>
+      <div class="section-more">
+        <a href="/blog/" class="more-link">View all posts &rarr;</a>
+      </div>
+    </div>
+  </section>
+  {{ end }}
+</div>
+{{ end }}

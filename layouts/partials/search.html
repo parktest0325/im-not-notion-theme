@@ -1,0 +1,141 @@
+{{/* Search modal — Ctrl+K or click search icon to open */}}
+<div class="search-overlay" id="searchOverlay" onclick="if(event.target===this)closeSearch()">
+  <div class="search-modal">
+    <div class="search-input-wrap">
+      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" class="search-input" placeholder="Search posts, projects..." autocomplete="off" autofocus>
+      <kbd class="search-kbd">ESC</kbd>
+    </div>
+    <div class="search-results" id="searchResults">
+      <div class="search-empty">Type to search...</div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
+<script>
+(function() {
+  var fuse = null;
+  var overlay = document.getElementById('searchOverlay');
+  var input = document.getElementById('searchInput');
+  var results = document.getElementById('searchResults');
+
+  // Load search index
+  function loadIndex() {
+    if (fuse) return Promise.resolve();
+    return fetch('/index.json')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        fuse = new Fuse(data, {
+          keys: [
+            { name: 'title', weight: 0.4 },
+            { name: 'description', weight: 0.2 },
+            { name: 'content', weight: 0.2 },
+            { name: 'tags', weight: 0.2 }
+          ],
+          threshold: 0.4,
+          ignoreLocation: true,
+          includeMatches: true,
+          minMatchCharLength: 2
+        });
+      });
+  }
+
+  // Section label
+  var sectionLabels = { blog: 'Blog', projects: 'Project', guestbook: 'Guestbook' };
+  function sectionLabel(s) { return sectionLabels[s] || s; }
+
+  // Render results
+  function renderResults(query) {
+    if (!fuse || !query || query.length < 2) {
+      results.innerHTML = '<div class="search-empty">Type to search...</div>';
+      return;
+    }
+    var hits = fuse.search(query, { limit: 12 });
+    if (hits.length === 0) {
+      results.innerHTML = '<div class="search-empty">No results for "' + query.replace(/</g, '&lt;') + '"</div>';
+      return;
+    }
+    var html = '';
+    hits.forEach(function(hit) {
+      var item = hit.item;
+      var desc = item.description || item.content;
+      if (desc.length > 120) desc = desc.substring(0, 120) + '...';
+      html += '<a href="' + item.permalink + '" class="search-result-item">'
+        + '<div class="search-result-header">'
+        + '<span class="search-result-title">' + item.title + '</span>'
+        + '<span class="search-result-section">' + sectionLabel(item.section) + '</span>'
+        + '</div>'
+        + '<div class="search-result-desc">' + desc + '</div>'
+        + '</a>';
+    });
+    results.innerHTML = html;
+  }
+
+  // Keyboard nav in results
+  function navigateResults(direction) {
+    var items = results.querySelectorAll('.search-result-item');
+    if (!items.length) return;
+    var active = results.querySelector('.search-result-item.focused');
+    var idx = -1;
+    if (active) {
+      active.classList.remove('focused');
+      idx = Array.prototype.indexOf.call(items, active);
+    }
+    idx += direction;
+    if (idx < 0) idx = items.length - 1;
+    if (idx >= items.length) idx = 0;
+    items[idx].classList.add('focused');
+    items[idx].scrollIntoView({ block: 'nearest' });
+  }
+
+  // Open / Close
+  window.openSearch = function() {
+    loadIndex().then(function() {
+      overlay.classList.add('open');
+      input.value = '';
+      results.innerHTML = '<div class="search-empty">Type to search...</div>';
+      setTimeout(function() { input.focus(); }, 50);
+    });
+  };
+
+  window.closeSearch = function() {
+    overlay.classList.remove('open');
+  };
+
+  // Input handler
+  var debounceTimer;
+  input.addEventListener('input', function() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function() {
+      renderResults(input.value.trim());
+    }, 150);
+  });
+
+  // Keyboard
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowDown') { e.preventDefault(); navigateResults(1); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); navigateResults(-1); }
+    else if (e.key === 'Enter') {
+      var focused = results.querySelector('.search-result-item.focused');
+      if (focused) { window.location.href = focused.href; }
+      else {
+        var first = results.querySelector('.search-result-item');
+        if (first) window.location.href = first.href;
+      }
+    }
+  });
+
+  // Global Ctrl+K / Cmd+K
+  document.addEventListener('keydown', function(e) {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      if (overlay.classList.contains('open')) closeSearch();
+      else openSearch();
+    }
+    if (e.key === 'Escape' && overlay.classList.contains('open')) {
+      closeSearch();
+    }
+  });
+})();
+</script>

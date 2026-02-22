@@ -1,0 +1,13 @@
+{{ define "main" }}
+<div class="default-list" style="max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem;">
+  <h1>{{ .Title }}</h1>
+  {{ .Content }}
+  {{ range .Pages }}
+    <article style="margin: 1.5rem 0; padding-bottom: 1rem; border-bottom: 1px solid var(--border-subtle);">
+      <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+      <p style="color: var(--text-secondary); font-size: 0.875rem;">{{ .Date.Format "2006-01-02" }}</p>
+      {{ with .Description }}<p>{{ . }}</p>{{ end }}
+    </article>
+  {{ end }}
+</div>
+{{ end }}

@@ -1,0 +1,17 @@
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-content">
+      <p>&copy; {{ now.Year }} {{ .Site.Params.author | default .Site.Title }}. Built with <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.</p>
+    </div>
+    {{ if and .Site.Params.goatcounterCode .Site.Params.goatcounterShow }}
+    <div class="footer-stats">
+      <span class="visitor-counter">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span id="goatcounter-visitors">...</span> views
+      </span>
+      <span class="stats-separator">·</span>
+      <a href="https://{{ .Site.Params.goatcounterCode }}.goatcounter.com" target="_blank" rel="noopener" class="stats-link">analytics</a>
+    </div>
+    {{ end }}
+  </div>
+</footer>

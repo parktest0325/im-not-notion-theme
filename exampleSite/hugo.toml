@@ -1,0 +1,143 @@
+# =============================================================================
+# im-not-notion-theme — Hugo Configuration
+# =============================================================================
+# Copy this file to your Hugo site root and customize the values below.
+# Docs: https://gohugo.io/getting-started/configuration/
+
+baseURL = "https://example.com/"
+languageCode = "ko-kr"
+title = "My Site"
+theme = "im-not-notion-theme"
+
+# =============================================================================
+# Site Parameters
+# =============================================================================
+[params]
+  # Site metadata
+  description = "Developer portfolio & technical blog"
+  author = "Your Name"
+
+  # GitHub profile link (shown in header)
+  github = "https://github.com/yourname"
+
+  # --- Hero Section (homepage) ---
+  heroTitle = "Your Name"
+  heroSubtitle = "Developer / Designer / Creator"
+  heroTagline = "I build things that break things."
+
+  # --- GoatCounter Analytics ---
+  # Sign up at https://www.goatcounter.com and set your code below.
+  # Example: if your dashboard is "mysite.goatcounter.com", set "mysite"
+  goatcounterCode = ""
+  # Show page view count in footer
+  goatcounterShow = true
+
+# --- Background Image ---
+# Set a site-wide background image (jpg/png/gif supported).
+# Remove this block or set image = "" to disable.
+[params.background]
+  image = "/images/bg-dark.jpg"
+  opacity = 0.06              # dark mode opacity (0~1, 0.05~0.1 recommended)
+  lightImage = "/images/bg-light.jpg"
+  lightOpacity = 0.15         # light mode opacity (0.1~0.2 for white backgrounds)
+  fixed = true                # true: background stays fixed on scroll
+
+# --- About Section (homepage) ---
+# Remove this block to hide the about section.
+[params.about]
+  name = "Your Name"
+  # Avatar image URL (remote URL or local path like "/images/avatar.jpg")
+  avatar = ""
+  # Short one-line bio
+  bio = "A short bio about yourself."
+  # Detailed description (supports **markdown**)
+  detail = """Longer description about your interests and background.
+
+You can use **bold**, *italic*, and [links](https://example.com)."""
+
+  # Social / contact links (shown as buttons)
+  [[params.about.links]]
+    name = "GitHub"
+    url = "https://github.com/yourname"
+  [[params.about.links]]
+    name = "Blog"
+    url = "/blog/"
+  [[params.about.links]]
+    name = "Email"
+    url = "mailto:you@example.com"
+
+# --- Giscus Comments ---
+# Powered by GitHub Discussions. Set up at https://giscus.app
+# Leave repoId/categoryId empty to disable comments.
+[params.giscus]
+  repo = "yourname/blog-comments"    # GitHub repo for discussions
+  repoId = ""                         # From giscus.app setup
+  category = "Announcements"
+  categoryId = ""                     # From giscus.app setup
+  mapping = "pathname"                # "pathname" | "title" | "specific"
+  lang = "ko"                         # "ko" | "en" | "ja" | ...
+
+# --- Homepage Layout ---
+[params.homepage]
+  featuredProjectsCount = 4           # Number of project cards on homepage
+  recentPostsCount = 5                # Number of recent posts on homepage
+
+# =============================================================================
+# Output Formats (required for search)
+# =============================================================================
+[outputs]
+  home = ["HTML", "JSON"]
+
+# =============================================================================
+# Markup Settings
+# =============================================================================
+[markup]
+  [markup.highlight]
+    # Code syntax highlight theme
+    # Options: dracula, monokai, github, vs, ...
+    # Full list: https://xyproto.github.io/splash/docs/
+    style = "dracula"
+    lineNos = false
+    guessSyntax = true
+  [markup.tableOfContents]
+    startLevel = 2                    # TOC starts at h2
+    endLevel = 4                      # TOC ends at h4
+
+# =============================================================================
+# Navigation Menu
+# =============================================================================
+# Add or remove menu items. "weight" controls the display order.
+[menu]
+  [[menu.main]]
+    name = "Blog"
+    url = "/blog/"
+    weight = 1
+  [[menu.main]]
+    name = "Projects"
+    url = "/projects/"
+    weight = 2
+  [[menu.main]]
+    name = "Guestbook"
+    url = "/guestbook/"
+    weight = 3
+
+# =============================================================================
+# Project Front Matter Reference
+# =============================================================================
+# Each project markdown file (content/projects/*.md) supports:
+#
+#   ---
+#   title: "Project Name"
+#   description: "Short description"
+#   featured_image: "/images/project-cover.png"
+#   tags: ["game-dev", "rust"]
+#   technologies: ["Rust", "Vulkan", "ECS"]
+#   status: "active"               # active | completed | archived
+#   weight: 1                      # Sort order (lower = first)
+#   links:
+#     blog: "/blog/my-post/"       # Related blog post
+#     showcase: "https://..."      # Live showcase site
+#     demo: "https://..."          # Demo / playground
+#     github: "https://github.com/..." # Source code
+#   ---
+#   Detailed project description in markdown...

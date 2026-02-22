@@ -1,0 +1,32 @@
+{{/* Project modal overlay + JS — include on any page that uses project cards */}}
+<div class="project-modal-overlay" id="projectModal" onclick="closeProjectModal(event)">
+  <div class="project-modal">
+    <button class="modal-close" onclick="closeProjectModal()" aria-label="Close">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="modal-inner" id="modalContent"></div>
+  </div>
+</div>
+
+<script>
+  function openProjectModal(id) {
+    var tpl = document.getElementById('modal-' + id);
+    if (!tpl) return;
+    var content = document.getElementById('modalContent');
+    content.innerHTML = tpl.innerHTML;
+    var overlay = document.getElementById('projectModal');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeProjectModal(e) {
+    if (e && e.target !== e.currentTarget) return;
+    var overlay = document.getElementById('projectModal');
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeProjectModal();
+  });
+</script>

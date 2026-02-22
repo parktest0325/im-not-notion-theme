@@ -1,0 +1,50 @@
+{{/* Blog sidebar — folders (sections) only, collapsible tree with depth */}}
+{{ $blog := .Site.GetPage "/blog" }}
+{{ if $blog }}
+<aside class="blog-sidebar">
+  <button class="sidebar-close" onclick="toggleSidebar()" aria-label="Close sidebar">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <nav class="sidebar-tree">
+    <ul>
+      {{ template "blog-tree" (dict "pages" $blog.Pages "current" $ "depth" 0) }}
+    </ul>
+  </nav>
+</aside>
+{{ end }}
+
+{{ define "blog-tree" }}
+  {{ $current := .current }}
+  {{ $depth := .depth }}
+  {{ $nextDepth := add $depth 1 }}
+  {{ $colorIdx := mod $depth 4 }}
+  {{ range .pages.ByWeight }}
+    {{ if .IsSection }}
+      {{ $isActive := or ($current.IsDescendant .) (eq $current.Page.RelPermalink .RelPermalink) }}
+      {{ $isExact := eq $current.Page.RelPermalink .RelPermalink }}
+      {{ $subSections := where .Pages "Kind" "section" }}
+      {{ $postCount := len .RegularPagesRecursive }}
+      <li class="tree-folder{{ if $isActive }} open{{ end }}">
+        <div class="tree-row{{ if $isExact }} active{{ end }} tree-depth-{{ cond (ge $depth 2) "deep" (string $depth) }}">
+          {{ if $subSections }}
+          <button class="tree-toggle" onclick="this.closest('.tree-folder').classList.toggle('open')" aria-label="Toggle">
+            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          {{ else }}
+          <span class="tree-toggle-spacer"></span>
+          {{ end }}
+          <a href="{{ .RelPermalink }}" class="tree-label">
+            <svg class="tree-icon folder-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>{{ .Title }}</span>
+          </a>
+          <span class="tree-count">{{ $postCount }}</span>
+        </div>
+        {{ if $subSections }}
+        <ul class="tree-children" data-color="{{ $colorIdx }}">
+          {{ template "blog-tree" (dict "pages" .Pages "current" $current "depth" $nextDepth) }}
+        </ul>
+        {{ end }}
+      </li>
+    {{ end }}
+  {{ end }}
+{{ end }}

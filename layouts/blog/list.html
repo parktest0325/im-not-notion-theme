@@ -1,0 +1,27 @@
+{{ define "main" }}
+<div class="blog-layout">
+  {{ partial "blog/sidebar.html" . }}
+  <div class="blog-content">
+    <div class="blog-content-inner content">
+      <h1>{{ .Title }}</h1>
+      {{ .Content }}
+      {{ range .Pages.ByWeight }}
+        <article class="blog-list-item">
+          <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+          {{ if .IsSection }}
+            <p class="blog-list-meta">{{ len .Pages }} posts</p>
+          {{ else }}
+            <p class="blog-list-meta">{{ .Date.Format "2006-01-02" }}</p>
+            {{ with .Description }}<p class="blog-list-desc">{{ . }}</p>{{ end }}
+          {{ end }}
+        </article>
+      {{ end }}
+    </div>
+  </div>
+</div>
+
+{{/* Mobile sidebar toggle */}}
+<button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+{{ end }}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Binary-Analysis on My Site</title>
+    <link>https://example.com/tags/binary-analysis/</link>
+    <description>Recent content in Binary-Analysis on My Site</description>
+    <generator>Hugo</generator>
+    <language>ko-kr</language>
+    <lastBuildDate>Wed, 04 Feb 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://example.com/tags/binary-analysis/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Reverse Engineering with Ghidra</title>
+      <link>https://example.com/blog/security/tools/ghidra-reverse-engineering/</link>
+      <pubDate>Wed, 04 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://example.com/blog/security/tools/ghidra-reverse-engineering/</guid>
+      <description>&lt;h2 id=&#34;why-ghidra&#34;&gt;Why Ghidra?&lt;/h2&gt;&#xA;&lt;p&gt;Ghidra is a free, open-source reverse engineering tool by the NSA. It rivals IDA Pro for most tasks:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;Decompiler&lt;/strong&gt; — produces readable C-like pseudocode&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Scripting&lt;/strong&gt; — Java/Python API for automation&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Multi-arch&lt;/strong&gt; — x86, ARM, MIPS, RISC-V, etc.&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;Collaboration&lt;/strong&gt; — shared projects via Ghidra Server&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;workflow&#34;&gt;Workflow&lt;/h2&gt;&#xA;&lt;h3 id=&#34;1-import-and-analyze&#34;&gt;1. Import and Analyze&lt;/h3&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;File → Import File → select binary&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Analysis → Auto Analyze (accept defaults)&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Wait for analysis to complete. Ghidra identifies functions, strings, cross-references.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

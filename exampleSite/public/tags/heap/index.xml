@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Heap on My Site</title>
+    <link>https://example.com/tags/heap/</link>
+    <description>Recent content in Heap on My Site</description>
+    <generator>Hugo</generator>
+    <language>ko-kr</language>
+    <lastBuildDate>Mon, 09 Feb 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://example.com/tags/heap/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Heap Exploitation — tcache Poisoning</title>
+      <link>https://example.com/blog/security/ctf/pwn/heap-exploitation/</link>
+      <pubDate>Mon, 09 Feb 2026 00:00:00 +0000</pubDate>
+      <guid>https://example.com/blog/security/ctf/pwn/heap-exploitation/</guid>
+      <description>&lt;h2 id=&#34;challenge-heapnote&#34;&gt;Challenge: HeapNote&lt;/h2&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;Category: Pwn | Points: 500 | Solves: 8&lt;/p&gt;&#xA;&lt;/blockquote&gt;&#xA;&lt;p&gt;A note manager with add/edit/delete/show. UAF (Use-After-Free) in delete — freed chunk pointers aren&amp;rsquo;t nulled out.&lt;/p&gt;&#xA;&lt;h2 id=&#34;glibc-tcache&#34;&gt;glibc tcache&lt;/h2&gt;&#xA;&lt;p&gt;Since glibc 2.26, freed chunks go to a per-thread cache (tcache) — a singly linked list per size class. No integrity checks in older versions.&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-fallback&#34; data-lang=&#34;fallback&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;tcache[0x20]:  chunk_A → chunk_B → NULL&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;the-bug-use-after-free&#34;&gt;The Bug: Use-After-Free&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8be9fd&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#50fa7b&#34;&gt;delete_note&lt;/span&gt;(&lt;span style=&#34;color:#8be9fd&#34;&gt;int&lt;/span&gt; idx) {&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#50fa7b&#34;&gt;free&lt;/span&gt;(notes[idx]);&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#6272a4&#34;&gt;// notes[idx] = NULL;  // BUG: missing this line!&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;After &lt;code&gt;delete(0)&lt;/code&gt;, &lt;code&gt;notes[0]&lt;/code&gt; still points to the freed chunk. We can &lt;code&gt;edit(0)&lt;/code&gt; to overwrite the tcache &lt;code&gt;fd&lt;/code&gt; pointer.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

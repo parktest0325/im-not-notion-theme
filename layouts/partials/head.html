@@ -1,0 +1,79 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{{/* D2Coding font */}}
+<link rel="preload" href="https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_three@1.0/D2Coding.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  @font-face {
+    font-family: 'D2Coding';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_three@1.0/D2Coding.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    pointer-events: none;
+  }
+</style>
+<script>
+  (function() {
+    var d = document.documentElement;
+    var theme = localStorage.getItem('inn-theme') || 'dark';
+    d.dataset.theme = theme;
+    d.classList.add('no-transition');
+    {{- with .Site.Params.background }}
+    {{- if or .image .lightImage }}
+    var bgDark = '{{ .image }}';
+    var bgLight = '{{ .lightImage | default .image }}';
+    var opDark = '{{ .opacity | default 0.08 }}';
+    var opLight = '{{ .lightOpacity | default (.opacity | default 0.08) }}';
+    d.dataset.bgDark = bgDark;
+    d.dataset.bgLight = bgLight;
+    d.dataset.opDark = opDark;
+    d.dataset.opLight = opLight;
+    var isDark = theme !== 'light';
+    var img = isDark ? bgDark : bgLight;
+    var op = isDark ? opDark : opLight;
+    if (img) {
+      var s = document.createElement('style');
+      s.id = 'site-bg-style';
+      s.textContent = 'body::before{background-image:url(\'' + img + '\');opacity:' + op + '}';
+      d.appendChild(s);
+    }
+    {{- end }}
+    {{- end }}
+    window.addEventListener('DOMContentLoaded', function() {
+      requestAnimationFrame(function() { d.classList.remove('no-transition'); });
+    });
+  })();
+</script>
+<title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+<meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+
+{{/* OpenGraph */}}
+<meta property="og:title" content="{{ .Title }}">
+<meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+<meta property="og:url" content="{{ .Permalink }}">
+
+{{/* CSS via Hugo Pipes */}}
+{{ $main := resources.Get "css/main.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $main.RelPermalink }}">
+
+{{ $blog := resources.Get "css/blog.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $blog.RelPermalink }}">
+
+{{ $projects := resources.Get "css/projects.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $projects.RelPermalink }}">
+
+{{ $syntax := resources.Get "css/syntax.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $syntax.RelPermalink }}">
+
+{{ $search := resources.Get "css/search.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $search.RelPermalink }}">

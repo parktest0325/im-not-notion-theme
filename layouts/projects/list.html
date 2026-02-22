@@ -1,0 +1,51 @@
+{{ define "main" }}
+<div class="projects-page">
+  <div class="projects-header">
+    <h1 class="projects-title" data-text="Projects">Projects</h1>
+    <p class="projects-subtitle">{{ .Description | default "Game dev, OS, security, and more." }}</p>
+
+    {{/* Filter buttons */}}
+    <div class="project-filters">
+      <button class="filter-btn active" data-filter="all">All</button>
+      {{ $allTags := slice }}
+      {{ range .Pages }}
+        {{ with .Params.tags }}
+          {{ range . }}
+            {{ $allTags = $allTags | append . }}
+          {{ end }}
+        {{ end }}
+      {{ end }}
+      {{ range uniq $allTags }}
+        <button class="filter-btn" data-filter="{{ . }}">{{ . }}</button>
+      {{ end }}
+    </div>
+  </div>
+
+  <div class="project-grid">
+    {{ range .Pages.ByWeight }}
+      {{ partial "projects/card.html" . }}
+    {{ end }}
+  </div>
+</div>
+
+{{ partial "projects/modal.html" . }}
+
+<script>
+  // Tag filter
+  document.querySelectorAll('.filter-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      var filter = btn.dataset.filter;
+      document.querySelectorAll('.project-card').forEach(function(card) {
+        if (filter === 'all') {
+          card.style.display = '';
+        } else {
+          var tags = (card.dataset.tags || '').split(',');
+          card.style.display = tags.indexOf(filter) >= 0 ? '' : 'none';
+        }
+      });
+    });
+  });
+</script>
+{{ end }}

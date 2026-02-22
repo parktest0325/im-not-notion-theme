@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ko-kr">
+<head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  (function() {
+    var d = document.documentElement;
+    d.dataset.theme = localStorage.getItem('inn-theme') || 'dark';
+    d.classList.add('no-transition');
+    window.addEventListener('DOMContentLoaded', function() {
+      requestAnimationFrame(function() { d.classList.remove('no-transition'); });
+    });
+  })();
+</script>
+<title>Security | My Site</title>
+<meta name="description" content="Developer portfolio &amp; technical blog">
+
+
+<meta property="og:title" content="Security">
+<meta property="og:description" content="Developer portfolio &amp; technical blog">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://example.com/blog/security/">
+
+
+
+<link rel="stylesheet" href="/css/main.min.3f072f29a6e04c0c0817f9855ecb1e7c0d4445b6e6c3807a377793ca41ff9be1.css">
+
+
+<link rel="stylesheet" href="/css/blog.min.a4bd111a60cc3f36397fcaf0faadcace24384c313b21256e5d16656406014ce5.css">
+
+
+<link rel="stylesheet" href="/css/projects.min.e152713220ed43fe8f0b2f4491aadf75679c96670cfaf498407bbb87d719d4b2.css">
+
+
+<link rel="stylesheet" href="/css/syntax.min.132316a43b6d26c3685cd4a1591cc945105070d46f679b6916e9c8fb85295cbc.css">
+</head>
+<body><header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="site-logo">
+      <span class="logo-text">My Site</span>
+    </a>
+
+    <nav class="site-nav">
+      
+        <a href="/blog/" class="nav-link">
+          Blog
+        </a>
+      
+        <a href="/projects/" class="nav-link">
+          Projects
+        </a>
+      
+        <a href="/guestbook/" class="nav-link">
+          Guestbook
+        </a>
+      
+    </nav>
+
+    <div class="header-actions">
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+
+      
+        <a href="https://github.com/yourname" class="header-icon" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
+      
+    </div>
+  </div>
+</header>
+<main class="site-main">
+<div class="blog-layout">
+  
+
+
+<aside class="blog-sidebar">
+  <button class="sidebar-close" onclick="toggleSidebar()" aria-label="Close sidebar">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <nav class="sidebar-tree">
+    <ul>
+      
+  
+  
+  
+  
+  
+    
+      
+      
+      
+      
+      <li class="tree-folder">
+        <div class="tree-row tree-depth-0">
+          
+          <button class="tree-toggle" onclick="this.closest('.tree-folder').classList.toggle('open')" aria-label="Toggle">
+            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          
+          <a href="/blog/game-dev/" class="tree-label">
+            <svg class="tree-icon folder-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>Game Development</span>
+          </a>
+          <span class="tree-count">8</span>
+        </div>
+        
+        <ul class="tree-children" data-color="0">
+          
+  
+  
+  
+  
+  
+    
+      
+      
+      
+      
+      <li class="tree-folder">
+        <div class="tree-row tree-depth-1">
+          
+          <button class="tree-toggle" onclick="this.closest('.tree-folder').classList.toggle('open')" aria-label="Toggle">
+            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          
+          <a href="/blog/game-dev/engine/" class="tree-label">
+            <svg class="tree-icon folder-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>Engine</span>
+          </a>
+          <span class="tree-count">6</span>
+        </div>
+        
+        <ul class="tree-children" data-color="1">
+          
+  
+  
+  
+  
+  
+    
+  
+    
+      
+      
+      
+      
+      <li class="tree-folder">
+        <div class="tree-row tree-depth-deep">
+          
+          <span class="tree-toggle-spacer"></span>
+          
+          <a href="/blog/game-dev/engine/rendering/" class="tree-label">
+            <svg class="tree-icon folder-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>Rendering</span>
+          </a>
+          <span class="tree-count">3</span>
+        </div>
+        
+      </li>
+    
+  
+    
+      
+      
+      
+      
+      <li class="tree-folder">
+        <div class="tree-row tree-depth-deep">
+          
+          <span class="tree-toggle-spacer"></span>
+          
+          <a href="/blog/game-dev/engine/physics/" class="tree-label">
+            <svg class="tree-icon folder-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>Physics</span>
+          </a>
+          <span class="tree-count">2</span>
+        </div>
+        
+      </li>
+    
+  
+
+        </ul>
+        
+      </li>
+    
+  
+    
+      
+      
+      
+      
+      <li class="tree-folder">
+        <div class="tree-row tree-depth-1">
+          
+          <span class="tree-toggle-spacer"></span>
+          
+          <a href="/blog/game-dev/tutorials/" class="tree-label">
+            <svg class="tree-icon folder-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>Tutorials</span>
+          </a>
+          <span class="tree-count">2</span>
+        </div>
+        
+      </li>
+    
+  
+
+        </ul>
+        
+      </li>
+    
+  
+    
+      
+      
+      
+      
+      <li class="tree-folder open">
+        <div class="tree-row active tree-depth-0">
+          
+          <button class="tree-toggle" onclick="this.closest('.tree-folder').classList.toggle('open')" aria-label="Toggle">
+            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          
+          <a href="/blog/security/" class="tree-label">
+            <svg class="tree-icon folder-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>Security</span>
+          </a>
+          <span class="tree-count">7</span>
+        </div>
+        
+        <ul class="tree-children" data-color="0">
+          
+  
+  
+  
+  
+  
+    
+      
+      
+      
+      
+      <li class="tree-folder">
+        <div class="tree-row tree-depth-1">
+          
+          <button class="tree-toggle" onclick="this.closest('.tree-folder').classList.toggle('open')" aria-label="Toggle">
+            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          
+          <a href="/blog/security/ctf/" class="tree-label">
+            <svg class="tree-icon folder-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>CTF</span>
+          </a>
+          <span class="tree-count">5</span>
+        </div>
+        
+        <ul class="tree-children" data-color="1">
+          
+  
+  
+  
+  
+  
+    
+      
+      
+      
+      
+      <li class="tree-folder">
+        <div class="tree-row tree-depth-deep">
+          
+          <span class="tree-toggle-spacer"></span>
+          
+          <a href="/blog/security/ctf/web/" class="tree-label">
+            <svg class="tree-icon folder-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>Web</span>
+          </a>
+          <span class="tree-count">2</span>
+        </div>
+        
+      </li>
+    
+  
+    
+      
+      
+      
+      
+      <li class="tree-folder">
+        <div class="tree-row tree-depth-deep">
+          
+          <span class="tree-toggle-spacer"></span>
+          
+          <a href="/blog/security/ctf/pwn/" class="tree-label">
+            <svg class="tree-icon folder-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>Pwn</span>
+          </a>
+          <span class="tree-count">3</span>
+        </div>
+        
+      </li>
+    
+  
+
+        </ul>
+        
+      </li>
+    
+  
+    
+      
+      
+      
+      
+      <li class="tree-folder">
+        <div class="tree-row tree-depth-1">
+          
+          <span class="tree-toggle-spacer"></span>
+          
+          <a href="/blog/security/tools/" class="tree-label">
+            <svg class="tree-icon folder-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>Tools</span>
+          </a>
+          <span class="tree-count">2</span>
+        </div>
+        
+      </li>
+    
+  
+
+        </ul>
+        
+      </li>
+    
+  
+    
+      
+      
+      
+      
+      <li class="tree-folder">
+        <div class="tree-row tree-depth-0">
+          
+          <span class="tree-toggle-spacer"></span>
+          
+          <a href="/blog/docs/" class="tree-label">
+            <svg class="tree-icon folder-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>Development Docs</span>
+          </a>
+          <span class="tree-count">3</span>
+        </div>
+        
+      </li>
+    
+  
+    
+      
+      
+      
+      
+      <li class="tree-folder">
+        <div class="tree-row tree-depth-0">
+          
+          <button class="tree-toggle" onclick="this.closest('.tree-folder').classList.toggle('open')" aria-label="Toggle">
+            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          
+          <a href="/blog/os-dev/" class="tree-label">
+            <svg class="tree-icon folder-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>OS Dev</span>
+          </a>
+          <span class="tree-count">6</span>
+        </div>
+        
+        <ul class="tree-children" data-color="0">
+          
+  
+  
+  
+  
+  
+    
+      
+      
+      
+      
+      <li class="tree-folder">
+        <div class="tree-row tree-depth-1">
+          
+          <button class="tree-toggle" onclick="this.closest('.tree-folder').classList.toggle('open')" aria-label="Toggle">
+            <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          
+          <a href="/blog/os-dev/kernel/" class="tree-label">
+            <svg class="tree-icon folder-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>Kernel</span>
+          </a>
+          <span class="tree-count">4</span>
+        </div>
+        
+        <ul class="tree-children" data-color="1">
+          
+  
+  
+  
+  
+  
+    
+      
+      
+      
+      
+      <li class="tree-folder">
+        <div class="tree-row tree-depth-deep">
+          
+          <span class="tree-toggle-spacer"></span>
+          
+          <a href="/blog/os-dev/kernel/memory/" class="tree-label">
+            <svg class="tree-icon folder-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>Memory Management</span>
+          </a>
+          <span class="tree-count">2</span>
+        </div>
+        
+      </li>
+    
+  
+    
+      
+      
+      
+      
+      <li class="tree-folder">
+        <div class="tree-row tree-depth-deep">
+          
+          <span class="tree-toggle-spacer"></span>
+          
+          <a href="/blog/os-dev/kernel/scheduler/" class="tree-label">
+            <svg class="tree-icon folder-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>Scheduler</span>
+          </a>
+          <span class="tree-count">2</span>
+        </div>
+        
+      </li>
+    
+  
+
+        </ul>
+        
+      </li>
+    
+  
+    
+      
+      
+      
+      
+      <li class="tree-folder">
+        <div class="tree-row tree-depth-1">
+          
+          <span class="tree-toggle-spacer"></span>
+          
+          <a href="/blog/os-dev/bootloader/" class="tree-label">
+            <svg class="tree-icon folder-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>Bootloader</span>
+          </a>
+          <span class="tree-count">2</span>
+        </div>
+        
+      </li>
+    
+  
+
+        </ul>
+        
+      </li>
+    
+  
+
+    </ul>
+  </nav>
+</aside>
+
+
+
+
+  <div class="blog-content">
+    <div class="blog-content-inner content">
+      <h1>Security</h1>
+      
+      
+        <article class="blog-list-item">
+          <h2><a href="/blog/security/ctf/">CTF</a></h2>
+          
+            <p class="blog-list-meta">2 posts</p>
+          
+        </article>
+      
+        <article class="blog-list-item">
+          <h2><a href="/blog/security/tools/">Tools</a></h2>
+          
+            <p class="blog-list-meta">2 posts</p>
+          
+        </article>
+      
+    </div>
+  </div>
+</div>
+
+
+<button class="sidebar-toggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+</main><footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-content">
+      <p>&copy; 2026 Your Name. Built with <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.</p>
+    </div>
+    
+  </div>
+</footer>
+<script>
+    function getTheme() {
+      return document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+    }
+
+    function syncGiscusTheme(theme) {
+      var frame = document.querySelector('iframe.giscus-frame');
+      if (frame) {
+        frame.contentWindow.postMessage(
+          { giscus: { setConfig: { theme: theme } } },
+          'https://giscus.app'
+        );
+      }
+    }
+
+    function toggleTheme() {
+      var html = document.documentElement;
+      var next = html.dataset.theme === 'dark' ? 'light' : 'dark';
+      html.dataset.theme = next;
+      localStorage.setItem('inn-theme', next);
+      syncGiscusTheme(next);
+    }
+
+    
+    window.addEventListener('message', function(e) {
+      if (e.origin !== 'https://giscus.app') return;
+      syncGiscusTheme(getTheme());
+    });
+
+    
+    function toggleSidebar() {
+      var el = document.querySelector('.blog-sidebar');
+      if (el) el.classList.toggle('open');
+    }
+  </script>
+
+  
+  
+</body>
+</html>

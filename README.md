@@ -2,6 +2,8 @@
 
 A Hugo theme with HugoBook-style blog sidebar and cyberpunk project portfolio.
 
+Built for [im-not-notion](https://github.com/donghyeonkim/im-not-notion) — a Tauri-based desktop CMS that manages Hugo sites over SSH. Write markdown, manage images, and deploy from a native app.
+
 ## Features
 
 - **Dark / Light mode** — `localStorage` 기반 테마 전환, 배경 이미지·댓글 테마 자동 동기화
@@ -16,6 +18,20 @@ A Hugo theme with HugoBook-style blog sidebar and cyberpunk project portfolio.
 - **Responsive** — 모바일 사이드바 토글, 반응형 그리드
 
 ## Quick Start
+
+### With im-not-notion (Recommended)
+
+[im-not-notion](https://github.com/donghyeonkim/im-not-notion) 앱에서 **deploy-theme** 플러그인으로 원클릭 배포할 수 있습니다.
+
+1. im-not-notion 앱에서 플러그인 메뉴 열기
+2. **Deploy Theme** 실행
+3. 옵션 선택:
+   - `deploy_content` — 데모 콘텐츠 배포 (블로그 예제 글, 프로젝트 등)
+   - `overwrite_toml` — hugo.toml을 예제 설정으로 덮어쓰기
+
+테마, 설정, 데모 콘텐츠가 Hugo 사이트에 자동 배포됩니다.
+
+### Manual
 
 ```bash
 # 1. Hugo 사이트 생성
@@ -227,6 +243,11 @@ title: "Guestbook"
 ## Requirements
 
 - Hugo >= 0.112.0 (extended edition recommended)
+
+## Related
+
+- [im-not-notion](https://github.com/donghyeonkim/im-not-notion) — Desktop CMS for Hugo (Tauri + Svelte)
+- [deploy-theme plugin](https://github.com/donghyeonkim/inn-plugins/tree/main/deploy-theme) — One-click theme deployment plugin
 
 ## License
 

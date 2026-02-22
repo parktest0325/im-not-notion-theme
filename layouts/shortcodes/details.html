@@ -1,0 +1,8 @@
+{{- $title := cond .IsNamedParams (.Get "title") (.Get 0) -}}
+{{- $open := cond .IsNamedParams (eq (printf "%v" (.Get "open")) "true") (in .Params "open") -}}
+<details{{ if $open }} open{{ end }}>
+  <summary>{{ default "Details" $title | .Page.RenderString }}</summary>
+  <div class="details-content">
+    {{ .Inner | .Page.RenderString }}
+  </div>
+</details>

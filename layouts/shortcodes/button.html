@@ -1,0 +1,4 @@
+{{- $href := .Get "href" | default (.Get "relref" | default "#") -}}
+<a class="book-btn" href="{{ $href }}"{{ if strings.HasPrefix $href "http" }} target="_blank" rel="noopener"{{ end }}>
+  {{- .Inner | plainify -}}
+</a>

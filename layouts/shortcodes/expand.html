@@ -1,0 +1,7 @@
+{{- /* expand — alias for details (hugo-book compat) */ -}}
+<details{{ if in .Params "open" }} open{{ end }}>
+  <summary>{{ default "Expand" (.Get 0) }}</summary>
+  <div class="details-content">
+    {{ .Inner | .Page.RenderString }}
+  </div>
+</details>

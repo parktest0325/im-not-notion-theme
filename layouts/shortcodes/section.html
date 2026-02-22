@@ -1,0 +1,8 @@
+<dl>
+{{ range .Page.Pages }}
+  <dt><a href="{{ .RelPermalink }}">{{ .Title }}</a></dt>
+  {{ if in $.Params "summary" -}}
+  <dd>{{ or .Description .Summary "" | plainify | htmlUnescape }}</dd>
+  {{ end -}}
+{{ end }}
+</dl>

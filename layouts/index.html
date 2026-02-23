@@ -57,7 +57,8 @@
           </div>
         </div>
         <div class="about-aside">
-          {{ $blogPosts := where $.Site.RegularPages "Section" "blog" }}
+          {{ $blogPosts := slice }}
+          {{ with $.Site.GetPage "/blog" }}{{ $blogPosts = .RegularPagesRecursive }}{{ end }}
           {{ $projectPages := where $.Site.RegularPages "Section" "projects" }}
           {{ $blogSections := 0 }}
           {{ with $.Site.GetPage "/blog" }}{{ $blogSections = len .Sections }}{{ end }}
@@ -108,7 +109,10 @@
   {{ end }}
 
   {{/* === Recent Posts === */}}
-  {{ $posts := where (where .Site.RegularPages "Section" "blog") ".Params.bookHidden" "ne" true }}
+  {{ $blogSection := .Site.GetPage "/blog" }}
+  {{ if $blogSection }}
+  {{ $posts := where $blogSection.RegularPagesRecursive ".Params.bookHidden" "ne" true }}
+  {{ $posts = sort $posts "Date" "desc" }}
   {{ if $posts }}
   <section class="home-section">
     <div class="section-inner">
@@ -131,6 +135,7 @@
       </div>
     </div>
   </section>
+  {{ end }}
   {{ end }}
 </div>
 {{ end }}

@@ -31,28 +31,54 @@
   <section class="home-section about-section">
     <div class="section-inner">
       <div class="about-card">
-        {{ with .avatar }}
-        <div class="about-avatar">
-          <img src="{{ . }}" alt="Avatar">
-        </div>
-        {{ end }}
-        <div class="about-body">
-          <h2 class="about-name">{{ .name | default $.Site.Params.author }}</h2>
-          {{ with .bio }}
-          <p class="about-bio">{{ . }}</p>
-          {{ end }}
-          {{ with .detail }}
-          <div class="about-detail">{{ . | markdownify }}</div>
-          {{ end }}
-          {{ if .links }}
-          <div class="about-links">
-            {{ range .links }}
-            <a href="{{ .url }}" target="_blank" rel="noopener" class="about-link-item" title="{{ .name }}">
-              {{ .name }}
-            </a>
-            {{ end }}
+        <div class="about-main">
+          {{ with .avatar }}
+          <div class="about-avatar">
+            <img src="{{ . }}" alt="Avatar">
           </div>
           {{ end }}
+          <div class="about-body">
+            <h2 class="about-name">{{ .name | default $.Site.Params.author }}</h2>
+            {{ with .bio }}
+            <p class="about-bio">{{ . }}</p>
+            {{ end }}
+            {{ with .detail }}
+            <div class="about-detail">{{ . | markdownify }}</div>
+            {{ end }}
+            {{ if .links }}
+            <div class="about-links">
+              {{ range .links }}
+              <a href="{{ .url }}" target="_blank" rel="noopener" class="about-link-item" title="{{ .name }}">
+                {{ .name }}
+              </a>
+              {{ end }}
+            </div>
+            {{ end }}
+          </div>
+        </div>
+        <div class="about-aside">
+          {{ $blogPosts := where $.Site.RegularPages "Section" "blog" }}
+          {{ $projectPages := where $.Site.RegularPages "Section" "projects" }}
+          {{ $blogSections := 0 }}
+          {{ with $.Site.GetPage "/blog" }}{{ $blogSections = len .Sections }}{{ end }}
+          <div class="about-stats">
+            <div class="about-stat">
+              <span class="about-stat-value">{{ len $blogPosts }}</span>
+              <span class="about-stat-label">Posts</span>
+            </div>
+            <div class="about-stat">
+              <span class="about-stat-value">{{ $blogSections }}</span>
+              <span class="about-stat-label">Categories</span>
+            </div>
+            <div class="about-stat">
+              <span class="about-stat-value">{{ len $projectPages }}</span>
+              <span class="about-stat-label">Projects</span>
+            </div>
+            <div class="about-stat">
+              <span class="about-stat-value" id="gc-total">-</span>
+              <span class="about-stat-label">Views</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -80,48 +106,6 @@
   </section>
   {{ partial "projects/modal.html" . }}
   {{ end }}
-
-  {{/* === Site Stats === */}}
-  <section class="home-section">
-    <div class="section-inner">
-      <h2 class="section-title">
-        <span class="section-label">Site</span> Stats
-      </h2>
-      <div class="stats-card">
-        {{ $blogPosts := where .Site.RegularPages "Section" "blog" }}
-        {{ $projectPages := where .Site.RegularPages "Section" "projects" }}
-        {{ $blogSections := 0 }}
-        {{ with .Site.GetPage "/blog" }}{{ $blogSections = len .Sections }}{{ end }}
-        <div class="stats-grid">
-          <div class="stat-item">
-            <span class="stat-value">{{ len $blogPosts }}</span>
-            <span class="stat-label">Blog Posts</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-value">{{ $blogSections }}</span>
-            <span class="stat-label">Categories</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-value">{{ len $projectPages }}</span>
-            <span class="stat-label">Projects</span>
-          </div>
-          {{ with .Site.Params.goatcounterCode }}
-          <div class="stat-item">
-            <span class="stat-value" id="gc-total">-</span>
-            <span class="stat-label">Page Views</span>
-          </div>
-          {{ end }}
-        </div>
-        {{ with .Site.Params.goatcounterCode }}
-        <div class="stats-footer">
-          <a href="https://{{ . }}.goatcounter.com" target="_blank" rel="noopener" class="stats-dashboard-link">
-            View visitor dashboard &rarr;
-          </a>
-        </div>
-        {{ end }}
-      </div>
-    </div>
-  </section>
 
   {{/* === Recent Posts === */}}
   {{ $posts := where (where .Site.RegularPages "Section" "blog") ".Params.bookHidden" "ne" true }}

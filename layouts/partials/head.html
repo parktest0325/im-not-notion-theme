@@ -12,7 +12,7 @@
   }
   body::before {
     content: "";
-    position: fixed;
+    position: {{ if .Site.Params.background.fixed | default true }}fixed{{ else }}absolute{{ end }};
     inset: 0;
     z-index: -1;
     background-size: cover;

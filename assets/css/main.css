@@ -484,6 +484,30 @@ img {
   margin: 2rem 0;
 }
 
+/* --- Definition List (section shortcode) --- */
+.content dl {
+  margin: 1rem 0;
+}
+.content dt {
+  font-weight: 600;
+  margin-top: 0.75rem;
+}
+.content dd {
+  margin-left: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* --- KaTeX --- */
+.book-katex {
+  overflow-x: auto;
+}
+div.book-katex {
+  display: block;
+  margin: 1rem 0;
+  text-align: center;
+}
+
 /* --- Mobile --- */
 @media (max-width: 768px) {
   .header-inner {

@@ -25,10 +25,11 @@ theme = "im-not-notion-theme"
   heroSubtitle = "Developer / Designer / Creator"
   heroTagline = "I build things that break things."
 
-  # --- GoatCounter Analytics ---
-  # Sign up at https://www.goatcounter.com and set your code below.
-  # Example: if your dashboard is "mysite.goatcounter.com", set "mysite"
-  goatcounterCode = ""
+  # --- GoatCounter Analytics (self-hosted) ---
+  # Set the base URL of your GoatCounter instance.
+  # Example: "https://stats.yourdomain.com"
+  # Leave empty to disable analytics.
+  goatcounterEndpoint = ""
   # Show page view count in footer
   goatcounterShow = true
 
@@ -47,7 +48,7 @@ theme = "im-not-notion-theme"
 [params.about]
   name = "Your Name"
   # Avatar image URL (remote URL or local path like "/images/avatar.jpg")
-  avatar = ""
+  avatar = "https://avatars.githubusercontent.com/u/52898964?v=4"
   # Short one-line bio
   bio = "A short bio about yourself."
   # Detailed description (supports **markdown**)

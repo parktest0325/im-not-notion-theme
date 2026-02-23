@@ -146,7 +146,7 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 0.1rem 0.4rem;
-  border-radius: 1px;
+  border-radius: 2px;
   background: var(--bg-surface);
   color: var(--text-muted);
   border: 1px solid var(--border-color);
@@ -184,7 +184,7 @@
 .search-toggle kbd {
   font-size: 0.6rem;
   padding: 0.05rem 0.3rem;
-  border-radius: 1px;
+  border-radius: 2px;
   border: 1px solid var(--border-color);
   background: var(--bg-surface);
   font-family: inherit;

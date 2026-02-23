@@ -53,13 +53,20 @@
     }
   </script>
 
-  {{/* GoatCounter analytics */}}
-  {{ with .Site.Params.goatcounterCode }}
-  <script data-goatcounter="https://{{ . }}.goatcounter.com/count"
-          async src="//gc.zgo.at/count.js"></script>
+  {{/* GoatCounter analytics (self-hosted) */}}
+  {{ with .Site.Params.goatcounterEndpoint }}
+  <script data-goatcounter="{{ . }}/count"
+          async src="{{ . }}/count.js"></script>
   <script>
     (function() {
-      var base = 'https://{{ . }}.goatcounter.com';
+      var base = '{{ . }}';
+
+      function formatCount(n) {
+        n = parseInt(n, 10) || 0;
+        if (n >= 1000000) return (n / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+        if (n >= 1000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+        return n.toString();
+      }
 
       function gcFetch(path, el) {
         var r = new XMLHttpRequest();
@@ -68,7 +75,8 @@
           if (r.status === 200) {
             try {
               var d = JSON.parse(r.responseText);
-              el.textContent = d.count_unique || d.count || '0';
+              var raw = d.count_unique || d.count || '0';
+              el.textContent = formatCount(raw);
             } catch(e) {}
           }
         };

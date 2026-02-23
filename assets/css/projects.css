@@ -321,7 +321,7 @@
 .tech-badge {
   font-size: 0.7rem;
   padding: 0.15rem 0.5rem;
-  border-radius: 1px;
+  border-radius: 2px;
   font-weight: 600;
   letter-spacing: 0.03em;
 }
@@ -682,12 +682,12 @@
 
 .about-card {
   display: flex;
-  gap: 2rem;
-  align-items: flex-start;
+  align-items: stretch;
+  min-height: 360px;
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 4px;
-  padding: 2rem;
+  overflow: hidden;
 }
 
 [data-theme="dark"] .about-card {
@@ -698,29 +698,70 @@
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
+/* Left: avatar + text */
+.about-main {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  padding: 2rem;
+}
+
+/* Right: stats sidebar */
+.about-aside {
+  display: flex;
+  align-items: center;
+  padding: 2rem 2.5rem;
+  border-left: 1px solid var(--border-color);
+  background: var(--bg-surface);
+}
+
+.about-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.about-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.about-stat-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+}
+
+[data-theme="dark"] .about-stat-value {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 10px rgba(var(--neon-cyan-rgb), 0.4);
+}
+
+[data-theme="light"] .about-stat-value {
+  color: var(--accent);
+}
+
+.about-stat-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
 .about-avatar {
   flex-shrink: 0;
 }
 
 .about-avatar img {
-  width: 120px;
-  height: 120px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--border-color);
-}
-
-[data-theme="dark"] .about-avatar img {
-  border-color: var(--neon-cyan);
-  box-shadow: 0 0 12px rgba(var(--neon-cyan-rgb), 0.3);
-}
-
-[data-theme="light"] .about-avatar img {
-  border: 2px solid transparent;
-  background-image: linear-gradient(var(--bg-primary), var(--bg-primary)),
-                    linear-gradient(135deg, var(--accent), var(--neon-cyan), var(--neon-magenta));
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
+  border: 1px solid var(--border-color);
 }
 
 .about-body {
@@ -792,8 +833,26 @@
   background: rgba(90, 63, 214, 0.06);
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .about-card {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .about-aside {
+    border-left: none;
+    border-top: 1px solid var(--border-color);
+    padding: 1.5rem 2rem;
+  }
+
+  .about-stats {
+    flex-direction: row;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .about-main {
     flex-direction: column;
     align-items: center;
     text-align: center;
@@ -801,6 +860,11 @@
 
   .about-links {
     justify-content: center;
+  }
+
+  .about-avatar img {
+    width: 110px;
+    height: 110px;
   }
 }
 

@@ -1,18 +1,61 @@
 {{ $pag := .Paginator }}
 {{ if gt $pag.TotalPages 1 }}
 <nav class="pagination" aria-label="Pagination">
+  {{/* Prev arrow */}}
   {{ if $pag.HasPrev }}
-  <a href="{{ $pag.Prev.URL }}" class="page-link page-prev" aria-label="Previous page">&larr; Prev</a>
+  <a href="{{ $pag.Prev.URL }}" class="page-link page-arrow" aria-label="Previous page">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </a>
   {{ else }}
-  <span class="page-link page-prev disabled">&larr; Prev</span>
+  <span class="page-link page-arrow disabled">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </span>
   {{ end }}
 
-  <span class="page-info">{{ $pag.PageNumber }} / {{ $pag.TotalPages }}</span>
+  {{/* Page numbers */}}
+  <div class="page-numbers">
+    {{ $current := $pag.PageNumber }}
+    {{ $total := $pag.TotalPages }}
+    {{ $pagers := $pag.Pagers }}
 
+    {{ range $i, $p := $pagers }}
+      {{ $pageNum := add $i 1 }}
+
+      {{/* Show: first, last, current, and neighbors within 2 */}}
+      {{ $show := false }}
+      {{ if eq $pageNum 1 }}{{ $show = true }}{{ end }}
+      {{ if eq $pageNum $total }}{{ $show = true }}{{ end }}
+      {{ if and (ge $pageNum (sub $current 3)) (le $pageNum (add $current 3)) }}{{ $show = true }}{{ end }}
+
+      {{/* Ellipsis logic */}}
+      {{ if not $show }}
+        {{ $prevNum := sub $pageNum 1 }}
+        {{ $prevShow := false }}
+        {{ if eq $prevNum 1 }}{{ $prevShow = true }}{{ end }}
+        {{ if eq $prevNum $total }}{{ $prevShow = true }}{{ end }}
+        {{ if and (ge $prevNum (sub $current 3)) (le $prevNum (add $current 3)) }}{{ $prevShow = true }}{{ end }}
+        {{ if $prevShow }}
+          <span class="page-ellipsis">&hellip;</span>
+        {{ end }}
+      {{ else }}
+        {{ if eq $pageNum $current }}
+        <span class="page-link page-num active">{{ $pageNum }}</span>
+        {{ else }}
+        <a href="{{ $p.URL }}" class="page-link page-num">{{ $pageNum }}</a>
+        {{ end }}
+      {{ end }}
+    {{ end }}
+  </div>
+
+  {{/* Next arrow */}}
   {{ if $pag.HasNext }}
-  <a href="{{ $pag.Next.URL }}" class="page-link page-next" aria-label="Next page">Next &rarr;</a>
+  <a href="{{ $pag.Next.URL }}" class="page-link page-arrow" aria-label="Next page">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </a>
   {{ else }}
-  <span class="page-link page-next disabled">Next &rarr;</span>
+  <span class="page-link page-arrow disabled">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </span>
   {{ end }}
 </nav>
 {{ end }}

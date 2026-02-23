@@ -5,19 +5,33 @@
     <div class="blog-content-inner content">
       <h1>{{ .Title }}</h1>
       {{ .Content }}
-      {{ range .Pages.ByWeight }}
-        {{ if or (not .IsSection) (not .Params.bookHidden) }}
+
+      {{/* Separate sections (folders) from regular pages (posts) */}}
+      {{ $sections := where .Pages ".IsSection" true }}
+      {{ $pages := where .Pages ".IsSection" false }}
+      {{ $pages = where $pages ".Params.bookHidden" "ne" true }}
+
+      {{/* Always show sub-sections first (no pagination) */}}
+      {{ range $sections.ByWeight }}
+        {{ if not .Params.bookHidden }}
         <article class="blog-list-item">
           <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-          {{ if .IsSection }}
-            <p class="blog-list-meta">{{ len .Pages }} posts</p>
-          {{ else }}
-            <p class="blog-list-meta">{{ .Date.Format "2006-01-02" }}</p>
-            {{ with .Description }}<p class="blog-list-desc">{{ . }}</p>{{ end }}
-          {{ end }}
+          <p class="blog-list-meta">{{ len .RegularPagesRecursive }} posts</p>
         </article>
         {{ end }}
       {{ end }}
+
+      {{/* Paginate regular posts */}}
+      {{ $paginator := .Paginate ($pages.ByDate.Reverse) }}
+      {{ range $paginator.Pages }}
+      <article class="blog-list-item">
+        <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+        <p class="blog-list-meta">{{ .Date.Format "2006-01-02" }}</p>
+        {{ with .Description }}<p class="blog-list-desc">{{ . }}</p>{{ end }}
+      </article>
+      {{ end }}
+
+      {{ partial "pagination.html" . }}
     </div>
   </div>
 </div>

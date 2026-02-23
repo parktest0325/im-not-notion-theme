@@ -8,6 +8,7 @@ baseURL = "https://example.com/"
 languageCode = "ko-kr"
 title = "My Site"
 theme = "im-not-notion-theme"
+paginate = 10                # Posts per page in list views
 
 # =============================================================================
 # Site Parameters

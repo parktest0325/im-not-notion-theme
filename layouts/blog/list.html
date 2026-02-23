@@ -9,7 +9,6 @@
       {{/* Separate sections (folders) from regular pages (posts) */}}
       {{ $sections := where .Pages ".IsSection" true }}
       {{ $pages := where .Pages ".IsSection" false }}
-      {{ $pages = where $pages ".Params.bookHidden" "ne" true }}
 
       {{/* Always show sub-sections first (no pagination) */}}
       {{ range $sections.ByWeight }}

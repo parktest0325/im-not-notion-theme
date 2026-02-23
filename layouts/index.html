@@ -111,7 +111,7 @@
   {{/* === Recent Posts === */}}
   {{ $blogSection := .Site.GetPage "/blog" }}
   {{ if $blogSection }}
-  {{ $posts := where $blogSection.RegularPagesRecursive ".Params.bookHidden" "ne" true }}
+  {{ $posts := $blogSection.RegularPagesRecursive }}
   {{ $posts = sort $posts "Date" "desc" }}
   {{ if $posts }}
   <section class="home-section">

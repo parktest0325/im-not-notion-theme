@@ -5,7 +5,8 @@
     <div class="blog-content-inner content">
       <h1>{{ .Title }}</h1>
       {{ .Content }}
-      {{ range where .Pages.ByWeight ".Params.bookHidden" "ne" true }}
+      {{ range .Pages.ByWeight }}
+        {{ if or (not .IsSection) (not .Params.bookHidden) }}
         <article class="blog-list-item">
           <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
           {{ if .IsSection }}
@@ -15,6 +16,7 @@
             {{ with .Description }}<p class="blog-list-desc">{{ . }}</p>{{ end }}
           {{ end }}
         </article>
+        {{ end }}
       {{ end }}
     </div>
   </div>

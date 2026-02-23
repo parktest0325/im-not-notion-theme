@@ -53,6 +53,14 @@
   98% { clip-path: inset(50% 0 20% 0); transform: translate(2px, 1px); }
 }
 
+/* Gradient text on title (light mode) */
+[data-theme="light"] .projects-title {
+  background: linear-gradient(135deg, var(--accent), var(--neon-cyan), var(--neon-magenta));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .projects-subtitle {
   color: var(--text-secondary);
   margin-top: 0.5rem;
@@ -128,14 +136,18 @@
   transform: translateY(-4px);
 }
 
-/* Light mode */
+/* Light mode: gradient border on hover + colored shadow */
 [data-theme="light"] .project-card {
   border: 1px solid var(--border-color);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(90, 63, 214, 0.06);
 }
 [data-theme="light"] .project-card:hover {
-  border-color: var(--accent);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+  border-color: transparent;
+  background-image: linear-gradient(var(--bg-surface), var(--bg-surface)),
+                    linear-gradient(135deg, var(--accent), var(--neon-cyan), var(--neon-magenta));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: 0 8px 24px rgba(90, 63, 214, 0.12), 0 2px 8px rgba(0, 136, 170, 0.08);
   transform: translateY(-4px);
 }
 
@@ -194,8 +206,33 @@
 [data-theme="dark"] .project-card:hover .card-thumb .card-scanlines {
   opacity: 1;
 }
+/* Light mode: shimmer sweep on thumbnail hover */
 [data-theme="light"] .card-scanlines {
-  display: none;
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255,255,255,0.5) 45%,
+    rgba(255,255,255,0.8) 50%,
+    rgba(255,255,255,0.5) 55%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  background-position: 200% 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+[data-theme="light"] .project-card:hover .card-scanlines {
+  opacity: 1;
+  animation: shimmer-sweep 0.8s ease forwards;
+}
+@keyframes shimmer-sweep {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
 }
 
 /* --- Card Body --- */
@@ -259,6 +296,12 @@
   60% { text-shadow: 1px 0 var(--neon-magenta), -1px 0 var(--neon-cyan); }
 }
 
+/* Light mode: accent color shift on hover */
+[data-theme="light"] .project-card:hover .card-title {
+  color: var(--accent);
+  transition: color 0.2s ease;
+}
+
 /* --- Card Description --- */
 .card-desc {
   font-size: 0.85rem;
@@ -289,8 +332,8 @@
   color: var(--neon-cyan);
 }
 [data-theme="light"] .tech-badge {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-color);
+  background: linear-gradient(135deg, rgba(90,63,214,0.08), rgba(0,136,170,0.08));
+  border: 1px solid rgba(90, 63, 214, 0.2);
   color: var(--accent);
 }
 
@@ -334,6 +377,28 @@
 [data-theme="light"] .card-link:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+/* Per-link colored hover (light mode) */
+[data-theme="light"] .card-link--blog:hover {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  background: rgba(0, 136, 170, 0.06);
+}
+[data-theme="light"] .card-link--showcase:hover {
+  border-color: var(--neon-magenta);
+  color: var(--neon-magenta);
+  background: rgba(170, 0, 136, 0.06);
+}
+[data-theme="light"] .card-link--demo:hover {
+  border-color: var(--neon-green);
+  color: var(--neon-green);
+  background: rgba(0, 136, 68, 0.06);
+}
+[data-theme="light"] .card-link--github:hover {
+  border-color: var(--text-primary);
+  color: var(--text-primary);
+  background: rgba(26, 26, 46, 0.04);
 }
 
 /* Per-link glow on hover (dark mode) */
@@ -478,6 +543,13 @@
 [data-theme="dark"] .stat-value {
   color: var(--neon-cyan);
   text-shadow: 0 0 10px rgba(var(--neon-cyan-rgb), 0.4);
+}
+
+[data-theme="light"] .stat-value {
+  background: linear-gradient(135deg, var(--accent), var(--neon-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .stat-label {
@@ -643,6 +715,14 @@
   box-shadow: 0 0 12px rgba(var(--neon-cyan-rgb), 0.3);
 }
 
+[data-theme="light"] .about-avatar img {
+  border: 2px solid transparent;
+  background-image: linear-gradient(var(--bg-primary), var(--bg-primary)),
+                    linear-gradient(135deg, var(--accent), var(--neon-cyan), var(--neon-magenta));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
 .about-body {
   flex: 1;
   min-width: 0;
@@ -706,6 +786,10 @@
 
 [data-theme="dark"] .about-link-item:hover {
   box-shadow: 0 0 8px rgba(var(--neon-cyan-rgb), 0.2);
+}
+
+[data-theme="light"] .about-link-item:hover {
+  background: rgba(90, 63, 214, 0.06);
 }
 
 @media (max-width: 640px) {
@@ -784,6 +868,14 @@
   margin-top: 0.5rem;
 }
 
+/* Hero title gradient text (light mode) */
+[data-theme="light"] .hero-title {
+  background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent), var(--neon-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 [data-theme="light"] .hero-tagline {
   color: var(--accent);
 }
@@ -833,6 +925,7 @@
 [data-theme="light"] .hero-btn--accent:hover {
   background: var(--accent-hover);
   color: #fff;
+  box-shadow: 0 4px 16px rgba(90, 63, 214, 0.3);
 }
 
 /* ========================================
@@ -982,8 +1075,8 @@
     0 25px 50px rgba(0, 0, 0, 0.5);
 }
 [data-theme="light"] .project-modal {
-  border: 1px solid var(--border-color);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(90, 63, 214, 0.2);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(90, 63, 214, 0.05);
 }
 
 .modal-close {
@@ -1053,6 +1146,12 @@
 }
 [data-theme="dark"] .modal-title {
   animation: glitch-text 0.5s ease;
+}
+[data-theme="light"] .modal-title {
+  background: linear-gradient(135deg, var(--text-primary) 40%, var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .modal-desc {

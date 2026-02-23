@@ -39,7 +39,7 @@
 }
 
 [data-theme="light"] .search-modal {
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(90, 63, 214, 0.1);
 }
 
 .search-overlay.open .search-modal {
@@ -116,6 +116,10 @@
 
 [data-theme="dark"] .search-result-item.focused {
   box-shadow: inset 0 0 0 1px rgba(var(--neon-cyan-rgb), 0.3);
+}
+
+[data-theme="light"] .search-result-item.focused {
+  box-shadow: inset 0 0 0 1px rgba(90, 63, 214, 0.2);
 }
 
 .search-result-header {

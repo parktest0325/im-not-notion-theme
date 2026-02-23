@@ -168,6 +168,14 @@ img {
   border-bottom: 1px solid var(--header-border);
 }
 
+[data-theme="light"] .site-header {
+  border-bottom: 1px solid transparent;
+  background-image: linear-gradient(var(--header-bg), var(--header-bg)),
+                    linear-gradient(90deg, transparent, rgba(90,63,214,0.15), rgba(0,136,170,0.15), transparent);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
 .header-inner {
   max-width: 1400px;
   margin: 0 auto;

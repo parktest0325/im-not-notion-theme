@@ -142,8 +142,12 @@
   box-shadow: 0 2px 8px rgba(90, 63, 214, 0.06);
 }
 [data-theme="light"] .project-card:hover {
-  border-color: var(--accent);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: transparent;
+  background-image: linear-gradient(var(--bg-surface), var(--bg-surface)),
+                    linear-gradient(135deg, var(--accent), var(--neon-cyan), var(--neon-magenta));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  box-shadow: 0 8px 24px rgba(90, 63, 214, 0.12), 0 2px 8px rgba(0, 136, 170, 0.08);
   transform: translateY(-4px);
 }
 
@@ -202,33 +206,9 @@
 [data-theme="dark"] .project-card:hover .card-thumb .card-scanlines {
   opacity: 1;
 }
-/* Light mode: shimmer sweep on thumbnail hover */
+/* Light mode: hide scanlines */
 [data-theme="light"] .card-scanlines {
-  display: block;
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background: linear-gradient(
-    105deg,
-    transparent 40%,
-    rgba(255,255,255,0.5) 45%,
-    rgba(255,255,255,0.8) 50%,
-    rgba(255,255,255,0.5) 55%,
-    transparent 60%
-  );
-  background-size: 200% 100%;
-  background-position: 200% 0;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-[data-theme="light"] .project-card:hover .card-scanlines {
-  opacity: 1;
-  animation: shimmer-sweep 0.8s ease forwards;
-}
-@keyframes shimmer-sweep {
-  from { background-position: 200% 0; }
-  to { background-position: -200% 0; }
+  display: none;
 }
 
 /* --- Card Body --- */

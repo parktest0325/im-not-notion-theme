@@ -1,0 +1,19 @@
+# Hugo build output
+exampleSite/public/
+exampleSite/resources/
+exampleSite/.hugo_build.lock
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editor
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Node (if using build tools)
+node_modules/

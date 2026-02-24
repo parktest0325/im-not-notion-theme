@@ -165,9 +165,9 @@
 
 /* Light mode: muted depth colors */
 [data-theme="light"] .tree-children[data-color="0"] { border-left-color: var(--accent); }
-[data-theme="light"] .tree-children[data-color="1"] { border-left-color: #0088aa; }
-[data-theme="light"] .tree-children[data-color="2"] { border-left-color: #aa0088; }
-[data-theme="light"] .tree-children[data-color="3"] { border-left-color: #008844; }
+[data-theme="light"] .tree-children[data-color="1"] { border-left-color: var(--neon-cyan); }
+[data-theme="light"] .tree-children[data-color="2"] { border-left-color: var(--neon-magenta); }
+[data-theme="light"] .tree-children[data-color="3"] { border-left-color: var(--neon-green); }
 
 /* Highlight guide line on hover */
 .tree-folder:hover > .tree-children {
@@ -347,7 +347,7 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 [data-theme="light"] .post-nav-link:hover {
-  box-shadow: 0 4px 12px rgba(90, 63, 214, 0.1);
+  box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.1);
 }
 .post-nav-next {
   text-align: right;

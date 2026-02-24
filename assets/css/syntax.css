@@ -13,11 +13,11 @@
 
 /* Chroma (Hugo built-in) overrides for dark theme */
 [data-theme="dark"] .highlight {
-  background: #1a1a2e;
+  background: var(--code-bg);
 }
 
 [data-theme="light"] .highlight {
-  background: #f4f4f8;
+  background: var(--code-bg);
 }
 
 /* Line numbers */

@@ -55,10 +55,7 @@
 
 /* Gradient text on title (light mode) */
 [data-theme="light"] .projects-title {
-  background: linear-gradient(135deg, var(--accent), var(--neon-cyan), var(--neon-magenta));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text-primary);
 }
 
 .projects-subtitle {
@@ -144,7 +141,7 @@
 [data-theme="light"] .project-card:hover {
   border-color: transparent;
   background-image: linear-gradient(var(--bg-surface), var(--bg-surface)),
-                    linear-gradient(135deg, var(--accent), var(--neon-cyan), var(--neon-magenta));
+                    linear-gradient(135deg, var(--accent), var(--accent-hover));
   background-origin: border-box;
   background-clip: padding-box, border-box;
   box-shadow: 0 8px 24px rgba(var(--accent-rgb), 0.12), 0 2px 8px rgba(var(--accent-rgb), 0.08);
@@ -232,23 +229,29 @@
   width: fit-content;
 }
 .status-dot {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
 }
 .card-status--active { color: var(--status-active); }
 .card-status--active .status-dot {
   background: var(--status-active);
-  box-shadow: 0 0 6px var(--status-active);
+  box-shadow: 0 0 4px var(--status-active), 0 0 10px var(--status-active);
+  animation: status-pulse 2s ease-in-out infinite;
 }
 .card-status--completed { color: var(--status-completed); }
 .card-status--completed .status-dot {
   background: var(--status-completed);
-  box-shadow: 0 0 6px var(--status-completed);
+  box-shadow: 0 0 4px var(--status-completed), 0 0 10px var(--status-completed);
 }
 .card-status--archived { color: var(--status-archived); }
 .card-status--archived .status-dot {
   background: var(--status-archived);
+}
+
+@keyframes status-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 /* --- Card Title + Glitch --- */
@@ -901,12 +904,9 @@
   margin-top: 0.5rem;
 }
 
-/* Hero title gradient text (light mode) */
+/* Light: clean title */
 [data-theme="light"] .hero-title {
-  background: linear-gradient(135deg, var(--text-primary) 30%, var(--accent), var(--neon-cyan));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text-primary);
 }
 
 [data-theme="light"] .hero-tagline {
@@ -1201,7 +1201,10 @@
 .modal-hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, var(--bg-secondary) 0%, transparent 60%);
+  background: linear-gradient(to top, var(--bg-secondary) 10%, rgba(0,0,0,0.3) 60%, transparent 100%);
+}
+[data-theme="light"] .modal-hero-overlay {
+  background: linear-gradient(to top, var(--bg-secondary) 10%, rgba(255,255,255,0.4) 60%, transparent 100%);
 }
 
 .modal-hero-info {
@@ -1220,19 +1223,34 @@
   position: relative;
 }
 [data-theme="dark"] .modal-title {
+  color: #fff;
+  text-shadow:
+    -1px -1px 0 rgba(0,0,0,0.6),
+    1px -1px 0 rgba(0,0,0,0.6),
+    -1px 1px 0 rgba(0,0,0,0.6),
+    1px 1px 0 rgba(0,0,0,0.6);
   animation: glitch-text 0.5s ease;
 }
 [data-theme="light"] .modal-title {
-  background: linear-gradient(135deg, var(--text-primary) 40%, var(--accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text-primary);
+  text-shadow:
+    -1px -1px 0 rgba(255,255,255,0.8),
+    1px -1px 0 rgba(255,255,255,0.8),
+    -1px 1px 0 rgba(255,255,255,0.8),
+    1px 1px 0 rgba(255,255,255,0.8);
 }
 
 .modal-desc {
   font-size: 0.95rem;
-  color: var(--text-secondary);
   margin: 0.5rem 0 0;
+}
+[data-theme="dark"] .modal-desc {
+  color: rgba(255,255,255,0.85);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+}
+[data-theme="light"] .modal-desc {
+  color: var(--text-secondary);
+  text-shadow: 0 1px 3px rgba(255,255,255,0.6);
 }
 
 /* Modal body */

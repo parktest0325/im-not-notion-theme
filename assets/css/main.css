@@ -48,9 +48,9 @@
   --neon-yellow: #fbbf24;
   --neon-yellow-rgb: 251, 191, 36;
 
-  --status-active: #0d9488;
-  --status-completed: #38bdf8;
-  --status-archived: #71717a;
+  --status-active: #00ff88;
+  --status-completed: #00d4ff;
+  --status-archived: #888;
 
   --sidebar-bg: #111218;
   --sidebar-hover: #23252e;
@@ -81,10 +81,10 @@
   --border-color: #e2e8f0;
   --border-subtle: #f1f5f9;
 
-  --accent: #0d9488;
-  --accent-hover: #0f766e;
-  --accent-rgb: 13, 148, 136;
-  --accent-text: #0f766e;
+  --accent: #0f766e;
+  --accent-hover: #115e59;
+  --accent-rgb: 15, 118, 110;
+  --accent-text: #115e59;
 
   --neon-cyan: #0284c7;
   --neon-cyan-rgb: 2, 132, 199;
@@ -95,9 +95,9 @@
   --neon-yellow: #d97706;
   --neon-yellow-rgb: 217, 119, 6;
 
-  --status-active: #0d9488;
-  --status-completed: #0284c7;
-  --status-archived: #94a3b8;
+  --status-active: #00c853;
+  --status-completed: #0091ea;
+  --status-archived: #9e9e9e;
 
   --sidebar-bg: #f8fafc;
   --sidebar-hover: #f1f5f9;
@@ -170,13 +170,9 @@ body {
   98% { clip-path: inset(50% 0 20% 0); transform: translate(1px, 1px); }
 }
 
-/* Light: Prismatic Shimmer (Crystal Blue & Silver) */
+/* Light: clean title */
 [data-theme="light"] .hero-title {
-  background: linear-gradient(135deg, var(--text-primary), var(--accent), var(--neon-cyan));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: crystal-shimmer 6s ease-in-out infinite alternate;
+  color: var(--text-primary);
 }
 
 @keyframes crystal-shimmer {
@@ -519,15 +515,14 @@ img {
 }
 
 .content table {
-  width: 100%;
   border-collapse: collapse;
   margin: 1.5rem 0;
-  font-size: 0.95rem;
+  font-size: 0.875rem;
 }
 
 .content th, .content td {
   border: 1px solid var(--border-color);
-  padding: 0.75rem 1rem;
+  padding: 0.35rem 0.65rem;
   text-align: left;
 }
 
@@ -604,10 +599,7 @@ div.book-katex {
 }
 
 [data-theme="light"] .section-title-glitch {
-  background: linear-gradient(135deg, var(--accent), var(--neon-cyan), var(--neon-magenta));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--text-primary);
 }
 
 @keyframes section-glitch {

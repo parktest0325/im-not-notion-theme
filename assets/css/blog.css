@@ -124,7 +124,7 @@
   background: var(--sidebar-active);
 }
 .tree-row.active .tree-label {
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
 }
 .tree-row.active .tree-icon {

@@ -1,7 +1,9 @@
 <header class="site-header">
   <div class="header-inner">
-    <a href="/" class="site-logo">
+    <a href="/" class="site-logo" data-text="{{ .Site.Title }}">
+      <span class="logo-prompt">&gt;</span>
       <span class="logo-text">{{ .Site.Title }}</span>
+      <span class="logo-cursor">_</span>
     </a>
 
     <nav class="site-nav">

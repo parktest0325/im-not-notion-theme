@@ -260,12 +260,44 @@ img {
 .site-logo {
   text-decoration: none;
   color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: 'D2Coding', "JetBrains Mono", "Fira Code", Consolas, monospace;
+  position: relative;
+}
+
+.logo-prompt {
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 1.3rem;
 }
 
 .logo-text {
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 800;
   letter-spacing: -0.02em;
+  position: relative;
+}
+
+.logo-cursor {
+  color: var(--accent);
+  font-weight: 400;
+  animation: logo-blink 1.2s ease-in-out infinite;
+}
+
+@keyframes logo-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.site-logo:hover .logo-text {
+  animation: glitch-text 0.4s ease;
+}
+
+.site-logo:hover .logo-prompt {
+  color: var(--neon-magenta);
+  transition: color 0.1s;
 }
 
 .site-nav {
@@ -277,9 +309,9 @@ img {
 .nav-link {
   padding: 0.4rem 0.75rem;
   border-radius: 2px;
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
   transition: all 0.2s ease;
 }
 .nav-link:hover {
@@ -538,6 +570,57 @@ div.book-katex {
   display: block;
   margin: 1rem 0;
   text-align: center;
+}
+
+/* --- Section Title Glitch (shared across Blog, Guestbook) --- */
+.section-title-glitch {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  position: relative;
+  display: inline-block;
+}
+
+[data-theme="dark"] .section-title-glitch::before,
+[data-theme="dark"] .section-title-glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+[data-theme="dark"] .section-title-glitch::before {
+  color: var(--neon-cyan);
+  z-index: -1;
+  animation: section-glitch 3s infinite;
+}
+[data-theme="dark"] .section-title-glitch::after {
+  color: var(--neon-magenta);
+  z-index: -2;
+  animation: section-glitch 3s infinite reverse;
+}
+
+[data-theme="light"] .section-title-glitch {
+  background: linear-gradient(135deg, var(--accent), var(--neon-cyan), var(--neon-magenta));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes section-glitch {
+  0%, 90%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+  92% { clip-path: inset(20% 0 40% 0); transform: translate(-3px, 1px); }
+  94% { clip-path: inset(60% 0 10% 0); transform: translate(3px, -1px); }
+  96% { clip-path: inset(10% 0 70% 0); transform: translate(-2px, 0); }
+  98% { clip-path: inset(50% 0 20% 0); transform: translate(2px, 1px); }
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
 /* --- Mobile --- */

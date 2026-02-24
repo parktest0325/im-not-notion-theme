@@ -35,11 +35,11 @@
 }
 
 [data-theme="dark"] .search-modal {
-  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), 0 0 10px rgba(var(--neon-cyan-rgb), 0.1);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), 0 0 10px rgba(var(--accent-rgb), 0.1);
 }
 
 [data-theme="light"] .search-modal {
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(90, 63, 214, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(var(--accent-rgb), 0.1);
 }
 
 .search-overlay.open .search-modal {
@@ -115,11 +115,11 @@
 }
 
 [data-theme="dark"] .search-result-item.focused {
-  box-shadow: inset 0 0 0 1px rgba(var(--neon-cyan-rgb), 0.3);
+  box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), 0.3);
 }
 
 [data-theme="light"] .search-result-item.focused {
-  box-shadow: inset 0 0 0 1px rgba(90, 63, 214, 0.2);
+  box-shadow: inset 0 0 0 1px rgba(var(--accent-rgb), 0.2);
 }
 
 .search-result-header {

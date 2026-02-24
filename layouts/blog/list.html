@@ -3,7 +3,10 @@
   {{ partial "blog/sidebar.html" . }}
   <div class="blog-content">
     <div class="blog-content-inner content">
-      <h1>{{ .Title }}</h1>
+      {{ partial "breadcrumb.html" . }}
+      <div class="section-header">
+        <h1 class="section-title-glitch" data-text="{{ .Title }}">{{ .Title }}</h1>
+      </div>
       {{ .Content }}
 
       {{/* Separate sections (folders) from regular pages (posts) */}}

@@ -3,6 +3,7 @@
   {{ partial "blog/sidebar.html" . }}
   <div class="blog-content blog-content-single">
     <article class="blog-content-inner content">
+      {{ partial "breadcrumb.html" . }}
       <header class="blog-post-header">
         <h1>{{ .Title }}</h1>
         <div class="blog-post-meta">

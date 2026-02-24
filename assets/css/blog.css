@@ -124,7 +124,7 @@
   background: var(--sidebar-active);
 }
 .tree-row.active .tree-label {
-  color: var(--accent);
+  color: var(--accent-text);
   font-weight: 600;
 }
 .tree-row.active .tree-icon {
@@ -158,16 +158,7 @@
 }
 
 /* Depth color-coded guide lines (cycles every 4 levels via data-color) */
-.tree-children[data-color="0"] { border-left-color: var(--accent); }
-.tree-children[data-color="1"] { border-left-color: var(--neon-cyan); }
-.tree-children[data-color="2"] { border-left-color: var(--neon-magenta); }
-.tree-children[data-color="3"] { border-left-color: var(--neon-green); }
-
-/* Light mode: muted depth colors */
-[data-theme="light"] .tree-children[data-color="0"] { border-left-color: var(--accent); }
-[data-theme="light"] .tree-children[data-color="1"] { border-left-color: #0088aa; }
-[data-theme="light"] .tree-children[data-color="2"] { border-left-color: #aa0088; }
-[data-theme="light"] .tree-children[data-color="3"] { border-left-color: #008844; }
+.tree-children[data-color] { border-left-color: rgba(var(--accent-rgb), 0.5); }
 
 /* Highlight guide line on hover */
 .tree-folder:hover > .tree-children {
@@ -199,6 +190,53 @@
 .blog-content-inner {
   max-width: 780px;
   margin: 0 auto;
+}
+
+/* --- Breadcrumb Navigation --- */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  padding: 0.25rem 0;
+}
+
+.breadcrumb-home {
+  display: flex;
+  align-items: center;
+  color: var(--text-muted);
+  transition: color 0.15s ease;
+}
+.breadcrumb-home:hover {
+  color: var(--accent);
+}
+
+.breadcrumb-item {
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+.breadcrumb-item:hover {
+  color: var(--accent);
+}
+
+.breadcrumb-sep {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.breadcrumb-current {
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
 }
 
 /* --- Blog Post Header --- */
@@ -347,7 +385,7 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 [data-theme="light"] .post-nav-link:hover {
-  box-shadow: 0 4px 12px rgba(90, 63, 214, 0.1);
+  box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.1);
 }
 .post-nav-next {
   text-align: right;

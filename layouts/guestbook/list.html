@@ -26,7 +26,8 @@
         })();
       </script>
     </div>
-    {{ else with .Site.Params.giscus }}
+    {{ else }}
+    {{ with .Site.Params.giscus }}
     {{ if and .repo .repoId .categoryId }}
     <div class="guestbook-comments">
       <div class="giscus-container"></div>
@@ -54,6 +55,7 @@
         })();
       </script>
     </div>
+    {{ end }}
     {{ end }}
     {{ end }}
   </div>

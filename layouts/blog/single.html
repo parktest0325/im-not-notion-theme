@@ -56,7 +56,8 @@
           })();
         </script>
       </section>
-      {{ else with .Site.Params.giscus }}
+      {{ else }}
+      {{ with .Site.Params.giscus }}
       {{ if and .repo .repoId .categoryId }}
       <section class="blog-comments">
         <h2 class="comments-title">Comments</h2>
@@ -84,6 +85,7 @@
           })();
         </script>
       </section>
+      {{ end }}
       {{ end }}
       {{ end }}
     </article>

@@ -120,7 +120,7 @@ html {
 }
 
 body {
-  font-family: "Geist Sans", "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   background-color: var(--bg-primary);
   /* Subtle depth with radial gradient */
   background-image: radial-gradient(circle at top center, var(--bg-secondary) 0%, var(--bg-primary) 100%);
@@ -259,7 +259,7 @@ img {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  font-family: 'D2Coding', "JetBrains Mono", "Fira Code", Consolas, monospace;
+  font-family: 'D2Coding', Consolas, monospace;
   position: relative;
 }
 
@@ -492,7 +492,7 @@ img {
   border-radius: 4px;
   padding: 0.2em 0.4em;
   font-size: 0.9em;
-  font-family: 'D2Coding', "JetBrains Mono", "Fira Code", Consolas, monospace;
+  font-family: 'D2Coding', Consolas, monospace;
   color: var(--accent-text);
 }
 

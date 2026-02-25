@@ -132,6 +132,9 @@
       }
       return top+'\n'+mid+'\n'+bot+'\n'+rp(' ',Math.floor(lineW/2)+1)+'\\';
     }
+    /* ---- Language & Responses ---- */
+    var lang=D.defLang;
+
     bubble.textContent=makeBubble(lang==='ko'?(D.tagKo||D.tag||'아무거나 입력하고 엔터!'):(D.tag||'Type something and press Enter!'));
 
     /* ---- Eye tracking ---- */
@@ -145,9 +148,6 @@
         pupils[i].style.transform='translate('+Math.cos(a)*d+'px,'+Math.sin(a)*d+'px)';
       }
     });
-
-    /* ---- Language & Responses ---- */
-    var lang=D.defLang;
     function L(en,ko){return{en:en,ko:ko};}
     function R(key){var r=responses[key];if(!r)return null;if(typeof r==='function')return r();return r.en?r[lang]:r;}
 
@@ -239,7 +239,7 @@
         if(lo.indexOf('echo ')===0){
           resp=raw.slice(5).replace(/^["']|["']$/g,'');
         }
-        if(!resp){var dl=defaults[lang];resp=dl[di%dl.length];di++;}
+        if(!resp){var dl=defaults[lang]||defaults.en;resp=dl[di%dl.length];di++;}
         bubble.textContent=makeBubble(resp);
       }
     });
@@ -248,6 +248,9 @@
     document.getElementById('hero-term-body').addEventListener('click',function(e){
       if(!e.target.closest('a'))input.focus();
     });
+
+    /* ---- Auto-focus input when hero section is visible ---- */
+    if(document.querySelector('.hero')){input.focus();}
   })();
   </script>
 

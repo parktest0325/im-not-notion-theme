@@ -6,7 +6,27 @@
       <p class="guestbook-desc">{{ .Description | default "Leave a message — sign in with GitHub to comment." }}</p>
     </header>
 
-    {{ with .Site.Params.giscus }}
+    {{/* Comments — Remark42 first, Giscus fallback */}}
+    {{ if .Site.Params.remark42.url }}
+    <div class="guestbook-comments">
+      <div id="remark42"></div>
+      <script>
+        var remark_config = {
+          host: '{{ .Site.Params.remark42.url }}',
+          site_id: '{{ .Site.Params.remark42.site | default "blog" }}',
+          url: window.location.origin + '/guestbook/',
+          theme: document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light',
+          locale: '{{ .Site.Params.remark42.locale | default "ko" }}'
+        };
+        (function() {
+          var s = document.createElement('script');
+          s.src = remark_config.host + '/web/embed.es6.mjs';
+          s.type = 'module'; s.defer = true;
+          (document.head || document.body).appendChild(s);
+        })();
+      </script>
+    </div>
+    {{ else with .Site.Params.giscus }}
     {{ if and .repo .repoId .categoryId }}
     <div class="guestbook-comments">
       <div class="giscus-container"></div>
@@ -35,10 +55,10 @@
       </script>
     </div>
     {{ else }}
-    <p class="guestbook-notice">Giscus is not configured. Set <code>[params.giscus]</code> in hugo.toml with <code>repo</code>, <code>repoId</code>, and <code>categoryId</code>.</p>
+    <p class="guestbook-notice">Comment system is not configured. Set <code>[params.remark42]</code> or <code>[params.giscus]</code> in hugo.toml.</p>
     {{ end }}
     {{ else }}
-    <p class="guestbook-notice">Giscus is not configured. Set <code>[params.giscus]</code> in hugo.toml.</p>
+    <p class="guestbook-notice">Comment system is not configured. Set <code>[params.remark42]</code> or <code>[params.giscus]</code> in hugo.toml.</p>
     {{ end }}
   </div>
 </div>

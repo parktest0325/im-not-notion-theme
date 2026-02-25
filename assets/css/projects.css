@@ -1,3 +1,21 @@
+/* ---- Bubble Font (영문: 둥근모꼴, 한글: Neo둥근모) ---- */
+@font-face {
+  font-family: 'BubbleFont';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-007F, U+2500-257F;
+}
+@font-face {
+  font-family: 'BubbleFont';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.3/NeoDunggeunmo.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+AC00-D7AF, U+3131-318E;
+}
+
 /* ========================================
    Projects Section — Cyberpunk Card Layout
    ======================================== */
@@ -441,39 +459,105 @@
   color: var(--accent);
 }
 
-/* --- Recent Posts List --- */
-.recent-posts {
-  list-style: none;
-  padding: 0;
+/* --- Section Divider --- */
+.section-divider {
+  font-family: Consolas, monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+.section-divider span {
+  color: var(--accent);
 }
 
-.recent-post-item {
-  border-bottom: 1px solid var(--border-subtle);
-}
-
-.recent-post-link {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 0.5rem;
-  text-decoration: none;
-  transition: background 0.15s ease;
-  border-radius: 2px;
+/* --- Recent Posts Grid --- */
+.recent-posts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 }
-.recent-post-link:hover {
-  background: var(--bg-surface);
+
+.recent-post-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.recent-post-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-3px);
+}
+[data-theme="dark"] .recent-post-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+[data-theme="light"] .recent-post-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
-.recent-post-title {
-  color: var(--text-primary);
-  font-size: 0.95rem;
+.recent-post-featured {
+  grid-column: 1 / -1;
+  border-left: 3px solid var(--accent);
 }
 
-.recent-post-date {
+.post-card-badge {
+  display: inline-block;
+  width: fit-content;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  background: rgba(var(--accent-rgb), 0.1);
+  padding: 0.15rem 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.post-card-date {
+  font-size: 0.75rem;
   color: var(--text-muted);
-  font-size: 0.8rem;
-  white-space: nowrap;
+  font-family: "D2Coding", "JetBrains Mono", monospace;
+}
+
+.post-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  border: none;
+  padding: 0;
+}
+.recent-post-featured .post-card-title {
+  font-size: 1.15rem;
+}
+
+.post-card-desc {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 0.15rem 0 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.5;
+}
+
+.post-card-tags {
+  display: flex;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+}
+.post-card-tag {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.4rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
 }
 
 /* ========================================
@@ -511,7 +595,7 @@
 .stat-value {
   font-size: 2rem;
   font-weight: 800;
-  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+  font-family: Consolas, monospace;
   color: var(--text-primary);
 }
 
@@ -705,7 +789,7 @@
 .about-stat-value {
   font-size: 1.5rem;
   font-weight: 800;
-  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+  font-family: Consolas, monospace;
 }
 
 [data-theme="dark"] .about-stat-value {
@@ -841,86 +925,232 @@
 }
 
 /* ========================================
-   Hero Section
+   Hero Section — Dragon Terminal
    ======================================== */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
 
 .hero {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 50vh;
-  padding: 4rem 1.5rem;
-  text-align: center;
+  min-height: 55vh;
+  padding: 4rem 1.5rem 2rem;
 }
 
-.hero-inner {
-  max-width: 700px;
+/* ---- Dragon Scene (inside terminal) ---- */
+.dragon-scene {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 0.75rem;
 }
 
-.hero-glitch-container {
-  position: relative;
+/* Speech bubble (ASCII cowsay style) */
+.dragon-bubble {
+  font-family: "BubbleFont", Consolas, monospace;
+  font-size: 1.3rem;
+  line-height: 1.45;
+  color: var(--text-primary);
+  margin: 0;
+  white-space: pre;
+  text-align: left;
 }
 
-.hero-title {
-  font-size: 3.5rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+/* Dragon ASCII art wrapper */
+.dragon-wrap {
   position: relative;
   display: inline-block;
+  font-family: Consolas, monospace;
+  font-size: 0.85rem;
+  line-height: 1.35;
 }
 
-/* Hero title glitch (dark mode) */
-[data-theme="dark"] .hero-title::before,
-[data-theme="dark"] .hero-title::after {
-  content: attr(data-text);
+.dragon-art {
+  color: var(--accent);
+  margin: 0;
+  user-select: none;
+  pointer-events: none;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Eyes overlaid on the ASCII art */
+.dragon-eye {
   position: absolute;
-  top: 0;
-  left: 0;
+  width: 12px; height: 12px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  transform: translate(-50%, -50%);
+}
+[data-theme="dark"] .dragon-eye {
+  box-shadow: 0 0 6px rgba(255,255,255,0.2);
+}
+/* Position eyes (row 2 after newline strip, cols 8 and 12) */
+.dragon-eye--l {
+  top: calc(2.5 * 1.35em);
+  left: 8.5ch;
+}
+.dragon-eye--r {
+  top: calc(2.5 * 1.35em);
+  left: 12.5ch;
+}
+
+.dragon-pupil {
+  width: 5px; height: 5px;
+  background: #1a1a2e;
+  border-radius: 50%;
+  transition: transform 0.08s ease-out;
+  position: relative;
+}
+.dragon-pupil::after {
+  content: '';
+  position: absolute;
+  width: 2px; height: 2px;
+  background: #fff;
+  border-radius: 50%;
+  top: 1px; right: 1px;
+}
+
+/* Blink */
+.dragon-eye::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: var(--code-bg);
+  border-radius: 50%;
+  transform: scaleY(0);
+  transform-origin: top;
+  z-index: 3;
+  animation: dragon-blink 5s ease infinite;
+}
+@keyframes dragon-blink {
+  0%, 92%, 100% { transform: scaleY(0); }
+  95%, 97% { transform: scaleY(1); }
+}
+
+/* ---- Terminal Window ---- */
+.hero-terminal {
   width: 100%;
-  height: 100%;
+  max-width: 560px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
 }
-[data-theme="dark"] .hero-title::before {
-  color: var(--neon-cyan);
-  z-index: -1;
-  animation: glitch-shift 4s infinite;
+[data-theme="dark"] .hero-terminal {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
-[data-theme="dark"] .hero-title::after {
-  color: var(--neon-magenta);
-  z-index: -2;
-  animation: glitch-shift 4s infinite reverse;
+[data-theme="light"] .hero-terminal {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border-color: #2b2e3a;
+}
+[data-theme="light"] .terminal-body {
+  background: rgba(15, 23, 42, 0.82);
+  color: #f1f5f9;
+}
+[data-theme="light"] .terminal-bar {
+  background: rgba(15, 23, 42, 0.88);
+  border-bottom-color: #2b2e3a;
+}
+[data-theme="light"] .terminal-path {
+  color: #8a8fa6;
+}
+[data-theme="light"] .t-prompt {
+  color: #2dd4bf;
+}
+[data-theme="light"] #hero-term-in {
+  color: #e2e8f0;
+}
+[data-theme="light"] .dragon-bubble {
+  color: #e2e8f0;
+}
+[data-theme="light"] .dragon-art {
+  color: #2dd4bf;
+}
+[data-theme="light"] .dragon-eye {
+  box-shadow: 0 0 6px rgba(255,255,255,0.2);
+}
+[data-theme="light"] .dragon-eye::before {
+  background: #0d0e12;
+}
+[data-theme="light"] #hero-term-in::placeholder {
+  color: #8a8fa6;
+  opacity: 0.5;
+}
+[data-theme="light"] .terminal-bar .td-close,
+[data-theme="light"] .terminal-bar .td-min,
+[data-theme="light"] .terminal-bar .td-max {
+  opacity: 1;
 }
 
-.hero-subtitle {
-  font-size: 1.2rem;
-  color: var(--text-secondary);
-  margin-top: 0.75rem;
-  font-weight: 500;
+/* Title bar */
+.terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 1rem;
+  background: rgba(26, 28, 36, 0.85);
+  border-bottom: 1px solid var(--border-color);
 }
-
-.hero-tagline {
-  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+.terminal-dots { display: flex; gap: 6px; }
+.td { width: 10px; height: 10px; border-radius: 50%; }
+.td-close  { background: #ff5f57; }
+.td-min    { background: #febc2e; }
+.td-max    { background: #28c840; }
+.terminal-path {
+  font-family: Consolas, "D2Coding", monospace;
   font-size: 1rem;
-  color: var(--accent-text);
-  margin-top: 0.5rem;
+  color: var(--text-muted);
 }
 
-/* Light: clean title */
-[data-theme="light"] .hero-title {
+/* Terminal body */
+.terminal-body {
+  padding: 1.25rem;
+  background: rgba(13, 14, 18, 0.8);
+  font-family: Consolas, "D2Coding", monospace;
+}
+
+/* Input row */
+.term-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: Consolas, "D2Coding", monospace;
+}
+.t-prompt {
+  color: var(--accent);
+  flex-shrink: 0;
+  font-size: 1rem;
+}
+#hero-term-in {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
   color: var(--text-primary);
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 0;
+  caret-color: var(--accent);
 }
-
-[data-theme="light"] .hero-tagline {
-  color: var(--accent-text);
-}
-
-/* Typing cursor blink */
-.typing-cursor {
-  animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+#hero-term-in::placeholder {
+  color: var(--text-muted);
+  opacity: 0.5;
 }
 
 /* Hero buttons */
@@ -928,7 +1158,7 @@
   display: flex;
   gap: 1.25rem;
   justify-content: center;
-  margin-top: 2.5rem;
+  margin-top: 2rem;
 }
 
 .hero-btn {
@@ -947,9 +1177,7 @@
   color: var(--text-primary);
   background: var(--bg-secondary);
 }
-.hero-btn svg {
-  flex-shrink: 0;
-}
+.hero-btn svg { flex-shrink: 0; }
 .hero-btn:hover {
   border-color: var(--accent);
   color: var(--accent);
@@ -961,27 +1189,20 @@
 .hero-btn::after {
   content: "";
   position: absolute;
-  width: 6px;
-  height: 6px;
+  width: 6px; height: 6px;
   border: 1px solid var(--text-muted);
   transition: border-color 0.2s ease;
 }
 .hero-btn::before {
-  top: -1px;
-  left: -1px;
-  border-right: none;
-  border-bottom: none;
+  top: -1px; left: -1px;
+  border-right: none; border-bottom: none;
 }
 .hero-btn::after {
-  bottom: -1px;
-  right: -1px;
-  border-left: none;
-  border-top: none;
+  bottom: -1px; right: -1px;
+  border-left: none; border-top: none;
 }
 .hero-btn:hover::before,
-.hero-btn:hover::after {
-  border-color: var(--accent);
-}
+.hero-btn:hover::after { border-color: var(--accent); }
 
 .hero-btn--accent {
   background: var(--accent);
@@ -989,12 +1210,8 @@
   color: #fff;
 }
 .hero-btn--accent::before,
-.hero-btn--accent::after {
-  border-color: var(--accent-hover);
-}
-.hero-btn--accent:hover {
-  color: #fff;
-}
+.hero-btn--accent::after { border-color: var(--accent-hover); }
+.hero-btn--accent:hover { color: #fff; }
 [data-theme="dark"] .hero-btn--accent:hover {
   box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.4);
 }
@@ -1286,12 +1503,42 @@
   .project-grid {
     grid-template-columns: 1fr;
   }
-  .hero-title {
-    font-size: 2.5rem;
-  }
   .hero {
-    min-height: 40vh;
-    padding: 3rem 1rem;
+    min-height: auto;
+    padding: 2rem 1rem 1rem;
+  }
+  .hero-terminal {
+    max-width: 100%;
+  }
+  .terminal-body {
+    padding: 1rem;
+  }
+  .dragon-bubble {
+    font-size: 0.8rem;
+  }
+  .dragon-wrap {
+    font-size: 0.7rem;
+  }
+  .dragon-eye {
+    width: 10px; height: 10px;
+  }
+  .dragon-pupil {
+    width: 4px; height: 4px;
+  }
+  .hero-btn-text {
+    display: none;
+  }
+  .hero-btn {
+    padding: 0.6rem;
+  }
+  .hero-btn svg {
+    width: 20px; height: 20px;
+  }
+  .recent-posts-grid {
+    grid-template-columns: 1fr;
+  }
+  .recent-post-featured {
+    grid-column: 1;
   }
   .projects-title {
     font-size: 2rem;

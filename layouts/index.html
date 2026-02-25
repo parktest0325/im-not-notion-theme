@@ -1,35 +1,261 @@
 {{ define "main" }}
 <div class="home">
-  {{/* === Hero Section === */}}
+  {{/* Precompute data */}}
+  {{ $blogPosts := slice }}
+  {{ with .Site.GetPage "/blog" }}{{ $blogPosts = .RegularPagesRecursive }}{{ end }}
+  {{ $projects := where .Site.RegularPages "Section" "projects" }}
+  {{ $blogSections := 0 }}
+  {{ with .Site.GetPage "/blog" }}{{ $blogSections = len .Sections }}{{ end }}
+  {{ $posts := slice }}
+  {{ with .Site.GetPage "/blog" }}
+    {{ $posts = sort .RegularPagesRecursive "Date" "desc" }}
+  {{ end }}
+
+  <h1 class="visually-hidden">{{ .Site.Params.heroTitle | default .Site.Title }}</h1>
+
+  {{/* === Hero: Dragon Terminal === */}}
   <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-glitch-container">
-        <h1 class="hero-title" data-text="{{ .Site.Params.heroTitle | default .Site.Title }}">
-          {{ .Site.Params.heroTitle | default .Site.Title }}
-        </h1>
+    <div class="hero-terminal">
+      <div class="terminal-bar">
+        <div class="terminal-dots">
+          <span class="td td-close"></span>
+          <span class="td td-min"></span>
+          <span class="td td-max"></span>
+        </div>
+        <span class="terminal-path">~/{{ .Site.Title }}</span>
       </div>
-      <p class="hero-subtitle">{{ .Site.Params.heroSubtitle | default "Developer" }}</p>
-      <p class="hero-tagline">
-        <span class="typing-text">{{ .Site.Params.heroTagline | default "" }}</span>
-        <span class="typing-cursor">_</span>
-      </p>
-      <div class="hero-links">
-        <a href="/blog/" class="hero-btn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-          Blog
-        </a>
-        <a href="/projects/" class="hero-btn hero-btn--accent">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-          Projects
-        </a>
+      <div class="terminal-body" id="hero-term-body">
+        {{/* Dragon ASCII art with speech bubble */}}
+        <div class="dragon-scene">
+          <pre class="dragon-bubble" id="dragon-bubble"></pre>
+          <div class="dragon-wrap">
+<pre class="dragon-art">
+       .     .
+       |\-=-/|
+    /| |· _ ·| |\
+  /' \ \_^-^_/ / `\
+/'    \-/ ~ \-/    `\
+|      /\\ //\      |
+ \|\|\/-""-""-\/|/|/
+</pre>
+            <div class="dragon-eye dragon-eye--l">
+              <div class="dragon-pupil" data-pupil></div>
+            </div>
+            <div class="dragon-eye dragon-eye--r">
+              <div class="dragon-pupil" data-pupil></div>
+            </div>
+          </div>
+        </div>
+        {{/* Single input line */}}
+        <div class="term-input-row">
+          <span class="t-prompt">Input:</span>
+          <input type="text" id="hero-term-in" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="say hi...">
+        </div>
       </div>
     </div>
+    <div class="hero-links">
+      <a href="/blog/" class="hero-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        <span class="hero-btn-text">Blog</span>
+      </a>
+      <a href="/projects/" class="hero-btn hero-btn--accent">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        <span class="hero-btn-text">Projects</span>
+      </a>
+    </div>
   </section>
+
+  {{/* === Dragon JS === */}}
+  <script>
+  (function(){
+    var D={
+      title:{{ .Site.Title | jsonify }},
+      hero:{{ (.Site.Params.heroTitle | default .Site.Title) | jsonify }},
+      sub:{{ (.Site.Params.heroSubtitle | default "Developer") | jsonify }},
+      tag:{{ ((.Site.Params.dragon).tagline | default .Site.Params.heroTagline | default "") | jsonify }},
+      tagKo:{{ ((.Site.Params.dragon).taglineKo | default "") | jsonify }},
+      maxW:{{ ((.Site.Params.dragon).maxWidth | default 34) }},
+      defLang:{{ ((.Site.Params.dragon).defaultLang | default "en") | jsonify }},
+      posts:{{ len $blogPosts }},
+      projects:{{ len $projects }},
+      cats:{{ $blogSections }},
+      custom:{{ with (.Site.Params.dragon).responses }}{{ . | jsonify }}{{ else }}{}{{ end }}
+    };
+
+    var bubble=document.getElementById('dragon-bubble');
+    var input=document.getElementById('hero-term-in');
+    var pupils=document.querySelectorAll('[data-pupil]');
+
+    /* ---- Visual width (CJK = 2 columns) ---- */
+    function vw(s){
+      var w=0;
+      for(var i=0;i<s.length;i++){
+        var c=s.charCodeAt(i);
+        w+=((c>=0xAC00&&c<=0xD7AF)||(c>=0x3000&&c<=0x9FFF)||(c>=0xF900&&c<=0xFAFF)||(c>=0xFF01&&c<=0xFF60))?2:1;
+      }
+      return w;
+    }
+
+    /* ---- ASCII speech bubble (cowsay style) ---- */
+    function makeBubble(text){
+      var maxW=D.maxW;
+      var rawLines=text.split('\n');
+      var lines=[];
+      for(var r=0;r<rawLines.length;r++){
+        if(!rawLines[r]){lines.push('');continue;}
+        var words=rawLines[r].split(' ');
+        var cur='';
+        for(var i=0;i<words.length;i++){
+          var w=words[i];
+          if(cur&&vw(cur)+1+vw(w)>maxW){lines.push(cur);cur=w;}
+          else{cur=cur?cur+' '+w:w;}
+        }
+        if(cur)lines.push(cur);
+      }
+      var lineW=0;
+      for(var i=0;i<lines.length;i++){var lw=vw(lines[i]);if(lw>lineW)lineW=lw;}
+      function rp(c,n){var s='';for(var j=0;j<n;j++)s+=c;return s;}
+      function pd(s){return s+rp(' ',lineW-vw(s));}
+      var top=' '+rp('_',lineW+2);
+      var bot=' '+rp('-',lineW+2);
+      var mid;
+      if(lines.length===1){
+        mid='< '+pd(lines[0])+' >';
+      }else{
+        var p=[];
+        for(var i=0;i<lines.length;i++){
+          if(i===0)p.push('/ '+pd(lines[i])+' \\');
+          else if(i===lines.length-1)p.push('\\ '+pd(lines[i])+' /');
+          else p.push('| '+pd(lines[i])+' |');
+        }
+        mid=p.join('\n');
+      }
+      return top+'\n'+mid+'\n'+bot+'\n'+rp(' ',Math.floor(lineW/2)+1)+'\\';
+    }
+    bubble.textContent=makeBubble(lang==='ko'?(D.tagKo||D.tag||'아무거나 입력하고 엔터!'):(D.tag||'Type something and press Enter!'));
+
+    /* ---- Eye tracking ---- */
+    document.addEventListener('mousemove',function(e){
+      for(var i=0;i<pupils.length;i++){
+        var eye=pupils[i].parentElement;
+        var r=eye.getBoundingClientRect();
+        var cx=r.left+r.width/2, cy=r.top+r.height/2;
+        var a=Math.atan2(e.clientY-cy,e.clientX-cx);
+        var d=Math.min(2.5,Math.hypot(e.clientX-cx,e.clientY-cy)/25);
+        pupils[i].style.transform='translate('+Math.cos(a)*d+'px,'+Math.sin(a)*d+'px)';
+      }
+    });
+
+    /* ---- Language & Responses ---- */
+    var lang=D.defLang;
+    function L(en,ko){return{en:en,ko:ko};}
+    function R(key){var r=responses[key];if(!r)return null;if(typeof r==='function')return r();return r.en?r[lang]:r;}
+
+    var responses={
+      hi:L('...oh! Hi! *tongue flop*\ntry "help" for commands!','...오! 안녕! *혀 늘어짐*\n"help" 쳐봐!'),
+      hello:L('Hello...! I think...?\ntype "help" to see what I can do!','안녕...! 인 것 같아...?\n"help"치면 할 수 있는거 알려줄게!'),
+      hey:L("...huh? Oh hey!\ntry typing something fun!","...응? 오 안녕!\n아무거나 재밌는거 쳐봐!"),
+      whoami:L(D.hero+'\n...that\'s you! I\'m just a dragon.',D.hero+'\n...그건 너잖아! 난 그냥 용이야.'),
+      'who are you':L("I'm the middle head!\n...or was I the left one?","난 가운데 머리야!\n...아니 왼쪽이었나?"),
+      help:function(){return lang==='ko'?'명령어:\n  ls     - 페이지 목록\n  cd blog - 페이지 이동\n  whoami, neofetch\n  date, pwd, kor, eng':'commands:\n  ls      - list pages\n  cd blog - go to a page\n  whoami  - who are you?\n  neofetch, date, pwd\n  kor, eng - switch lang';},
+      ls:L('blog/  projects/  guestbook/\ntype "cd blog" to go!','blog/  projects/  guestbook/\n"cd blog" 치면 이동해!'),
+      date:function(){var d=new Date(),h=d.getHours(),mn=d.getMinutes(),ap=h>=12?'PM':'AM',h12=h%12||12,mm=mn<10?'0'+mn:mn,mo=d.getMonth()+1,dy=d.getDate(),yr=d.getFullYear();var t=yr+'/'+mo+'/'+dy+' '+h12+':'+mm+' '+ap+'\n';var m=lang==='ko'?{0:'...왜 깨어있어?!\n빨리 자!!',6:'아침~... *하품*\n아직 덜 깼어...',9:'좋은 아침!\n일이나 열심히 해!',12:'점심시간!\n밥은 먹었어?',14:'오후 파이팅!\n힘내, 할 수 있어!',18:'벌써 저녁이네...\n너무 늦게까지 하지마!',22:'너무 늦었어...\n졸리지 않아? 난 졸려... Zzz'}:{0:'...why are you awake?!\ngo to sleep!!',6:'morning~... *yawns*\nI\'m still waking up...',9:'good morning!\ngo do some work!',12:'lunchtime!\nhave you eaten yet?',14:'afternoon grind!\nkeep working, you got this!',18:'evening already...\ndon\'t stay up too late!',22:'it\'s SO late...\naren\'t you sleepy? I am... Zzz'};var k=[0,6,9,12,14,18,22];for(var i=k.length-1;i>=0;i--){if(h>=k[i]){t+=m[k[i]];break;}}return t;},
+      pwd:L('~/'+D.title+'\n...home sweet home!','~/'+D.title+'\n...여긴 내 집이야!'),
+      neofetch:L('Engine: Hugo\nPosts: '+D.posts+' | Projects: '+D.projects+'\n...pretty cool huh?','Engine: Hugo\nPosts: '+D.posts+' | Projects: '+D.projects+'\n...꽤 멋지지?'),
+      'cat about.txt':D.sub,
+      'cat about':D.sub,
+      sudo:L('Permission denied!\n...just kidding, I don\'t know\nwhat permissions are *tongue out*','권한 거부!\n...농담이야, 권한이 뭔지\n나도 몰라 *혀 내밀기*'),
+      exit:L("Leave? But I just got here...\nwait, YOU got here.","가는 거야? 나 방금 왔는데...\n아 네가 온 거구나."),
+      'rm -rf /':L('*stares blankly*\n...what does that do?\nplease don\'t tell me.','*멍하니 쳐다봄*\n...그게 뭐 하는 건데?\n제발 알려주지 마.'),
+      'rm -rf':L("*chewing on the keyboard*\n...was that important?","*키보드 씹는 중*\n...그거 중요한 거였어?"),
+      clear:L('...where did everything go?\n*looks around nervously*','...다 어디 갔어?\n*불안하게 두리번*'),
+      '42':L("The answer to everything!\n...is it? I forgot the question.","모든 것의 답!\n...맞나? 질문을 까먹었어."),
+      hack:L('*accidentally unplugs router*\n...oops. *plugs it back in*','*실수로 공유기 뽑음*\n...앗. *다시 꽂는 중*'),
+      thanks:L("You're... wel... *falls asleep*\nZzz... you're welcome! Zzz...","천...만... *잠듦*\nZzz... 천만에! Zzz..."),
+      bye:L('Bye! ...wait come back!\nI was still loading!','잘 가! ...잠깐 돌아와!\n아직 로딩 중이었어!'),
+      fire:L('*tries to breathe fire*\n...just drool came out.\n*embarrassed*','*불 뿜기 시도*\n...침만 나왔어.\n*부끄*'),
+      roar:L('...rawr? *quiet roar*\nwas that scary? ...no?','...크아? *조용한 포효*\n무서웠어? ...아니지?'),
+      name:L("I'm... uh...\n*checks nametag* ...it fell off.","나는... 음...\n*이름표 확인* ...떨어졌네."),
+      age:L("I forgot...\nwas it 5? Or 5000?\nbig number either way!","까먹었어...\n5살? 아니면 5000살?\n어쨌든 큰 숫자!"),
+      hungry:L('I could eat a...\nwhat do I eat again?\n*chews on pixel*','뭔가 먹고 싶은데...\n내가 뭘 먹더라?\n*픽셀 씹는 중*'),
+      fly:L("*flaps wings*\n...I have wings?? *looks back*\nwhen did those get there?!","*날개 퍼덕*\n...나 날개 있었어?? *뒤돌아봄*\n언제 생긴 거야?!"),
+      joke:L('Why did the dragon...\num... I forgot the punchline.\n...just laugh anyway?','용이 왜...\n음... 펀치라인을 까먹었어.\n...그냥 웃어줄래?'),
+      sing:L('La la... *forgets lyrics*\n...la? ...la la?\n*gives up*','라 라... *가사 까먹음*\n...라? ...라 라?\n*포기*'),
+      tongue:L('*sticks tongue out more*\nbleh! bleeehh!! BLEH!!!','*혀 더 내밀기*\n멜렝! 메에엘렝!! 멜렝!!!'),
+      think:L('...(loading)...\n...(still loading)...\n...(have you tried restarting?)','...(로딩중)...\n...(아직 로딩중)...\n...(껐다 켜볼래?)'),
+      sleep:L('Zzz... *wakes up*\n...was I asleep?\nZzz... *falls back asleep*','Zzz... *깨어남*\n...내가 잤어?\nZzz... *다시 잠듦*'),
+      smart:L("I'm very smart!\n...what's 2+2 again?\n*counts on claws*","나 진짜 똑똒해!\n...2+2가 뭐였지?\n*발톱으로 세는 중*"),
+      head:L("Three heads!\nBut we share one brain...\n...it's very crowded in here.","머리 세 개!\n근데 뇌는 하나 공유해...\n...여기 진짜 비좁아."),
+    };
+    var defaults={
+      en:["...*stares blankly*...","...huh?","*tongue flop* what?","...try 'help'!","*confused head tilt*","...(processing)...(error)..."],
+      ko:["...*멍하니 쳐다봄*...","...응?","*혀 늘어짐* 뭐?","...'help' 쳐봐!","*갸우뚱*","...(처리중)...(오류)..."],
+    };
+    /* ---- Merge custom responses from config ---- */
+    var ck=Object.keys(D.custom);
+    for(var i=0;i<ck.length;i++){
+      var k=ck[i],v=D.custom[k];
+      if(typeof v==='string')responses[k]=v;
+      else if(v.en||v.ko)responses[k]=L(v.en||'',v.ko||'');
+    }
+    var di=0;
+
+    /* ---- Handle input ---- */
+    input.addEventListener('keydown',function(e){
+      if(e.key==='Enter'){
+        var raw=input.value.trim();
+        input.value='';
+        if(!raw)return;
+        var lo=raw.toLowerCase();
+        // Language switch
+        if(lo==='kor'||lo==='ko'||lo==='한국어'){
+          lang='ko';bubble.textContent=makeBubble('한국어로 바꿨어!\n이제 한국어로 대답할게~');return;
+        }
+        if(lo==='eng'||lo==='en'||lo==='english'){
+          lang='en';bubble.textContent=makeBubble('Switched to English!\nI\'ll answer in English now~');return;
+        }
+        // Check for exact match
+        var resp=R(lo);
+        if(!resp){
+          // Check for partial matches
+          var keys=Object.keys(responses);
+          for(var i=0;i<keys.length;i++){
+            if(lo.indexOf(keys[i])>=0||keys[i].indexOf(lo)>=0){
+              resp=R(keys[i]);break;
+            }
+          }
+        }
+        // Navigate commands
+        if(lo.indexOf('cd ')===0){
+          var t=lo.replace('cd ','').replace(/\/$/,'');
+          if(['blog','projects','guestbook'].indexOf(t)>=0){
+            bubble.textContent=makeBubble(lang==='ko'?'/'+t+'/(으)로 이동 중...':'Going to /'+t+'/...');
+            setTimeout(function(){location.href='/'+t+'/';},800);
+            return;
+          }
+          resp=lang==='ko'?'그런 폴더 없어: '+t:'No such directory: '+t;
+        }
+        // Echo command
+        if(lo.indexOf('echo ')===0){
+          resp=raw.slice(5).replace(/^["']|["']$/g,'');
+        }
+        if(!resp){var dl=defaults[lang];resp=dl[di%dl.length];di++;}
+        bubble.textContent=makeBubble(resp);
+      }
+    });
+
+    /* ---- Click terminal to focus ---- */
+    document.getElementById('hero-term-body').addEventListener('click',function(e){
+      if(!e.target.closest('a'))input.focus();
+    });
+  })();
+  </script>
 
   {{/* === About Section === */}}
   {{ with .Site.Params.about }}
   <section class="home-section about-section">
     <div class="section-inner">
+      <div class="section-divider"><span>// about</span></div>
       <div class="about-card">
         <div class="about-main">
           {{ with .avatar }}
@@ -57,11 +283,6 @@
           </div>
         </div>
         <div class="about-aside">
-          {{ $blogPosts := slice }}
-          {{ with $.Site.GetPage "/blog" }}{{ $blogPosts = .RegularPagesRecursive }}{{ end }}
-          {{ $projectPages := where $.Site.RegularPages "Section" "projects" }}
-          {{ $blogSections := 0 }}
-          {{ with $.Site.GetPage "/blog" }}{{ $blogSections = len .Sections }}{{ end }}
           <div class="about-stats">
             <div class="about-stat">
               <span class="about-stat-value">{{ len $blogPosts }}</span>
@@ -72,7 +293,7 @@
               <span class="about-stat-label">Categories</span>
             </div>
             <div class="about-stat">
-              <span class="about-stat-value">{{ len $projectPages }}</span>
+              <span class="about-stat-value">{{ len $projects }}</span>
               <span class="about-stat-label">Projects</span>
             </div>
             <div class="about-stat">
@@ -87,13 +308,10 @@
   {{ end }}
 
   {{/* === Featured Projects === */}}
-  {{ $projects := where .Site.RegularPages "Section" "projects" }}
   {{ if $projects }}
   <section class="home-section">
     <div class="section-inner">
-      <h2 class="section-title">
-        <span class="section-label">Featured</span> Projects
-      </h2>
+      <div class="section-divider"><span>// projects</span></div>
       <div class="project-grid project-grid--home">
         {{ $limit := .Site.Params.homepage.featuredProjectsCount | default 4 }}
         {{ range first $limit (sort $projects "Params.weight" "asc") }}
@@ -111,25 +329,28 @@
   {{/* === Recent Posts === */}}
   {{ $blogSection := .Site.GetPage "/blog" }}
   {{ if $blogSection }}
-  {{ $posts := $blogSection.RegularPagesRecursive }}
-  {{ $posts = sort $posts "Date" "desc" }}
   {{ if $posts }}
   <section class="home-section">
     <div class="section-inner">
-      <h2 class="section-title">
-        <span class="section-label">Recent</span> Posts
-      </h2>
-      <ul class="recent-posts">
+      <div class="section-divider"><span>// recent</span></div>
+      <div class="recent-posts-grid">
         {{ $limit := .Site.Params.homepage.recentPostsCount | default 5 }}
-        {{ range first $limit $posts }}
-        <li class="recent-post-item">
-          <a href="{{ .RelPermalink }}" class="recent-post-link">
-            <span class="recent-post-title">{{ .Title }}</span>
-            <span class="recent-post-date">{{ .Date.Format "2006-01-02" }}</span>
-          </a>
-        </li>
+        {{ range $i, $post := first $limit $posts }}
+        <a href="{{ $post.RelPermalink }}" class="recent-post-card{{ if eq $i 0 }} recent-post-featured{{ end }}">
+          {{ if eq $i 0 }}<span class="post-card-badge">Latest</span>{{ end }}
+          <time class="post-card-date">{{ $post.Date.Format "Jan 02, 2006" }}</time>
+          <h3 class="post-card-title">{{ $post.Title }}</h3>
+          {{ if eq $i 0 }}
+            {{ with $post.Description }}<p class="post-card-desc">{{ . }}</p>{{ end }}
+          {{ end }}
+          {{ with $post.Params.tags }}
+          <div class="post-card-tags">
+            {{ range first 3 . }}<span class="post-card-tag">{{ . }}</span>{{ end }}
+          </div>
+          {{ end }}
+        </a>
         {{ end }}
-      </ul>
+      </div>
       <div class="section-more">
         <a href="/blog/" class="more-link">View all posts &rarr;</a>
       </div>

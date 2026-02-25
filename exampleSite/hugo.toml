@@ -79,6 +79,23 @@ You can use **bold**, *italic*, and [links](https://example.com)."""
   mapping = "pathname"                # "pathname" | "title" | "specific"
   lang = "ko"                         # "ko" | "en" | "ja" | ...
 
+# --- Dragon Terminal (homepage) ---
+[params.dragon]
+  # Initial greeting message
+  tagline = "Type something and press Enter!"
+  taglineKo = "아무거나 입력하고 엔터를 눌러봐!"
+  # Bubble max text width (characters)
+  maxWidth = 34
+  # Default language: "en" or "ko"
+  defaultLang = "en"
+
+  # Add custom responses (merged with built-in defaults)
+  # Each key becomes a command. Supports en/ko bilingual.
+  # Example:
+  # [params.dragon.responses.coffee]
+  #   en = "Coffee? I prefer lava!\n...it's warmer."
+  #   ko = "커피? 난 용암이 좋아!\n...더 따뜻하거든."
+
 # --- Homepage Layout ---
 [params.homepage]
   featuredProjectsCount = 4           # Number of project cards on homepage

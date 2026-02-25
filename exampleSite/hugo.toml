@@ -7,8 +7,9 @@
 baseURL = "https://example.com/"
 languageCode = "ko-kr"
 title = "My Site"
-theme = "im-not-notion-theme_claude"
+theme = "im-not-notion-theme"
 paginate = 10                # Posts per page in list views
+pluralizeListTitles = false  # Prevent Hugo from pluralizing section titles (e.g. "blog" → "blogs")
 
 # =============================================================================
 # Site Parameters

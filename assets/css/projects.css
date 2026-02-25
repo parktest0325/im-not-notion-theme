@@ -1,3 +1,21 @@
+/* ---- Bubble Font (영문: 둥근모꼴, 한글: Neo둥근모) ---- */
+@font-face {
+  font-family: 'BubbleFont';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-007F, U+2500-257F;
+}
+@font-face {
+  font-family: 'BubbleFont';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.3/NeoDunggeunmo.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+AC00-D7AF, U+3131-318E;
+}
+
 /* ========================================
    Projects Section — Cyberpunk Card Layout
    ======================================== */
@@ -443,13 +461,11 @@
 
 /* --- Section Divider --- */
 .section-divider {
-  font-family: "D2Coding", "JetBrains Mono", "Fira Code", Consolas, monospace;
-  font-size: 0.8rem;
+  font-family: Consolas, monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
   color: var(--text-muted);
   margin-bottom: 1.5rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px solid var(--border-subtle);
-  opacity: 0.6;
 }
 .section-divider span {
   color: var(--accent);
@@ -579,7 +595,7 @@
 .stat-value {
   font-size: 2rem;
   font-weight: 800;
-  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+  font-family: Consolas, monospace;
   color: var(--text-primary);
 }
 
@@ -773,7 +789,7 @@
 .about-stat-value {
   font-size: 1.5rem;
   font-weight: 800;
-  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+  font-family: Consolas, monospace;
 }
 
 [data-theme="dark"] .about-stat-value {
@@ -942,9 +958,9 @@
 
 /* Speech bubble (ASCII cowsay style) */
 .dragon-bubble {
-  font-family: "JetBrains Mono", "Fira Code", Consolas, "Courier New", monospace;
-  font-size: 0.85rem;
-  line-height: 1.35;
+  font-family: "BubbleFont", Consolas, monospace;
+  font-size: 1.3rem;
+  line-height: 1.45;
   color: var(--text-primary);
   margin: 0;
   white-space: pre;
@@ -955,7 +971,7 @@
 .dragon-wrap {
   position: relative;
   display: inline-block;
-  font-family: "JetBrains Mono", "Fira Code", Consolas, "Courier New", monospace;
+  font-family: Consolas, monospace;
   font-size: 0.85rem;
   line-height: 1.35;
 }
@@ -1040,7 +1056,46 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
 [data-theme="light"] .hero-terminal {
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border-color: #2b2e3a;
+}
+[data-theme="light"] .terminal-body {
+  background: rgba(15, 23, 42, 0.82);
+  color: #f1f5f9;
+}
+[data-theme="light"] .terminal-bar {
+  background: rgba(15, 23, 42, 0.88);
+  border-bottom-color: #2b2e3a;
+}
+[data-theme="light"] .terminal-path {
+  color: #8a8fa6;
+}
+[data-theme="light"] .t-prompt {
+  color: #2dd4bf;
+}
+[data-theme="light"] #hero-term-in {
+  color: #e2e8f0;
+}
+[data-theme="light"] .dragon-bubble {
+  color: #e2e8f0;
+}
+[data-theme="light"] .dragon-art {
+  color: #2dd4bf;
+}
+[data-theme="light"] .dragon-eye {
+  box-shadow: 0 0 6px rgba(255,255,255,0.2);
+}
+[data-theme="light"] .dragon-eye::before {
+  background: #0d0e12;
+}
+[data-theme="light"] #hero-term-in::placeholder {
+  color: #8a8fa6;
+  opacity: 0.5;
+}
+[data-theme="light"] .terminal-bar .td-close,
+[data-theme="light"] .terminal-bar .td-min,
+[data-theme="light"] .terminal-bar .td-max {
+  opacity: 1;
 }
 
 /* Title bar */
@@ -1049,7 +1104,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.55rem 1rem;
-  background: var(--bg-elevated);
+  background: rgba(26, 28, 36, 0.85);
   border-bottom: 1px solid var(--border-color);
 }
 .terminal-dots { display: flex; gap: 6px; }
@@ -1058,16 +1113,16 @@
 .td-min    { background: #febc2e; }
 .td-max    { background: #28c840; }
 .terminal-path {
-  font-family: "D2Coding", "JetBrains Mono", "Fira Code", Consolas, monospace;
-  font-size: 0.8rem;
+  font-family: Consolas, "D2Coding", monospace;
+  font-size: 1rem;
   color: var(--text-muted);
 }
 
 /* Terminal body */
 .terminal-body {
   padding: 1.25rem;
-  background: var(--code-bg);
-  font-family: "D2Coding", "JetBrains Mono", "Fira Code", Consolas, monospace;
+  background: rgba(13, 14, 18, 0.8);
+  font-family: Consolas, "D2Coding", monospace;
 }
 
 /* Input row */
@@ -1075,12 +1130,12 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  font-family: Consolas, "D2Coding", monospace;
 }
 .t-prompt {
   color: var(--accent);
-  font-weight: 700;
   flex-shrink: 0;
-  font-size: 0.85rem;
+  font-size: 1rem;
 }
 #hero-term-in {
   flex: 1;
@@ -1089,13 +1144,13 @@
   outline: none;
   color: var(--text-primary);
   font-family: inherit;
-  font-size: 0.9rem;
+  font-size: 1rem;
   padding: 0;
   caret-color: var(--accent);
 }
 #hero-term-in::placeholder {
   color: var(--text-muted);
-  opacity: 0.3;
+  opacity: 0.5;
 }
 
 /* Hero buttons */
@@ -1458,6 +1513,9 @@
   .terminal-body {
     padding: 1rem;
   }
+  .dragon-bubble {
+    font-size: 0.8rem;
+  }
   .dragon-wrap {
     font-size: 0.7rem;
   }
@@ -1466,6 +1524,15 @@
   }
   .dragon-pupil {
     width: 4px; height: 4px;
+  }
+  .hero-btn-text {
+    display: none;
+  }
+  .hero-btn {
+    padding: 0.6rem;
+  }
+  .hero-btn svg {
+    width: 20px; height: 20px;
   }
   .recent-posts-grid {
     grid-template-columns: 1fr;

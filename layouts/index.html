@@ -56,11 +56,11 @@
     <div class="hero-links">
       <a href="/blog/" class="hero-btn">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-        Blog
+        <span class="hero-btn-text">Blog</span>
       </a>
       <a href="/projects/" class="hero-btn hero-btn--accent">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-        Projects
+        <span class="hero-btn-text">Projects</span>
       </a>
     </div>
   </section>
@@ -72,10 +72,14 @@
       title:{{ .Site.Title | jsonify }},
       hero:{{ (.Site.Params.heroTitle | default .Site.Title) | jsonify }},
       sub:{{ (.Site.Params.heroSubtitle | default "Developer") | jsonify }},
-      tag:{{ (.Site.Params.heroTagline | default "") | jsonify }},
+      tag:{{ ((.Site.Params.dragon).tagline | default .Site.Params.heroTagline | default "") | jsonify }},
+      tagKo:{{ ((.Site.Params.dragon).taglineKo | default "") | jsonify }},
+      maxW:{{ ((.Site.Params.dragon).maxWidth | default 34) }},
+      defLang:{{ ((.Site.Params.dragon).defaultLang | default "en") | jsonify }},
       posts:{{ len $blogPosts }},
       projects:{{ len $projects }},
-      cats:{{ $blogSections }}
+      cats:{{ $blogSections }},
+      custom:{{ with (.Site.Params.dragon).responses }}{{ . | jsonify }}{{ else }}{}{{ end }}
     };
 
     var bubble=document.getElementById('dragon-bubble');
@@ -94,7 +98,7 @@
 
     /* ---- ASCII speech bubble (cowsay style) ---- */
     function makeBubble(text){
-      var maxW=34;
+      var maxW=D.maxW;
       var rawLines=text.split('\n');
       var lines=[];
       for(var r=0;r<rawLines.length;r++){
@@ -128,7 +132,7 @@
       }
       return top+'\n'+mid+'\n'+bot+'\n'+rp(' ',Math.floor(lineW/2)+1)+'\\';
     }
-    bubble.textContent=makeBubble(D.tag||'Type something and press Enter!');
+    bubble.textContent=makeBubble(lang==='ko'?(D.tagKo||D.tag||'아무거나 입력하고 엔터!'):(D.tag||'Type something and press Enter!'));
 
     /* ---- Eye tracking ---- */
     document.addEventListener('mousemove',function(e){
@@ -137,13 +141,13 @@
         var r=eye.getBoundingClientRect();
         var cx=r.left+r.width/2, cy=r.top+r.height/2;
         var a=Math.atan2(e.clientY-cy,e.clientX-cx);
-        var d=Math.min(5,Math.hypot(e.clientX-cx,e.clientY-cy)/25);
+        var d=Math.min(2.5,Math.hypot(e.clientX-cx,e.clientY-cy)/25);
         pupils[i].style.transform='translate('+Math.cos(a)*d+'px,'+Math.sin(a)*d+'px)';
       }
     });
 
     /* ---- Language & Responses ---- */
-    var lang='en';
+    var lang=D.defLang;
     function L(en,ko){return{en:en,ko:ko};}
     function R(key){var r=responses[key];if(!r)return null;if(typeof r==='function')return r();return r.en?r[lang]:r;}
 
@@ -153,7 +157,7 @@
       hey:L("...huh? Oh hey!\ntry typing something fun!","...응? 오 안녕!\n아무거나 재밌는거 쳐봐!"),
       whoami:L(D.hero+'\n...that\'s you! I\'m just a dragon.',D.hero+'\n...그건 너잖아! 난 그냥 용이야.'),
       'who are you':L("I'm the middle head!\n...or was I the left one?","난 가운데 머리야!\n...아니 왼쪽이었나?"),
-      help:function(){return lang==='ko'?'명령어:\n  ls     - 페이지 목록\n  cd blog - 페이지 이동\n  whoami / neofetch\n  date / pwd / kor / eng':'commands:\n  ls      - list pages\n  cd blog - go to a page\n  whoami  - who are you?\n  neofetch / date / pwd\n  kor / eng - switch lang';},
+      help:function(){return lang==='ko'?'명령어:\n  ls     - 페이지 목록\n  cd blog - 페이지 이동\n  whoami, neofetch\n  date, pwd, kor, eng':'commands:\n  ls      - list pages\n  cd blog - go to a page\n  whoami  - who are you?\n  neofetch, date, pwd\n  kor, eng - switch lang';},
       ls:L('blog/  projects/  guestbook/\ntype "cd blog" to go!','blog/  projects/  guestbook/\n"cd blog" 치면 이동해!'),
       date:function(){var d=new Date(),h=d.getHours(),mn=d.getMinutes(),ap=h>=12?'PM':'AM',h12=h%12||12,mm=mn<10?'0'+mn:mn,mo=d.getMonth()+1,dy=d.getDate(),yr=d.getFullYear();var t=yr+'/'+mo+'/'+dy+' '+h12+':'+mm+' '+ap+'\n';var m=lang==='ko'?{0:'...왜 깨어있어?!\n빨리 자!!',6:'아침~... *하품*\n아직 덜 깼어...',9:'좋은 아침!\n일이나 열심히 해!',12:'점심시간!\n밥은 먹었어?',14:'오후 파이팅!\n힘내, 할 수 있어!',18:'벌써 저녁이네...\n너무 늦게까지 하지마!',22:'너무 늦었어...\n졸리지 않아? 난 졸려... Zzz'}:{0:'...why are you awake?!\ngo to sleep!!',6:'morning~... *yawns*\nI\'m still waking up...',9:'good morning!\ngo do some work!',12:'lunchtime!\nhave you eaten yet?',14:'afternoon grind!\nkeep working, you got this!',18:'evening already...\ndon\'t stay up too late!',22:'it\'s SO late...\naren\'t you sleepy? I am... Zzz'};var k=[0,6,9,12,14,18,22];for(var i=k.length-1;i>=0;i--){if(h>=k[i]){t+=m[k[i]];break;}}return t;},
       pwd:L('~/'+D.title+'\n...home sweet home!','~/'+D.title+'\n...여긴 내 집이야!'),
@@ -187,6 +191,13 @@
       en:["...*stares blankly*...","...huh?","*tongue flop* what?","...try 'help'!","*confused head tilt*","...(processing)...(error)..."],
       ko:["...*멍하니 쳐다봄*...","...응?","*혀 늘어짐* 뭐?","...'help' 쳐봐!","*갸우뚱*","...(처리중)...(오류)..."],
     };
+    /* ---- Merge custom responses from config ---- */
+    var ck=Object.keys(D.custom);
+    for(var i=0;i<ck.length;i++){
+      var k=ck[i],v=D.custom[k];
+      if(typeof v==='string')responses[k]=v;
+      else if(v.en||v.ko)responses[k]=L(v.en||'',v.ko||'');
+    }
     var di=0;
 
     /* ---- Handle input ---- */
@@ -301,9 +312,6 @@
   <section class="home-section">
     <div class="section-inner">
       <div class="section-divider"><span>// projects</span></div>
-      <h2 class="section-title">
-        <span class="section-label">Featured</span> Projects
-      </h2>
       <div class="project-grid project-grid--home">
         {{ $limit := .Site.Params.homepage.featuredProjectsCount | default 4 }}
         {{ range first $limit (sort $projects "Params.weight" "asc") }}
@@ -325,9 +333,6 @@
   <section class="home-section">
     <div class="section-inner">
       <div class="section-divider"><span>// recent</span></div>
-      <h2 class="section-title">
-        <span class="section-label">Recent</span> Posts
-      </h2>
       <div class="recent-posts-grid">
         {{ $limit := .Site.Params.homepage.recentPostsCount | default 5 }}
         {{ range $i, $post := first $limit $posts }}

@@ -36,8 +36,27 @@
         {{ end }}
       </nav>
 
-      {{/* Giscus Comments */}}
-      {{ with .Site.Params.giscus }}
+      {{/* Comments — Remark42 first, Giscus fallback */}}
+      {{ if .Site.Params.remark42.url }}
+      <section class="blog-comments">
+        <h2 class="comments-title">Comments</h2>
+        <div id="remark42"></div>
+        <script>
+          var remark_config = {
+            host: '{{ .Site.Params.remark42.url }}',
+            site_id: '{{ .Site.Params.remark42.site | default "blog" }}',
+            theme: document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light',
+            locale: '{{ .Site.Params.remark42.locale | default "ko" }}'
+          };
+          (function() {
+            var s = document.createElement('script');
+            s.src = remark_config.host + '/web/embed.es6.mjs';
+            s.type = 'module'; s.defer = true;
+            (document.head || document.body).appendChild(s);
+          })();
+        </script>
+      </section>
+      {{ else with .Site.Params.giscus }}
       {{ if and .repo .repoId .categoryId }}
       <section class="blog-comments">
         <h2 class="comments-title">Comments</h2>

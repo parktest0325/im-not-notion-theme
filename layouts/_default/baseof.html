@@ -25,12 +25,23 @@
       }
     }
 
+    function syncRemark42Theme(theme) {
+      var frame = document.querySelector('iframe[src*="remark42"]');
+      if (frame) {
+        frame.contentWindow.postMessage(
+          JSON.stringify({ theme: theme }),
+          '*'
+        );
+      }
+    }
+
     function toggleTheme() {
       var html = document.documentElement;
       var next = html.dataset.theme === 'dark' ? 'light' : 'dark';
       html.dataset.theme = next;
       localStorage.setItem('inn-theme', next);
       syncGiscusTheme(next);
+      syncRemark42Theme(next);
       var isDark = next === 'dark';
       var img = isDark ? html.dataset.bgDark : html.dataset.bgLight;
       var op = isDark ? html.dataset.opDark : html.dataset.opLight;

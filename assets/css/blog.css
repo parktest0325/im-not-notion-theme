@@ -336,7 +336,7 @@
   height: 32px;
   font-size: 0.8rem;
   font-weight: 600;
-  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+  font-family: 'D2Coding', Consolas, monospace;
 }
 
 .page-num.active {

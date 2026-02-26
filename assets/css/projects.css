@@ -572,13 +572,30 @@
 
 .recent-comment-card {
   display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1rem;
   padding: 1rem 1.25rem;
   border: 1px solid var(--border-color);
   background: var(--bg-secondary);
   text-decoration: none;
   transition: all 0.2s ease;
+}
+
+.comment-card-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--border-color);
+}
+
+.comment-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-width: 0;
 }
 .recent-comment-card:hover {
   border-color: var(--accent);

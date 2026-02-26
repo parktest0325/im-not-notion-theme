@@ -293,7 +293,7 @@
             </div>
             <div class="about-stat">
               <span class="about-stat-value">{{ $blogSections }}</span>
-              <span class="about-stat-label">Categories</span>
+              <span class="about-stat-label">Cats</span>
             </div>
             <div class="about-stat">
               <span class="about-stat-value">{{ len $projects }}</span>
@@ -335,7 +335,7 @@
   {{ if $posts }}
   <section class="home-section">
     <div class="section-inner">
-      <div class="section-divider"><span>// recent</span></div>
+      <div class="section-divider"><span>// recent posts</span></div>
       <div class="recent-posts-grid">
         {{ $limit := .Site.Params.homepage.recentPostsCount | default 5 }}
         {{ range $i, $post := first $limit $posts }}
@@ -367,7 +367,7 @@
   {{ if .url }}
   <section class="home-section">
     <div class="section-inner">
-      <div class="section-divider"><span>// comments</span></div>
+      <div class="section-divider"><span>// recent comments</span></div>
       <div class="recent-comments" id="recent-comments"></div>
       <script>
         (function() {
@@ -388,16 +388,20 @@
                 if (text.length > 120) text = text.substring(0, 120) + '…';
                 var pageUrl = c.locator.url || '#';
                 var pageTitle = decodeURIComponent(pageUrl.replace(/\/$/, '').split('/').pop() || 'page').replace(/-/g, ' ');
+                var avatar = c.user.picture || (host + '/api/v1/avatar/' + encodeURIComponent(c.user.id) + '.image');
                 var el = document.createElement('a');
                 el.href = pageUrl + '#remark42__comment-' + c.id;
                 el.className = 'recent-comment-card';
                 el.innerHTML =
-                  '<div class="comment-card-header">' +
-                    '<span class="comment-card-author">' + (c.user.name || 'Anonymous') + '</span>' +
-                    '<time class="comment-card-date">' + dateStr + '</time>' +
-                  '</div>' +
-                  '<p class="comment-card-text">' + text + '</p>' +
-                  '<span class="comment-card-source">' + pageTitle + '</span>';
+                  '<img class="comment-card-avatar" src="' + avatar + '" alt="" />' +
+                  '<div class="comment-card-body">' +
+                    '<div class="comment-card-header">' +
+                      '<span class="comment-card-author">' + (c.user.name || 'Anonymous') + '</span>' +
+                      '<time class="comment-card-date">' + dateStr + '</time>' +
+                    '</div>' +
+                    '<p class="comment-card-text">' + text + '</p>' +
+                    '<span class="comment-card-source">' + pageTitle + '</span>' +
+                  '</div>';
                 container.appendChild(el);
               });
             })

@@ -361,5 +361,52 @@
   </section>
   {{ end }}
   {{ end }}
+
+  {{/* === Recent Comments (Remark42) === */}}
+  {{ with .Site.Params.remark42 }}
+  {{ if .url }}
+  <section class="home-section">
+    <div class="section-inner">
+      <div class="section-divider"><span>// comments</span></div>
+      <div class="recent-comments" id="recent-comments"></div>
+      <script>
+        (function() {
+          var host = {{ .url | jsonify }};
+          var siteId = {{ (.site | default "blog") | jsonify }};
+          fetch(host + '/api/v1/last/5?site=' + siteId)
+            .then(function(r) { return r.json(); })
+            .then(function(comments) {
+              var container = document.getElementById('recent-comments');
+              if (!comments || !comments.length) {
+                container.innerHTML = '<p class="no-comments">No comments yet.</p>';
+                return;
+              }
+              comments.forEach(function(c) {
+                var date = new Date(c.time);
+                var dateStr = date.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+                var text = c.text.replace(/<[^>]*>/g, '');
+                if (text.length > 120) text = text.substring(0, 120) + '…';
+                var pageUrl = c.locator.url || '#';
+                var pageTitle = decodeURIComponent(pageUrl.replace(/\/$/, '').split('/').pop() || 'page').replace(/-/g, ' ');
+                var el = document.createElement('a');
+                el.href = pageUrl + '#remark42__comment-' + c.id;
+                el.className = 'recent-comment-card';
+                el.innerHTML =
+                  '<div class="comment-card-header">' +
+                    '<span class="comment-card-author">' + (c.user.name || 'Anonymous') + '</span>' +
+                    '<time class="comment-card-date">' + dateStr + '</time>' +
+                  '</div>' +
+                  '<p class="comment-card-text">' + text + '</p>' +
+                  '<span class="comment-card-source">' + pageTitle + '</span>';
+                container.appendChild(el);
+              });
+            })
+            .catch(function() {});
+        })();
+      </script>
+    </div>
+  </section>
+  {{ end }}
+  {{ end }}
 </div>
 {{ end }}

@@ -395,12 +395,13 @@
                 el.innerHTML =
                   '<img class="comment-card-avatar" src="' + avatar + '" alt="" />' +
                   '<div class="comment-card-body">' +
-                    '<div class="comment-card-header">' +
+                    '<div class="comment-card-meta">' +
                       '<span class="comment-card-author">' + (c.user.name || 'Anonymous') + '</span>' +
-                      '<time class="comment-card-date">' + dateStr + '</time>' +
+                      '<span class="comment-card-sep">on</span>' +
+                      '<span class="comment-card-source">' + pageTitle + '</span>' +
                     '</div>' +
                     '<p class="comment-card-text">' + text + '</p>' +
-                    '<span class="comment-card-source">' + pageTitle + '</span>' +
+                    '<time class="comment-card-date">' + dateStr + '</time>' +
                   '</div>';
                 container.appendChild(el);
               });

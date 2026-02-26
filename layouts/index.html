@@ -371,8 +371,8 @@
       <div class="recent-comments" id="recent-comments"></div>
       <script>
         (function() {
-          var host = {{ .url | jsonify }};
-          var siteId = {{ (.site | default "blog") | jsonify }};
+          var host = '{{ .url }}';
+          var siteId = '{{ .site | default "blog" }}';
           fetch(host + '/api/v1/last/5?site=' + siteId)
             .then(function(r) { return r.json(); })
             .then(function(comments) {

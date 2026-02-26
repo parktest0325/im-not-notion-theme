@@ -24,16 +24,11 @@
           s.type = 'module'; s.defer = true;
           (document.head || document.body).appendChild(s);
         })();
-        (function() {
-          var hash = location.hash;
-          if (!hash || hash.indexOf('remark42__comment-') < 0) return;
-          var obs = new MutationObserver(function(_, o) {
-            var el = document.getElementById(hash.substring(1));
-            if (el) { o.disconnect(); setTimeout(function() { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 200); }
-          });
-          obs.observe(document.getElementById('remark42'), { childList: true, subtree: true });
-          setTimeout(function() { obs.disconnect(); }, 10000);
-        })();
+        if (location.hash && location.hash.indexOf('remark42') >= 0) {
+          setTimeout(function() {
+            document.querySelector('.guestbook-comments').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 300);
+        }
       </script>
     </div>
     {{ else }}

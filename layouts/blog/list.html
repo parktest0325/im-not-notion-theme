@@ -23,8 +23,9 @@
         {{ end }}
       {{ end }}
 
-      {{/* Paginate regular posts */}}
-      {{ $paginator := .Paginate ($pages.ByDate.Reverse) }}
+      {{/* Paginate regular posts (exclude bookHidden) */}}
+      {{ $visiblePages := where $pages ".Params.bookHidden" "ne" true }}
+      {{ $paginator := .Paginate ($visiblePages.ByDate.Reverse) }}
       {{ range $paginator.Pages }}
       <article class="blog-list-item">
         <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>

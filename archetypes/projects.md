@@ -6,6 +6,7 @@ tags: []
 technologies: []
 status: "active"
 weight: 1
+bookHidden: true
 links:
   blog: ""
   showcase: ""

@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /
+
+{{ range .Site.RegularPages }}{{ if not .Params.bookHidden }}Allow: {{ .RelPermalink }}
+{{ end }}{{ end }}
+Sitemap: {{ .Site.BaseURL }}sitemap.xml

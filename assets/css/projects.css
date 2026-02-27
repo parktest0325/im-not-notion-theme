@@ -1141,26 +1141,63 @@
   0%, 92%, 100% { transform: scaleY(0); }
   95%, 97% { transform: scaleY(1); }
 }
-
+/* Droopy eyes (half-closed) */
+.dragon-eye.droopy {
+  clip-path: inset(45% 0 0 0);
+  transition: clip-path 0.2s ease;
+}
+.dragon-eye.droopy .dragon-pupil {
+  transform: translateY(1px) !important;
+}
 /* Dragon mouth (hidden by default, shown via JS) */
 .dragon-mouth {
   position: absolute;
-  width: 10px; height: 6px;
-  border-left: 2px solid var(--body-font-color);
-  border-right: 2px solid var(--body-font-color);
-  border-bottom: 2px solid var(--body-font-color);
-  border-top: none;
-  border-radius: 0 0 50% 50%;
-  top: calc(2.8 * 1.35em);
+  width: 32px; height: 20px;
+  background: #1a1a2e;
+  border-radius: 50%;
+  top: calc(3.4 * 1.35em);
   left: 10.5ch;
-  transform: translate(-50%, 0);
+  transform: translate(-50%, -50%);
   z-index: 2;
   opacity: 0;
-  transition: opacity 0.15s ease;
+  transition: opacity 0.2s ease;
   pointer-events: none;
+  overflow: hidden;
+}
+/* Dracula fangs (inside the mouth, hanging from top) */
+.dragon-mouth::before,
+.dragon-mouth::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 0; height: 0;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-top: 10px solid #fff;
+}
+.dragon-mouth::before { left: 4px; }
+.dragon-mouth::after { right: 4px; }
+/* Bottom teeth (pointing up from bottom) */
+.dragon-teeth-bottom {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  display: flex;
+  justify-content: space-around;
+  padding: 0 2px;
+}
+.dragon-teeth-bottom::before,
+.dragon-teeth-bottom::after {
+  content: '';
+  width: 0; height: 0;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-bottom: 8px solid #fff;
 }
 .dragon-mouth.open {
   opacity: 1;
+}
+[data-theme="light"] .dragon-mouth {
+  background: #c44;
 }
 
 /* ---- Terminal Window ---- */
@@ -1645,7 +1682,13 @@
     width: 4px; height: 4px;
   }
   .dragon-mouth {
-    width: 8px; height: 5px;
+    width: 20px; height: 12px;
+  }
+  .dragon-mouth::before,
+  .dragon-mouth::after {
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 6px;
   }
   .hero-btn-text {
     display: none;

@@ -32,7 +32,7 @@
 <pre class="dragon-art">
        .     .
        |\-=-/|
-    /| |· _ ·| |\
+    /| |  _  | |\
   /' \ \_^-^_/ / `\
 /'    \-/ ~ \-/    `\
 |      /\\ //\      |
@@ -44,7 +44,7 @@
             <div class="dragon-eye dragon-eye--r">
               <div class="dragon-pupil" data-pupil></div>
             </div>
-            <div class="dragon-mouth" id="dragon-mouth"></div>
+            <div class="dragon-mouth" id="dragon-mouth"><span class="dragon-teeth-bottom"></span></div>
           </div>
         </div>
         {{/* Single input line */}}
@@ -88,21 +88,33 @@
     var pupils=document.querySelectorAll('[data-pupil]');
     var mouth=document.getElementById('dragon-mouth');
     var dartEl=document.querySelector('.dragon-art');
-    var dartNormal='       .     .\n       |\\-=-/|\n    /| |\u00b7 _ \u00b7| |\\\n  /\' \\ \\_^-^_/ / `\\\n/\'    \\-/ ~ \\-/    `\\\n|      /\\\\ //\\      |\n \\|\\|\\/-""-""-\\/|/|/';
-    var dartOpen='       |\\-=-/|\n    /| |.^-^.| |\\\n  /\' \\ \\_____/ / `\\\n/\'    \\-/ ~ \\-/    `\\\n|      /\\\\ //\\      |\n \\|\\|\\/-""-""-\\/|/|/';
+    var eyeL=document.querySelector('.dragon-eye--l');
+    var eyeR=document.querySelector('.dragon-eye--r');
+    var dartNormal='       .     .\n       |\\-=-/|\n    /| |  _  | |\\\n  /\' \\ \\_^-^_/ / `\\\n/\'    \\-/ ~ \\-/    `\\\n|      /\\\\ //\\      |\n \\|\\|\\/-""-""-\\/|/|/';
+    var dartOpen='       .     .\n       |\\-=-/|\n    /| | ^-^ | |\\\n  /\' \\ \\ ___ / / `\\\n/\'    \\-/ ~ \\-/    `\\\n|      /\\\\ //\\      |\n \\|\\|\\/-""-""-\\/|/|/';
+    var dartCrouch="\n\n\n              .     .\n              |\\-=-/|\n         /'/'\\|  _  |/'\\`\\\n       /'     \\_^-^_/     `\\\n       \\|\\|\\/-\"\"---\"\"-\\/|/|/\n";
 
-    /* ---- Dragon mouth animation ---- */
-    var mouthTimer=null;
-    function openMouth(ms){
-      if(mouthTimer){clearTimeout(mouthTimer);closeMouth();}
-      dartEl.textContent=dartOpen;
-      mouth.classList.add('open');
-      mouthTimer=setTimeout(function(){closeMouth();},ms||2000);
+    /* ---- Dragon state animation ---- */
+    var stateTimer=null;
+    function setDragon(state,ms){
+      if(stateTimer){clearTimeout(stateTimer);resetDragon();}
+      if(state==='open'){
+        dartEl.textContent=dartOpen;
+        mouth.classList.add('open');
+      }else if(state==='crouch'){
+        dartEl.textContent=dartCrouch;
+        eyeL.style.top='calc(4.5 * 1.35em)';eyeL.style.left='15.5ch';
+        eyeR.style.top='calc(4.5 * 1.35em)';eyeR.style.left='19.5ch';
+      }
+      if(ms)stateTimer=setTimeout(resetDragon,ms);
     }
-    function closeMouth(){
+    function resetDragon(){
       dartEl.textContent=dartNormal;
       mouth.classList.remove('open');
-      mouthTimer=null;
+      eyeL.classList.remove('droopy');eyeR.classList.remove('droopy');
+      eyeL.style.top='';eyeL.style.left='';
+      eyeR.style.top='';eyeR.style.left='';
+      stateTimer=null;
     }
 
     /* ---- Visual width (CJK = 2 columns) ---- */
@@ -152,7 +164,7 @@
       return top+'\n'+mid+'\n'+bot+'\n'+rp(' ',Math.floor(lineW/2)+1)+'\\';
     }
     /* ---- Language & Responses ---- */
-    var lang=D.defLang;
+    var lang=D.defLang.replace(/^["']|["']$/g,'');
 
     bubble.textContent=makeBubble(lang==='ko'?(D.tagKo||D.tag||'아무거나 입력하고 엔터!'):(D.tag||'Type something and press Enter!'));
 
@@ -176,7 +188,8 @@
       hey:L("...huh? Oh hey!\ntry typing something fun!","...응? 오 안녕!\n아무거나 재밌는거 쳐봐!"),
       who:L("I'm a dragon!\nI guard this site.\n...please don't touch anything.","난 용이야!\n이 사이트를 지키고 있어.\n...아무것도 만지지 마."),
       'who are you':L("I'm a dragon!\nI guard this site.\n...please don't touch anything.","난 용이야!\n이 사이트를 지키고 있어.\n...아무것도 만지지 마."),
-      help:function(){return lang==='ko'?'명령어:\n  ls     - 페이지 목록\n  cd blog - 페이지 이동\n  neofetch, date, pwd\n  kor, eng - 언어 전환':'commands:\n  ls      - list pages\n  cd blog - go to a page\n  neofetch, date, pwd\n  kor, eng - switch lang';},
+      help:function(){return lang==='ko'?'명령어:\n  ls     - 페이지 목록\n  cd blog - 페이지 이동\n  neofetch, date, pwd\n  kor, eng - 언어 전환\n  help-v  - 전체 명령어':'commands:\n  ls      - list pages\n  cd blog - go to a page\n  neofetch, date, pwd\n  kor, eng - switch lang\n  help-v  - all commands';},
+      'help-v':function(){return lang==='ko'?'ls, cd, neofetch, date\npwd, kor, eng, echo\nwho, hi, hello, hey\nfeed, pet, sleep, fight\nflip, fortune, secret\nfire, roar, fly, sing\njoke, tongue, think\nhead, name, age, hungry\nsmart, color, bye, exit\nsudo, hack, clear, thanks\npassword, 1234, 42, rm':'ls, cd, neofetch, date\npwd, kor, eng, echo\nwho, hi, hello, hey\nfeed, pet, sleep, fight\nflip, fortune, secret\nfire, roar, fly, sing\njoke, tongue, think\nhead, name, age, hungry\nsmart, color, bye, exit\nsudo, hack, clear, thanks\npassword, 1234, 42, rm';},
       ls:L('blog/  projects/  guestbook/\ntype "cd blog" to go!','blog/  projects/  guestbook/\n"cd blog" 치면 이동해!'),
       date:function(){var d=new Date(),h=d.getHours(),mn=d.getMinutes(),ap=h>=12?'PM':'AM',h12=h%12||12,mm=mn<10?'0'+mn:mn,mo=d.getMonth()+1,dy=d.getDate(),yr=d.getFullYear();var t=yr+'/'+mo+'/'+dy+' '+h12+':'+mm+' '+ap+'\n';var m=lang==='ko'?{0:'...왜 깨어있어?!\n빨리 자!!',6:'아침~... *하품*\n아직 덜 깼어...',9:'좋은 아침!\n일이나 열심히 해!',12:'점심시간!\n밥은 먹었어?',14:'오후 파이팅!\n힘내, 할 수 있어!',18:'벌써 저녁이네...\n너무 늦게까지 하지마!',22:'너무 늦었어...\n졸리지 않아? 난 졸려... Zzz'}:{0:'...why are you awake?!\ngo to sleep!!',6:'morning~... *yawns*\nI\'m still waking up...',9:'good morning!\ngo do some work!',12:'lunchtime!\nhave you eaten yet?',14:'afternoon grind!\nkeep working, you got this!',18:'evening already...\ndon\'t stay up too late!',22:'it\'s SO late...\naren\'t you sleepy? I am... Zzz'};var k=[0,6,9,12,14,18,22];for(var i=k.length-1;i>=0;i--){if(h>=k[i]){t+=m[k[i]];break;}}return t;},
       pwd:L('~/'+D.title+'\n...home sweet home!','~/'+D.title+'\n...여긴 내 집이야!'),
@@ -206,8 +219,8 @@
       smart:L("I'm very smart!\n...what's 2+2 again?\n*counts on claws*","나 진짜 똑똒해!\n...2+2가 뭐였지?\n*발톱으로 세는 중*"),
       head:L("Just one head!\n...but sometimes it feels\nlike there's two opinions in here.","머리 하나!\n...근데 가끔 의견이\n두 개인 것 같아."),
       pet:L('*purrrr*... wait.\nI\'m a dragon, not a cat!\n...*purrs again*','*그르릉*... 잠깐.\n난 용이지 고양이가 아니야!\n...*또 그르릉*'),
-      feed:function(){openMouth(2000);var m=lang==='ko'?['옴뇸뇸... 맛있어!\n더 줘!!','...이게 뭐야?\n*뱉음* 다른 거 줘.','*꿀꺽*\n...뭘 먹은 거지?\n맛은 있었어.','배고팠는데 고마워!\n...근데 이거 먹어도 되는 거야?']:['om nom nom... yummy!\nmore please!!','...what IS this?\n*spits it out* try again.','*gulp*\n...what did I just eat?\nit was good though.','I was so hungry, thanks!\n...wait, was that edible?'];return m[Math.floor(Math.random()*m.length)];},
-      fight:L('...really? *hides tail*\nI\'m a pacifist!\n...please don\'t hurt me.','...진짜? *꼬리 숨김*\n나 평화주의자인데!\n...때리지 마.'),
+      feed:function(){var good=lang==='ko'?['옴뇸뇸... 맛있어!\n더 줘!!','*꿀꺽*\n...뭘 먹은 거지?\n맛은 있었어.','배고팠는데 고마워!\n...근데 이거 먹어도 되는 거야?']:['om nom nom... yummy!\nmore please!!','*gulp*\n...what did I just eat?\nit was good though.','I was so hungry, thanks!\n...wait, was that edible?'];var bad=lang==='ko'?['...이게 뭐야?\n*뱉음* 다른 거 줘.']:['...what IS this?\n*spits it out* try again.'];if(Math.random()<0.25){eyeL.classList.add('droopy');eyeR.classList.add('droopy');setTimeout(function(){eyeL.classList.remove('droopy');eyeR.classList.remove('droopy');},3000);return bad[Math.floor(Math.random()*bad.length)];}return good[Math.floor(Math.random()*good.length)];},
+      fight:function(){eyeL.classList.add('droopy');eyeR.classList.add('droopy');setTimeout(function(){eyeL.classList.remove('droopy');eyeR.classList.remove('droopy');},3000);return lang==='ko'?'...진짜? *꼬리 숨김*\n나 평화주의자인데!\n...때리지 마.':'...really? *hides tail*\nI\'m a pacifist!\n...please don\'t hurt me.';},
       flip:function(){var r=Math.random();if(r<0.1)return lang==='ko'?'*동전 던짐*\n...*꿀꺽*\n...삼켜버렸어.':'*flips coin*\n...*gulp*\n...I swallowed it.';var side=Math.random()<0.5;return lang==='ko'?(side?'*동전 던짐*\n앞! ...맞지?':'*동전 던짐*\n뒤! ...아마?'):(side?'*flips coin*\nHeads! ...right?':'*flips coin*\nTails! ...I think?');},
       fortune:function(){var m=lang==='ko'?['오늘 버그 3개 잡을 운명!\n...아니면 3개 만들거나.','커밋 전에 저장했는지 확인해.\n...진심이야.','오늘의 운세: 대길!\n...내가 만든 거지만.','뭔가 좋은 일이 생길 거야!\n...아마... 내일?','오늘은 일찍 자.\n...용의 예언이야.']:['You\'ll squash 3 bugs today!\n...or create 3 new ones.','Did you save before commit?\n...I\'m serious.','Today\'s fortune: great luck!\n...I made it up though.','Something good will happen!\n...maybe... tomorrow?','Go to bed early today.\n...dragon prophecy.'];return m[Math.floor(Math.random()*m.length)];},
       secret:L('*whispers* I actually...\ncan\'t breathe fire.\n...you already knew, right?','*속삭임* 사실 나...\n불 못 뿜어.\n...이미 알고 있었지?'),
@@ -242,17 +255,8 @@
         if(lo==='eng'||lo==='en'||lo==='english'){
           lang='en';bubble.textContent=makeBubble('Switched to English!\nI\'ll answer in English now~');return;
         }
-        // Check for exact match
+        // Check for exact match only
         var resp=R(lo);
-        if(!resp){
-          // Check for partial matches
-          var keys=Object.keys(responses);
-          for(var i=0;i<keys.length;i++){
-            if(lo.indexOf(keys[i])>=0||keys[i].indexOf(lo)>=0){
-              resp=R(keys[i]);break;
-            }
-          }
-        }
         // Navigate commands
         if(lo.indexOf('cd ')===0){
           var t=lo.replace('cd ','').replace(/\/$/,'');

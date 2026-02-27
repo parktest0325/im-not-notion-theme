@@ -1,6 +1,7 @@
 User-agent: *
 Disallow: /
 
-{{ range .Site.RegularPages }}{{ if not .Params.bookHidden }}Allow: {{ .RelPermalink }}
+{{ range .Site.Pages }}{{ if and (not .Params.bookHidden) (ne .Kind "taxonomy") (ne .Kind "term") (or (ne .Kind "section") .File) }}Allow: {{ .RelPermalink }}
 {{ end }}{{ end }}
+Allow: /$
 Sitemap: {{ .Site.BaseURL }}sitemap.xml

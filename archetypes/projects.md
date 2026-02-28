@@ -6,7 +6,7 @@ tags: []
 technologies: []
 status: "active"
 weight: 1
-showList: false
+showList: true
 links:
   blog: ""
   showcase: ""

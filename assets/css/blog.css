@@ -558,10 +558,10 @@
   height: auto;
 }
 
-/* Image border — opposite of theme */
+/* Image border */
 .content figure img {
-  border: 1px solid var(--text-primary);
-  border-radius: 4px;
+  border: 1px solid var(--accent);
+  border-radius: 0;
 }
 
 /* Figcaption — centered below image */

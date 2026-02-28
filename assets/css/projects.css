@@ -1088,13 +1088,14 @@
 .dragon-eye {
   position: absolute;
   width: 12px; height: 12px;
-  background: rgba(255,255,255,0.9);
+  background: #fcf3e6;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 2;
   transform: translate(-50%, -50%);
+  overflow: hidden;
 }
 [data-theme="dark"] .dragon-eye {
   box-shadow: 0 0 6px rgba(255,255,255,0.2);
@@ -1110,19 +1111,28 @@
 }
 
 .dragon-pupil {
-  width: 5px; height: 5px;
-  background: #1a1a2e;
+  width: 7px; height: 7px;
+  background: #2d2d2d;
   border-radius: 50%;
   transition: transform 0.08s ease-out;
   position: relative;
 }
+.dragon-pupil::before {
+  content: '';
+  position: absolute;
+  width: 3px; height: 3px;
+  background: #fff;
+  border-radius: 50%;
+  top: 0; left: 0;
+}
 .dragon-pupil::after {
   content: '';
   position: absolute;
-  width: 2px; height: 2px;
+  width: 1.5px; height: 1.5px;
   background: #fff;
   border-radius: 50%;
-  top: 1px; right: 1px;
+  bottom: 1px; right: 0;
+  opacity: 0.8;
 }
 
 /* Blink */
@@ -1141,13 +1151,102 @@
   0%, 92%, 100% { transform: scaleY(0); }
   95%, 97% { transform: scaleY(1); }
 }
-/* Droopy eyes (half-closed) */
+/* 2. Deadpan - flat top eyelid, tiny unfocused pupil */
+.dragon-eye.deadpan {
+  clip-path: inset(40% 0 0 0);
+  transition: clip-path 0.3s ease;
+}
+.dragon-eye.deadpan .dragon-pupil {
+  width: 3px; height: 3px;
+  transform: translate(0, 0) !important;
+}
+.dragon-eye.deadpan .dragon-pupil::before,
+.dragon-eye.deadpan .dragon-pupil::after {
+  display: none;
+}
+
+/* 3. Dragon - vertical slit pupil (excited/gap moe) */
+.dragon-eye.dragon .dragon-pupil {
+  width: 3px; height: 10px;
+  border-radius: 50%;
+  transition: width 0.3s ease, height 0.3s ease;
+}
+.dragon-eye.dragon .dragon-pupil::before {
+  width: 1.5px; height: 1.5px;
+}
+.dragon-eye.dragon .dragon-pupil::after {
+  width: 1px; height: 1px;
+}
+
+/* 4. Droopy - sad, outer corners droop (\ / eyelid shape) */
 .dragon-eye.droopy {
-  clip-path: inset(45% 0 0 0);
-  transition: clip-path 0.2s ease;
+  transition: clip-path 0.3s ease, transform 0.3s ease;
+}
+.dragon-eye--l.droopy {
+  clip-path: polygon(0% 45%, 100% 25%, 100% 100%, 0% 100%);
+  transform: translate(-50%, -50%) rotate(-3deg);
+}
+.dragon-eye--r.droopy {
+  clip-path: polygon(0% 25%, 100% 45%, 100% 100%, 0% 100%);
+  transform: translate(-50%, -50%) rotate(3deg);
 }
 .dragon-eye.droopy .dragon-pupil {
+  width: 4px; height: 4px;
   transform: translateY(1px) !important;
+}
+.dragon-eye.droopy .dragon-pupil::before {
+  width: 1.5px; height: 1.5px;
+}
+.dragon-eye.droopy .dragon-pupil::after {
+  display: none;
+}
+
+/* 5. Angry - inner corners raised (\ / eyelid shape) */
+.dragon-eye.angry {
+  transition: clip-path 0.3s ease, transform 0.3s ease;
+}
+.dragon-eye--l.angry {
+  clip-path: polygon(0% 25%, 100% 45%, 100% 100%, 0% 100%);
+  transform: translate(-50%, -50%) rotate(3deg);
+}
+.dragon-eye--r.angry {
+  clip-path: polygon(0% 45%, 100% 25%, 100% 100%, 0% 100%);
+  transform: translate(-50%, -50%) rotate(-3deg);
+}
+.dragon-eye.angry .dragon-pupil {
+  width: 3px; height: 9px;
+  border-radius: 50%;
+}
+.dragon-eye.angry .dragon-pupil::before {
+  width: 1.5px; height: 1.5px;
+}
+.dragon-eye.angry .dragon-pupil::after {
+  display: none;
+}
+
+/* 6. Shocked - tiny pupil fixed center, no tracking */
+.dragon-eye.shocked .dragon-pupil {
+  width: 2px; height: 2px;
+  transform: translate(0, 0) !important;
+  transition: width 0.15s ease, height 0.15s ease;
+}
+.dragon-eye.shocked .dragon-pupil::before,
+.dragon-eye.shocked .dragon-pupil::after {
+  display: none;
+}
+
+/* 6. Sleep - thin horizontal line */
+.dragon-eye.sleep {
+  width: 10px; height: 2px;
+  background: #888;
+  border-radius: 1px;
+  transition: height 0.4s ease, background 0.4s ease;
+}
+.dragon-eye.sleep .dragon-pupil {
+  display: none;
+}
+.dragon-eye.sleep::before {
+  display: none;
 }
 /* Dragon mouth (hidden by default, shown via JS) */
 .dragon-mouth {
@@ -1678,8 +1777,26 @@
   .dragon-eye {
     width: 10px; height: 10px;
   }
+  .dragon-eye.sleep {
+    width: 8px; height: 2px;
+  }
   .dragon-pupil {
-    width: 4px; height: 4px;
+    width: 6px; height: 6px;
+  }
+  .dragon-eye.dragon .dragon-pupil {
+    width: 2px; height: 8px;
+  }
+  .dragon-eye.deadpan .dragon-pupil {
+    width: 3px; height: 3px;
+  }
+  .dragon-eye.shocked .dragon-pupil {
+    width: 2px; height: 2px;
+  }
+  .dragon-eye.droopy .dragon-pupil {
+    width: 3px; height: 3px;
+  }
+  .dragon-eye.angry .dragon-pupil {
+    width: 2px; height: 7px;
   }
   .dragon-mouth {
     width: 20px; height: 12px;

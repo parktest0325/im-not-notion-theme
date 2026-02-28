@@ -94,28 +94,56 @@
     var dartOpen='       .     .\n       |\\-=-/|\n    /| | ^-^ | |\\\n  /\' \\ \\ ___ / / `\\\n/\'    \\-/ ~ \\-/    `\\\n|      /\\\\ //\\      |\n \\|\\|\\/-""-""-\\/|/|/';
     var dartCrouch="\n\n\n              .     .\n              |\\-=-/|\n         /'/'\\|  _  |/'\\`\\\n       /'     \\_^-^_/     `\\\n       \\|\\|\\/-\"\"---\"\"-\\/|/|/\n";
 
-    /* ---- Dragon state animation ---- */
-    var stateTimer=null;
-    function setDragon(state,ms){
-      if(stateTimer){clearTimeout(stateTimer);resetDragon();}
-      if(state==='open'){
-        dartEl.textContent=dartOpen;
-        mouth.classList.add('open');
-      }else if(state==='crouch'){
-        dartEl.textContent=dartCrouch;
-        eyeL.style.top='calc(4.5 * 1.35em)';eyeL.style.left='15.5ch';
-        eyeR.style.top='calc(4.5 * 1.35em)';eyeR.style.left='19.5ch';
+    /* ---- Eye state system ---- */
+    var eyeModes=['deadpan','dragon','droopy','angry','shocked','sleep'];
+    var eyeState='normal';
+    var eyeTimer=null;
+    function setEyes(mode,ms){
+      if(eyeTimer){clearTimeout(eyeTimer);eyeTimer=null;}
+      eyeModes.forEach(function(m){eyeL.classList.remove(m);eyeR.classList.remove(m);});
+      if(mode&&mode!=='normal'){eyeL.classList.add(mode);eyeR.classList.add(mode);}
+      eyeState=mode||'normal';
+      if(ms)eyeTimer=setTimeout(function(){setEyes('normal');},ms);
+    }
+
+    /* ---- Idle timer system ---- */
+    var idleTimer1=null,idleTimer2=null,isSleeping=false;
+    function resetIdle(){
+      clearTimeout(idleTimer1);clearTimeout(idleTimer2);
+      if(isSleeping){
+        isSleeping=false;setEyes('shocked',500);
+        bubble.textContent=makeBubble(lang==='ko'?'...안 잤어!\n눈 감고 생각 중이었어.':'...I wasn\'t sleeping!\nI was thinking with\nmy eyes closed.');
       }
-      if(ms)stateTimer=setTimeout(resetDragon,ms);
+      idleTimer1=setTimeout(function(){
+        setEyes('deadpan');
+        bubble.textContent=makeBubble(lang==='ko'?'...심심해.\n아무거나 쳐봐.':'...I\'m bored.\ntype something.');
+      },30000);
+      idleTimer2=setTimeout(function(){
+        setEyes('sleep');isSleeping=true;
+        bubble.textContent=makeBubble('Zzz...');
+      },60000);
     }
-    function resetDragon(){
-      dartEl.textContent=dartNormal;
-      mouth.classList.remove('open');
-      eyeL.classList.remove('droopy');eyeR.classList.remove('droopy');
-      eyeL.style.top='';eyeL.style.left='';
-      eyeR.style.top='';eyeR.style.left='';
-      stateTimer=null;
+    input.addEventListener('keydown',function(){resetIdle();});
+    document.addEventListener('mousemove',function(){if(isSleeping)resetIdle();});
+    resetIdle();
+
+    /* ---- Context memory ---- */
+    var lastCmd='',repeatCount=0;
+    function trackCmd(cmd){
+      if(cmd===lastCmd){repeatCount++;}else{repeatCount=1;lastCmd=cmd;}
+      return repeatCount;
     }
+
+    /* ---- Typing speed detection ---- */
+    var keyTimes=[];
+    input.addEventListener('input',function(){
+      var now=Date.now();keyTimes.push(now);
+      if(keyTimes.length>10)keyTimes.shift();
+      if(keyTimes.length>=5){
+        var avg=(keyTimes[keyTimes.length-1]-keyTimes[0])/(keyTimes.length-1);
+        if(avg<80){setEyes('shocked',2000);}
+      }
+    });
 
     /* ---- Visual width (CJK = 2 columns) ---- */
     function vw(s){
@@ -170,6 +198,7 @@
 
     /* ---- Eye tracking ---- */
     document.addEventListener('mousemove',function(e){
+      if(eyeState==='sleep'||eyeState==='shocked'||eyeState==='deadpan')return;
       for(var i=0;i<pupils.length;i++){
         var eye=pupils[i].parentElement;
         var r=eye.getBoundingClientRect();
@@ -181,6 +210,15 @@
     });
     function L(en,ko){return{en:en,ko:ko};}
     function R(key){var r=responses[key];if(!r)return null;if(typeof r==='function')return r();return r.en?r[lang]:r;}
+
+    /* ---- Eye mode map per command ---- */
+    var eyeMap={
+      /* dragon (excited) */ pet:'dragon',smart:'dragon',neofetch:'dragon',roar:'dragon',tongue:'dragon',
+      /* droopy (sad/embarrassed) */ fire:'droopy',fight:'droopy',secret:'droopy',
+      /* shocked */ hack:'shocked',password:'shocked','1234':'shocked',clear:'shocked',
+      /* deadpan (annoyed) */ sudo:'deadpan','rm -rf':'deadpan','rm -rf /':'deadpan',who:'deadpan','who are you':'deadpan',
+      /* sleep */ sleep:'sleep',thanks:'sleep'
+    };
 
     var responses={
       hi:L('...oh! Hi! *tongue flop*\ntry "help" for commands!','...오! 안녕! *혀 늘어짐*\n"help" 쳐봐!'),
@@ -219,8 +257,8 @@
       smart:L("I'm very smart!\n...what's 2+2 again?\n*counts on claws*","나 진짜 똑똒해!\n...2+2가 뭐였지?\n*발톱으로 세는 중*"),
       head:L("Just one head!\n...but sometimes it feels\nlike there's two opinions in here.","머리 하나!\n...근데 가끔 의견이\n두 개인 것 같아."),
       pet:L('*purrrr*... wait.\nI\'m a dragon, not a cat!\n...*purrs again*','*그르릉*... 잠깐.\n난 용이지 고양이가 아니야!\n...*또 그르릉*'),
-      feed:function(){var good=lang==='ko'?['옴뇸뇸... 맛있어!\n더 줘!!','*꿀꺽*\n...뭘 먹은 거지?\n맛은 있었어.','배고팠는데 고마워!\n...근데 이거 먹어도 되는 거야?']:['om nom nom... yummy!\nmore please!!','*gulp*\n...what did I just eat?\nit was good though.','I was so hungry, thanks!\n...wait, was that edible?'];var bad=lang==='ko'?['...이게 뭐야?\n*뱉음* 다른 거 줘.']:['...what IS this?\n*spits it out* try again.'];if(Math.random()<0.25){eyeL.classList.add('droopy');eyeR.classList.add('droopy');setTimeout(function(){eyeL.classList.remove('droopy');eyeR.classList.remove('droopy');},3000);return bad[Math.floor(Math.random()*bad.length)];}return good[Math.floor(Math.random()*good.length)];},
-      fight:function(){eyeL.classList.add('droopy');eyeR.classList.add('droopy');setTimeout(function(){eyeL.classList.remove('droopy');eyeR.classList.remove('droopy');},3000);return lang==='ko'?'...진짜? *꼬리 숨김*\n나 평화주의자인데!\n...때리지 마.':'...really? *hides tail*\nI\'m a pacifist!\n...please don\'t hurt me.';},
+      feed:function(){var good=lang==='ko'?['옴뇸뇸... 맛있어!\n더 줘!!','*꿀꺽*\n...뭘 먹은 거지?\n맛은 있었어.','배고팠는데 고마워!\n...근데 이거 먹어도 되는 거야?']:['om nom nom... yummy!\nmore please!!','*gulp*\n...what did I just eat?\nit was good though.','I was so hungry, thanks!\n...wait, was that edible?'];var bad=lang==='ko'?['...이게 뭐야?\n*뱉음* 다른 거 줘.']:['...what IS this?\n*spits it out* try again.'];if(Math.random()<0.25){setEyes('angry',3000);return bad[Math.floor(Math.random()*bad.length)];}setEyes('dragon',3000);return good[Math.floor(Math.random()*good.length)];},
+      fight:L('...really? *hides tail*\nI\'m a pacifist!\n...please don\'t hurt me.','...진짜? *꼬리 숨김*\n나 평화주의자인데!\n...때리지 마.'),
       flip:function(){var r=Math.random();if(r<0.1)return lang==='ko'?'*동전 던짐*\n...*꿀꺽*\n...삼켜버렸어.':'*flips coin*\n...*gulp*\n...I swallowed it.';var side=Math.random()<0.5;return lang==='ko'?(side?'*동전 던짐*\n앞! ...맞지?':'*동전 던짐*\n뒤! ...아마?'):(side?'*flips coin*\nHeads! ...right?':'*flips coin*\nTails! ...I think?');},
       fortune:function(){var m=lang==='ko'?['오늘 버그 3개 잡을 운명!\n...아니면 3개 만들거나.','커밋 전에 저장했는지 확인해.\n...진심이야.','오늘의 운세: 대길!\n...내가 만든 거지만.','뭔가 좋은 일이 생길 거야!\n...아마... 내일?','오늘은 일찍 자.\n...용의 예언이야.']:['You\'ll squash 3 bugs today!\n...or create 3 new ones.','Did you save before commit?\n...I\'m serious.','Today\'s fortune: great luck!\n...I made it up though.','Something good will happen!\n...maybe... tomorrow?','Go to bed early today.\n...dragon prophecy.'];return m[Math.floor(Math.random()*m.length)];},
       secret:L('*whispers* I actually...\ncan\'t breathe fire.\n...you already knew, right?','*속삭임* 사실 나...\n불 못 뿜어.\n...이미 알고 있었지?'),
@@ -247,16 +285,39 @@
         var raw=input.value.trim();
         input.value='';
         if(!raw)return;
+        resetIdle();keyTimes=[];
         var lo=raw.toLowerCase();
+        var cnt=trackCmd(lo);
         // Language switch
         if(lo==='kor'||lo==='ko'||lo==='한국어'){
-          lang='ko';bubble.textContent=makeBubble('한국어로 바꿨어!\n이제 한국어로 대답할게~');return;
+          lang='ko';setEyes('normal');bubble.textContent=makeBubble('한국어로 바꿨어!\n이제 한국어로 대답할게~');return;
         }
         if(lo==='eng'||lo==='en'||lo==='english'){
-          lang='en';bubble.textContent=makeBubble('Switched to English!\nI\'ll answer in English now~');return;
+          lang='en';setEyes('normal');bubble.textContent=makeBubble('Switched to English!\nI\'ll answer in English now~');return;
         }
-        // Check for exact match only
+        // Context memory: repeated command overrides
+        if(cnt>=3&&(lo==='hi'||lo==='hello'||lo==='hey')){
+          setEyes('deadpan',3000);
+          bubble.textContent=makeBubble(lang==='ko'?'...안녕?\n또 안녕?\n우리 방금 인사하지 않았어?':'...hi?\nhi again?\ndidn\'t we JUST say hi?');return;
+        }
+        if(cnt>=5&&lo==='feed'){
+          setEyes('droopy',3000);
+          bubble.textContent=makeBubble(lang==='ko'?'...배불러.\n토할 것 같아.\n그만 줘...':'...so full.\nI might throw up.\nstop feeding me...');return;
+        }
+        if(cnt>=5&&lo==='pet'){
+          setEyes('angry',3000);
+          bubble.textContent=makeBubble(lang==='ko'?'...이제 그만.\n나침반 만지듯이 만지지 마.':'...stop it.\nI\'m not a stress ball.');return;
+        }
+        // Check for exact match, then partial (longest key wins)
         var resp=R(lo);
+        var matchedKey=lo;
+        if(!resp){
+          var rkeys=Object.keys(responses);
+          rkeys.sort(function(a,b){return b.length-a.length;});
+          for(var ki=0;ki<rkeys.length;ki++){
+            if(lo.indexOf(rkeys[ki])>=0){resp=R(rkeys[ki]);matchedKey=rkeys[ki];break;}
+          }
+        }
         // Navigate commands
         if(lo.indexOf('cd ')===0){
           var t=lo.replace('cd ','').replace(/\/$/,'');
@@ -270,6 +331,13 @@
         // Echo command
         if(lo.indexOf('echo ')===0){
           resp=raw.slice(5).replace(/^["']|["']$/g,'');
+        }
+        // Apply eye mode (unless feed already handled it)
+        if(matchedKey!=='feed'){
+          var em=eyeMap[matchedKey];
+          if(em)setEyes(em,3000);
+          else if(!resp)setEyes('deadpan',3000);
+          else setEyes('normal');
         }
         if(!resp){var dl=defaults[lang]||defaults.en;resp=dl[di%dl.length];di++;}
         bubble.textContent=makeBubble(resp);

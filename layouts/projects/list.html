@@ -6,20 +6,28 @@
 
     {{/* Filter buttons */}}
     <div class="project-filters">
-      <button class="filter-btn active" data-filter="all">All</button>
-      {{ $allTags := slice }}
-      {{ range .Pages }}
-        {{ if .Params.showList }}
-        {{ with .Params.tags }}
-          {{ range . }}
-            {{ $allTags = $allTags | append . }}
+      <div class="filter-group">
+        <button class="filter-btn filter-btn--status active" data-status="all">All</button>
+        <button class="filter-btn filter-btn--status" data-status="active">Active</button>
+        <button class="filter-btn filter-btn--status" data-status="completed">Completed</button>
+        <button class="filter-btn filter-btn--status" data-status="archived">Archived</button>
+      </div>
+      <div class="filter-group">
+        <button class="filter-btn filter-btn--tag active" data-filter="all">All</button>
+        {{ $allTags := slice }}
+        {{ range .Pages }}
+          {{ if .Params.showList }}
+          {{ with .Params.tags }}
+            {{ range . }}
+              {{ $allTags = $allTags | append . }}
+            {{ end }}
+          {{ end }}
           {{ end }}
         {{ end }}
+        {{ range uniq $allTags }}
+          <button class="filter-btn filter-btn--tag" data-filter="{{ . }}">{{ . }}</button>
         {{ end }}
-      {{ end }}
-      {{ range uniq $allTags }}
-        <button class="filter-btn" data-filter="{{ . }}">{{ . }}</button>
-      {{ end }}
+      </div>
     </div>
   </div>
 
@@ -35,21 +43,37 @@
 {{ partial "projects/modal.html" . }}
 
 <script>
-  // Tag filter
-  document.querySelectorAll('.filter-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      var filter = btn.dataset.filter;
+  (function() {
+    var activeStatus = 'all';
+    var activeTag = 'all';
+
+    function applyFilters() {
       document.querySelectorAll('.project-card').forEach(function(card) {
-        if (filter === 'all') {
-          card.style.display = '';
-        } else {
-          var tags = (card.dataset.tags || '').split(',');
-          card.style.display = tags.indexOf(filter) >= 0 ? '' : 'none';
-        }
+        var statusMatch = activeStatus === 'all' || card.dataset.status === activeStatus;
+        var tagMatch = activeTag === 'all' || (card.dataset.tags || '').split(',').indexOf(activeTag) >= 0;
+        card.style.display = (statusMatch && tagMatch) ? '' : 'none';
+      });
+    }
+
+    // Status filter
+    document.querySelectorAll('.filter-btn--status').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn--status').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        activeStatus = btn.dataset.status;
+        applyFilters();
       });
     });
-  });
+
+    // Tag filter
+    document.querySelectorAll('.filter-btn--tag').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn--tag').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        activeTag = btn.dataset.filter;
+        applyFilters();
+      });
+    });
+  })();
 </script>
 {{ end }}

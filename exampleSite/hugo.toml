@@ -54,10 +54,24 @@ pluralizeListTitles = false  # Prevent Hugo from pluralizing section titles (e.g
   avatar = "https://avatars.githubusercontent.com/u/52898964?v=4"
   # Short one-line bio
   bio = "A short bio about yourself."
-  # Detailed description (supports **markdown**)
-  detail = """Longer description about your interests and background.
+  # Career history (displayed as a timeline)
+  [[params.about.career]]
+    company = "Company A"
+    role = "Software Engineer"
+    start = "2023.01"
+    end = ""
 
-You can use **bold**, *italic*, and [links](https://example.com)."""
+  [[params.about.career]]
+    company = "Company B"
+    role = "Backend Developer"
+    start = "2020.06"
+    end = "2022.12"
+
+  [[params.about.career]]
+    company = "Company C"
+    role = "Junior Developer"
+    start = "2018.03"
+    end = "2020.05"
 
   # Social / contact links (shown as buttons)
   [[params.about.links]]

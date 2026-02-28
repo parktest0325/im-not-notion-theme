@@ -373,8 +373,22 @@
             {{ with .bio }}
             <p class="about-bio">{{ . }}</p>
             {{ end }}
-            {{ with .detail }}
-            <div class="about-detail">{{ . | markdownify }}</div>
+            {{ if .career }}
+            <div class="about-timeline">
+              {{ range .career }}
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">
+                  <span>{{ .start }}</span>
+                  <span>{{ if .end }}~ {{ .end }}{{ else }}~{{ end }}</span>
+                </div>
+                <div class="timeline-content">
+                  <span class="timeline-company">{{ .company }}</span>
+                  <span class="timeline-role">{{ .role }}</span>
+                </div>
+              </div>
+              {{ end }}
+            </div>
             {{ end }}
             {{ if .links }}
             <div class="about-links">

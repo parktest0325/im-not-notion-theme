@@ -15,7 +15,7 @@
 
       {{/* Always show sub-sections first (no pagination) */}}
       {{ range $sections.ByWeight }}
-        {{ if not .Params.bookHidden }}
+        {{ if .Params.showList }}
         <article class="blog-list-item">
           <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
           <p class="blog-list-meta">{{ len .RegularPagesRecursive }} posts</p>
@@ -23,8 +23,8 @@
         {{ end }}
       {{ end }}
 
-      {{/* Paginate regular posts (exclude bookHidden) */}}
-      {{ $visiblePages := where $pages ".Params.bookHidden" "ne" true }}
+      {{/* Paginate regular posts (only showList: true) */}}
+      {{ $visiblePages := where $pages ".Params.showList" true }}
       {{ $paginator := .Paginate ($visiblePages.ByDate.Reverse) }}
       {{ range $paginator.Pages }}
       <article class="blog-list-item">

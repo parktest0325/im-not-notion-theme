@@ -9,7 +9,7 @@
       <button class="filter-btn active" data-filter="all">All</button>
       {{ $allTags := slice }}
       {{ range .Pages }}
-        {{ if not .Params.bookHidden }}
+        {{ if .Params.showList }}
         {{ with .Params.tags }}
           {{ range . }}
             {{ $allTags = $allTags | append . }}
@@ -25,7 +25,7 @@
 
   <div class="project-grid">
     {{ range .Pages.ByWeight }}
-      {{ if not .Params.bookHidden }}
+      {{ if .Params.showList }}
       {{ partial "projects/card.html" . }}
       {{ end }}
     {{ end }}

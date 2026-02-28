@@ -5,6 +5,5 @@ draft: false
 weight: 1
 description: ""
 tags: []
-bookHidden: true
-bookComments: true
+showList: false
 ---

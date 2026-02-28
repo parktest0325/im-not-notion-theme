@@ -142,6 +142,9 @@ pluralizeListTitles = false  # Prevent Hugo from pluralizing section titles (e.g
     style = "dracula"
     lineNos = false
     guessSyntax = true
+  [markup.goldmark.renderer]
+    hardWraps = true                    # Treat single newlines as <br>
+    unsafe = true                       # Allow raw HTML in markdown
   [markup.tableOfContents]
     startLevel = 2                    # TOC starts at h2
     endLevel = 4                      # TOC ends at h4

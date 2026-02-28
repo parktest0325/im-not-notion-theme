@@ -507,6 +507,18 @@ img {
   padding: 1.25rem;
   margin: 1.5rem 0;
   overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+.content pre::-webkit-scrollbar {
+  height: 3px;
+}
+.content pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+.content pre::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 0;
 }
 
 .content pre code {

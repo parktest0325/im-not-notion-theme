@@ -1,6 +1,9 @@
-{{- $pages := where .Site.RegularPages "Kind" "page" -}}
+{{- $pages := slice -}}
+{{- with .Site.GetPage "/blog" }}{{ $pages = .RegularPagesRecursive }}{{ end -}}
+{{- with .Site.GetPage "/projects" }}{{ $pages = append .RegularPagesRecursive $pages }}{{ end -}}
 {{- $index := slice -}}
 {{- range $pages -}}
+  {{- if or .Params.showMenu .Params.showList -}}
   {{- $entry := dict
     "title" .Title
     "permalink" .RelPermalink
@@ -11,5 +14,6 @@
     "tags" (.Params.tags | default slice)
   -}}
   {{- $index = $index | append $entry -}}
+  {{- end -}}
 {{- end -}}
 {{- $index | jsonify -}}

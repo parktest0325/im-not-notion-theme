@@ -3,12 +3,14 @@
   {{/* Precompute data */}}
   {{ $blogPosts := slice }}
   {{ with .Site.GetPage "/blog" }}{{ $blogPosts = .RegularPagesRecursive }}{{ end }}
-  {{ $projects := where .Site.RegularPages "Section" "projects" }}
+  {{ $projects := where (where .Site.RegularPages "Section" "projects") ".Params.showList" true }}
   {{ $blogSections := 0 }}
   {{ with .Site.GetPage "/blog" }}{{ $blogSections = len .Sections }}{{ end }}
   {{ $posts := slice }}
   {{ with .Site.GetPage "/blog" }}
-    {{ $posts = sort .RegularPagesRecursive "Date" "desc" }}
+    {{ $allPosts := .RegularPagesRecursive }}
+    {{ $visiblePosts := where $allPosts ".Params.showList" true }}
+    {{ $posts = sort $visiblePosts "Date" "desc" }}
   {{ end }}
 
   <h1 class="visually-hidden">{{ .Site.Params.heroTitle | default .Site.Title }}</h1>

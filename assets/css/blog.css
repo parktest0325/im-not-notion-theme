@@ -519,21 +519,19 @@
 
 /* Default: block image */
 .content figure.img-default {
-  margin: 1.5rem 0;
+  margin: 0.75rem 0;
 }
 .content figure.img-default img {
-  border-radius: 4px;
   width: 100%;
   height: auto;
 }
 
 /* Center */
 .content figure.img-center {
-  margin: 1.5rem auto;
+  margin: 0.75rem auto;
   text-align: center;
 }
 .content figure.img-center img {
-  border-radius: 4px;
   width: 100%;
   height: auto;
 }
@@ -541,11 +539,10 @@
 /* Float left */
 .content figure.img-float-left {
   float: left;
-  margin: 0.5rem 1.5rem 1rem 0;
+  margin: 0.25rem 1.5rem 0.5rem 0;
   max-width: 50%;
 }
 .content figure.img-float-left img {
-  border-radius: 4px;
   width: 100%;
   height: auto;
 }
@@ -553,24 +550,27 @@
 /* Float right */
 .content figure.img-float-right {
   float: right;
-  margin: 0.5rem 0 1rem 1.5rem;
+  margin: 0.25rem 0 0.5rem 1.5rem;
   max-width: 50%;
 }
 .content figure.img-float-right img {
-  border-radius: 4px;
   width: 100%;
   height: auto;
 }
 
-/* Figcaption */
-.content figure figcaption {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  margin-top: 0.4rem;
-  line-height: 1.4;
+/* Image border — opposite of theme */
+.content figure img {
+  border: 1px solid var(--text-primary);
+  border-radius: 4px;
 }
-.content figure.img-center figcaption {
+
+/* Figcaption — centered below image */
+.content figure figcaption {
+  font-size: 0.75rem;
+  color: var(--text-muted);
   text-align: center;
+  margin-top: 0.35rem;
+  line-height: 1.4;
 }
 
 /* Clear floats after content with floated images */

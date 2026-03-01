@@ -38,7 +38,7 @@
         {{ $hiddenDir := printf "%s%s" $privateRoot $currentPath }}
         {{ range $page := site.RegularPages }}
           {{ if $page.File }}
-            {{ if hasPrefix $page.File.Dir $hiddenDir }}
+            {{ if eq $page.File.Dir $hiddenDir }}
               {{ $hiddenPages = $hiddenPages | append $page }}
             {{ end }}
           {{ end }}

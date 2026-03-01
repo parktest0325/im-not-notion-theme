@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   {{ range .Data.Pages }}
-    {{ if and (or .Params.showMenu .Params.showList) (ne .Kind "taxonomy") (ne .Kind "term") (eq .Kind "section") .File (le (len (split .RelPermalink "/")) 4) }}
+    {{ $parts := split (trim .RelPermalink "/") "/" }}{{ if and (or .Params.showMenu .Params.showList) .File (eq (len $parts) 2) }}
     <url>
       <loc>{{ .Permalink }}</loc>
       {{ if not .Lastmod.IsZero }}<lastmod>{{ safeHTML ( .Lastmod.Format "2006-01-02T15:04:05-07:00" ) }}</lastmod>{{ end }}

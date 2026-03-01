@@ -1,6 +1,6 @@
 User-agent: *
 Disallow: /
 
-{{ range .Site.Pages }}{{ $parts := split (trim .RelPermalink "/") "/" }}{{ if and (or .Params.showList .Params.showMenu) (eq (len $parts) 2) }}Allow: {{ .RelPermalink }}
+{{ range .Site.Pages }}{{ $parts := split (trim .RelPermalink "/") "/" }}{{ if and (or .Params.showList .Params.showMenu) .File (eq (len $parts) 2) }}Allow: {{ .RelPermalink }}
 {{ end }}{{ end }}
 Allow: /$

@@ -288,6 +288,15 @@
   margin: 0.25rem 0 0;
 }
 
+/* --- Private Post --- */
+.blog-list-item--private {
+  opacity: 0.5;
+}
+.private-lock {
+  vertical-align: -1px;
+  margin-right: 2px;
+}
+
 /* --- Pagination --- */
 .pagination {
   display: flex;

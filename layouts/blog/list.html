@@ -23,15 +23,52 @@
         {{ end }}
       {{ end }}
 
-      {{/* Paginate regular posts (only showList: true) */}}
+      {{/* Fetch hidden posts if current section is in privateListing */}}
+      {{ $privateRoot := .Site.Params.privateRoot }}
+      {{ $privateListing := .Site.Params.privateListing }}
+      {{ $currentPath := .RelPermalink }}
+      {{ $hiddenPages := slice }}
+      {{ $matchedPrivate := false }}
+      {{ range $privateListing }}
+        {{ if hasPrefix $currentPath . }}
+          {{ $matchedPrivate = true }}
+        {{ end }}
+      {{ end }}
+      {{ if and $privateRoot $privateListing $matchedPrivate }}
+        {{ $hiddenDir := printf "%s%s" $privateRoot $currentPath }}
+        {{ range $page := site.RegularPages }}
+          {{ if $page.File }}
+            {{ if hasPrefix $page.File.Dir $hiddenDir }}
+              {{ $hiddenPages = $hiddenPages | append $page }}
+            {{ end }}
+          {{ end }}
+        {{ end }}
+      {{ end }}
+
+      {{/* Paginate regular posts (only showList: true) + hidden posts */}}
       {{ $visiblePages := where $pages ".Params.showList" true }}
-      {{ $paginator := .Paginate ($visiblePages.ByDate.Reverse) }}
+      {{ $allPages := $visiblePages }}
+      {{ range $hiddenPages }}
+        {{ $allPages = $allPages | append . }}
+      {{ end }}
+      {{ $paginator := .Paginate ($allPages.ByDate.Reverse) }}
       {{ range $paginator.Pages }}
-      <article class="blog-list-item">
-        <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-        <p class="blog-list-meta">{{ .Date.Format "2006-01-02" }}</p>
-        {{ with .Description }}<p class="blog-list-desc">{{ . }}</p>{{ end }}
-      </article>
+        {{ $isPrivate := false }}
+        {{ if and $privateRoot .File (hasPrefix .File.Dir $privateRoot) }}
+          {{ $isPrivate = true }}
+        {{ end }}
+        {{ if $isPrivate }}
+        <article class="blog-list-item blog-list-item--private">
+          <h2><svg class="private-lock" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> {{ .Title }}</h2>
+          <p class="blog-list-meta">{{ .Date.Format "2006-01-02" }}</p>
+        </article>
+        {{ else }}
+        <article class="blog-list-item">
+          <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+          <p class="blog-list-meta">{{ .Date.Format "2006-01-02" }}</p>
+          {{ with .Description }}<p class="blog-list-desc">{{ . }}</p>{{ end }}
+        </article>
+        {{ end }}
       {{ end }}
 
       {{ partial "pagination.html" . }}

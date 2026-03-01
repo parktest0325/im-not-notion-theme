@@ -36,6 +36,13 @@ pluralizeListTitles = false  # Prevent Hugo from pluralizing section titles (e.g
   # Show page view count in footer
   goatcounterShow = true
 
+  # --- Private Posts ---
+  # Show hidden posts (title only, no link) in specified section lists.
+  # privateRoot: the hidden_path folder name (set by im-not-notion CMS)
+  # privateListing: sections where hidden posts should be visible in the list
+  # privateRoot = "your_hidden_path"
+  # privateListing = ["/blog/android/", "/blog/ios/"]
+
 # --- Background Image ---
 # Set a site-wide background image (jpg/png/gif supported).
 # Remove this block or set image = "" to disable.

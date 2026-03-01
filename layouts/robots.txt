@@ -1,7 +1,6 @@
 User-agent: *
 Disallow: /
 
-{{ range .Site.Pages }}{{ if and .Params.showList (ne .Kind "taxonomy") (ne .Kind "term") (or (ne .Kind "section") .File) }}Allow: {{ .RelPermalink }}
+{{ range .Site.Pages }}{{ $parts := split (trim .RelPermalink "/") "/" }}{{ if and (or .Params.showList .Params.showMenu) (eq (len $parts) 2) }}Allow: {{ .RelPermalink }}
 {{ end }}{{ end }}
 Allow: /$
-Sitemap: {{ .Site.BaseURL }}sitemap.xml

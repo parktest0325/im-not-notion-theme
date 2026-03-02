@@ -2,13 +2,67 @@
 <div class="default-list" style="max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem;">
   <h1>{{ .Title }}</h1>
   {{ .Content }}
-  {{ $paginator := .Paginate .Pages }}
+
+  {{/* Separate sections from regular pages */}}
+  {{ $sections := where .Pages ".IsSection" true }}
+  {{ $pages := where .Pages ".IsSection" false }}
+
+  {{/* Show sub-sections first */}}
+  {{ range $sections.ByWeight }}
+    {{ if .Params.showList }}
+    <article style="margin: 1.5rem 0; padding-bottom: 1rem; border-bottom: 1px solid var(--border-subtle);">
+      <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+      <p style="color: var(--text-secondary); font-size: 0.875rem;">{{ len .RegularPagesRecursive }} posts</p>
+    </article>
+    {{ end }}
+  {{ end }}
+
+  {{/* Fetch hidden posts if current section is in privateListing */}}
+  {{ $privateRoot := .Site.Params.privateRoot }}
+  {{ $privateListing := .Site.Params.privateListing }}
+  {{ $currentPath := .RelPermalink }}
+  {{ $hiddenPages := slice }}
+  {{ $matchedPrivate := false }}
+  {{ range $privateListing }}
+    {{ if hasPrefix $currentPath . }}
+      {{ $matchedPrivate = true }}
+    {{ end }}
+  {{ end }}
+  {{ if and $privateRoot $privateListing $matchedPrivate }}
+    {{ $hiddenDir := printf "%s%s" $privateRoot $currentPath }}
+    {{ range $page := site.RegularPages }}
+      {{ if $page.File }}
+        {{ if and (eq $page.File.Dir $hiddenDir) $page.Params.showList }}
+          {{ $hiddenPages = $hiddenPages | append $page }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
+
+  {{/* Paginate regular posts (only showList: true) + hidden posts */}}
+  {{ $visiblePages := where $pages ".Params.showList" true }}
+  {{ $allPages := $visiblePages }}
+  {{ range $hiddenPages }}
+    {{ $allPages = $allPages | append . }}
+  {{ end }}
+  {{ $paginator := .Paginate ($allPages.ByDate.Reverse) }}
   {{ range $paginator.Pages }}
+    {{ $isPrivate := false }}
+    {{ if and $privateRoot .File (hasPrefix .File.Dir $privateRoot) }}
+      {{ $isPrivate = true }}
+    {{ end }}
+    {{ if $isPrivate }}
+    <article class="blog-list-item--private" style="margin: 1.5rem 0; padding-bottom: 1rem; border-bottom: 1px solid var(--border-subtle); opacity: 0.5;">
+      <h2><svg class="private-lock" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> {{ .Title }}</h2>
+      <p style="color: var(--text-secondary); font-size: 0.875rem;">{{ .Date.Format "2006-01-02" }}</p>
+    </article>
+    {{ else }}
     <article style="margin: 1.5rem 0; padding-bottom: 1rem; border-bottom: 1px solid var(--border-subtle);">
       <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
       <p style="color: var(--text-secondary); font-size: 0.875rem;">{{ .Date.Format "2006-01-02" }}</p>
       {{ with .Description }}<p>{{ . }}</p>{{ end }}
     </article>
+    {{ end }}
   {{ end }}
   {{ partial "pagination.html" . }}
 </div>

@@ -1,5 +1,5 @@
 <dl>
-{{ range .Page.Pages }}
+{{ range where .Page.Pages ".Params.showList" true }}
   <dt><a href="{{ .RelPermalink }}">{{ .Title }}</a></dt>
   {{ if in $.Params "summary" -}}
   <dd>{{ or .Description .Summary "" | plainify | htmlUnescape }}</dd>

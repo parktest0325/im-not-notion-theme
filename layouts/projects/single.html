@@ -70,7 +70,7 @@
     {{/* Related blog posts */}}
     {{ with .Params.tags }}
       {{ $tags := . }}
-      {{ $related := where $.Site.RegularPages "Section" "blog" }}
+      {{ $related := where (where $.Site.RegularPages "Section" "blog") ".Params.showList" true }}
       {{ $matching := slice }}
       {{ range $related }}
         {{ $postTags := .Params.tags | default slice }}

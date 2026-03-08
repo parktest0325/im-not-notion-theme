@@ -116,7 +116,6 @@
 /* --- Base --- */
 html {
   font-size: 16px;
-  scroll-behavior: smooth;
 }
 
 body {
@@ -464,6 +463,33 @@ img {
   font-weight: 600;
   margin: 1.5rem 0 0.4rem;
   color: var(--text-secondary);
+}
+
+/* Heading anchor link */
+.heading-anchor {
+  opacity: 0;
+  margin-left: 0.4rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-weight: 400;
+  font-size: 0.85em;
+  transition: opacity 0.15s ease;
+}
+.content h2 .heading-anchor,
+.content h3 .heading-anchor,
+.content h4 .heading-anchor {
+  border: none;
+  padding: 0;
+}
+.content h2:hover .heading-anchor,
+.content h3:hover .heading-anchor,
+.content h4:hover .heading-anchor,
+.heading-anchor:focus {
+  opacity: 0.5;
+}
+.heading-anchor:hover {
+  opacity: 1 !important;
+  color: var(--accent);
 }
 
 .content p { margin-bottom: 1.5rem; }

@@ -1,0 +1,4 @@
+<h{{ .Level }} id="{{ .Anchor | safeURL }}"{{ with .Attributes }} {{ range $k, $v := . }} {{ $k }}="{{ $v }}"{{ end }}{{ end }}>
+  {{- .Text -}}
+  <a class="heading-anchor" href="#{{ .Anchor | safeURL }}" aria-hidden="true" title="Copy link">#</a>
+</h{{ .Level }}>

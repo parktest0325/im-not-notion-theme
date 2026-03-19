@@ -460,9 +460,14 @@ img {
 
 .content h4 {
   font-size: 1.05rem;
-  font-weight: 500;
+  font-weight: 600;
   margin: 2rem 0 0.5rem;
   color: var(--text-primary);
+}
+.content h4::before {
+  content: ">";
+  color: var(--accent-text);
+  margin-right: 0.4rem;
 }
 
 /* Heading anchor link */

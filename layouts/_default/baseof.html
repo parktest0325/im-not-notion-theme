@@ -63,6 +63,39 @@
       if (el) el.classList.toggle('open');
     }
 
+    // Tree code block highlighting
+    document.querySelectorAll('code[data-lang="tree"]').forEach(function(block) {
+      var html = block.innerHTML;
+      var lines = html.split('\n');
+      var result = [];
+      for (var i = 0; i < lines.length; i++) {
+        var line = lines[i];
+        if (!line.trim()) { result.push(line); continue; }
+        // Split: connectors | name | comment
+        var m = line.match(/^([│├└┬┤─\s]*(?:├──|└──|│\s+)?)(.*?)(\s+#\s*.*)$/);
+        if (!m) m = line.match(/^([│├└┬┤─\s]*(?:├──|└──|│\s+)?)(.*)$/);
+        if (m) {
+          var conn = m[1] || '';
+          var name = m[2] || '';
+          var comment = m[3] || '';
+          var out = '';
+          if (conn) out += '<span class="tree-connector">' + conn + '</span>';
+          if (name) {
+            if (name.match(/\/\s*$/) || name === '.') {
+              out += '<span class="tree-dir">' + name + '</span>';
+            } else {
+              out += '<span class="tree-file">' + name + '</span>';
+            }
+          }
+          if (comment) out += '<span class="tree-comment">' + comment + '</span>';
+          result.push(out);
+        } else {
+          result.push(line);
+        }
+      }
+      block.innerHTML = result.join('\n');
+    });
+
     // Heading anchor click → copy URL
     document.addEventListener('click', function(e) {
       var a = e.target.closest('.heading-anchor');

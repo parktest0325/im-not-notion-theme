@@ -459,10 +459,12 @@ img {
 }
 
 .content h4 {
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  margin: 1.5rem 0 0.4rem;
-  color: var(--text-secondary);
+  margin: 2rem 0 0.5rem;
+  color: var(--text-primary);
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--text-muted);
 }
 
 /* Heading anchor link */

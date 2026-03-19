@@ -28,9 +28,12 @@
 }
 
 /* --- Tree View Code Block --- */
-.highlight code[data-lang="tree"] {
+.highlight code[data-lang="tree"],
+.content pre code[data-lang="tree"],
+code[data-lang="tree"],
+code.language-tree {
   font-size: 0.85rem;
-  line-height: 1;
+  line-height: 1 !important;
 }
 
 .tree-connector {

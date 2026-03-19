@@ -460,13 +460,9 @@ img {
 
 .content h4 {
   font-size: 1.05rem;
-  font-weight: 600;
+  font-weight: 500;
   margin: 2rem 0 0.5rem;
   color: var(--text-primary);
-}
-.content h4::before {
-  content: "─ ";
-  color: var(--text-muted);
 }
 
 /* Heading anchor link */

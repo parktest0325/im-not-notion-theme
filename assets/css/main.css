@@ -465,7 +465,7 @@ img {
   color: var(--text-primary);
 }
 .content h4::before {
-  content: "── ";
+  content: "─ ";
   color: var(--text-muted);
 }
 

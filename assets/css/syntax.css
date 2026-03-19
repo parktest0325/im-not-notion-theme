@@ -30,7 +30,7 @@
 /* --- Tree View Code Block --- */
 .highlight code[data-lang="tree"] {
   font-size: 0.85rem;
-  line-height: 1.2;
+  line-height: 1;
 }
 
 .tree-connector {

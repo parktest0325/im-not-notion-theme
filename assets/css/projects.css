@@ -1487,6 +1487,38 @@
   opacity: 0.5;
 }
 
+/* ---- Hero Game Banner ---- */
+.hero-game-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+#hero-game {
+  width: 100%;
+  max-width: 624px;
+  height: auto;
+  aspect-ratio: 416 / 320;
+  border: 2px solid var(--border-color);
+  border-radius: 4px;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  background: #000;
+  outline: none;
+}
+[data-theme="dark"] #hero-game {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+[data-theme="light"] #hero-game {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+.hero-game-hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-family: 'D2Coding', Consolas, monospace;
+}
+
 /* Hero buttons */
 .hero-links {
   display: flex;

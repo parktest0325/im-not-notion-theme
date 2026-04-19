@@ -23,6 +23,12 @@ pluralizeListTitles = false  # Prevent Hugo from pluralizing section titles (e.g
   # GitHub profile link (shown in header)
   github = "https://github.com/yourname"
 
+  # --- Homepage Banner ---
+  # Choose the hero banner style on the homepage.
+  # "dragon" (default): interactive dragon terminal
+  # "game": bam-nara style 2D tile game (arrow keys to move)
+  homepageBanner = "dragon"
+
   # --- Hero Section (homepage) ---
   heroTitle = "Your Name"
   heroSubtitle = "Developer / Designer / Creator"

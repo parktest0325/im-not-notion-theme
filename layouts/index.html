@@ -15,7 +15,11 @@
 
   <h1 class="visually-hidden">{{ .Site.Params.heroTitle | default .Site.Title }}</h1>
 
-  {{/* === Hero: Dragon Terminal === */}}
+  {{/* === Hero Banner (dragon | game) === */}}
+  {{ $banner := .Site.Params.homepageBanner | default "dragon" }}
+  {{ if eq $banner "game" }}
+    {{ partial "home/banner-game.html" . }}
+  {{ else }}
   <section class="hero">
     <div class="hero-terminal">
       <div class="terminal-bar">
@@ -355,6 +359,7 @@
     if(document.querySelector('.hero')){input.focus();}
   })();
   </script>
+  {{ end }}
 
   {{/* === About Section === */}}
   {{ with .Site.Params.about }}

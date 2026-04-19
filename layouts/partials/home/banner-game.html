@@ -112,15 +112,15 @@
         '____OBBBOOBBO___','____OBBBOOBBO___','____OKKKOOKKO___','____OOOOOOOOO___'
       ], pal),
       right0: ps([
-        '_____OOOOOO_____','____OHHHHHHO____','___OHHHHHHHHO___','___OHHHHSSSHO___',
-        '___OHHSSSSSSO___','___OHSSSEESSO___','___OHSSSSSSSO___','___OHSSOOSSSO___',
+        '_____OOOOOO_____','____OHHHHHHO____','___OHHHHHHHHO___','___OHHHHHHHSO___',
+        '___OHHHHSSSSO___','___OHHHSSEESO___','___OHHSSSSSSO___','___OHHHSSOOSO___',
         '____OSSSSSSO____','___ORRRRRRRRO___','__ORRRRRRRRRRO__','__ORRRRRRRRRRO__',
         '__ORRRRRRRRRRO__','___OOBBBBBBBOO__','____OBBBBBBBO___','____OBBBBBBBO___',
         '____OBBBBBBBO___','_____OBBBBBBO___','_____OKKKKKKO___','_____OOOOOOOO___'
       ], pal),
       right1: ps([
-        '_____OOOOOO_____','____OHHHHHHO____','___OHHHHHHHHO___','___OHHHHSSSHO___',
-        '___OHHSSSSSSO___','___OHSSSEESSO___','___OHSSSSSSSO___','___OHSSOOSSSO___',
+        '_____OOOOOO_____','____OHHHHHHO____','___OHHHHHHHHO___','___OHHHHHHHSO___',
+        '___OHHHHSSSSO___','___OHHHSSEESO___','___OHHSSSSSSO___','___OHHHSSOOSO___',
         '____OSSSSSSO____','___ORRRRRRRRO___','__ORRRRRRRRRRO__','__ORRRRRRRRRRO__',
         '__ORRRRRRRRRRO__','___OOBBBBBBBOO__','____OBBBBBBBO___','____OBBBBBBBO___',
         '___OBBBBBBBBO___','___OBBBBBBO_____','___OKKKKKKO_____','___OOOOOOOO_____'
@@ -162,12 +162,18 @@
     hitFlash:0
   };
 
+  function mkMonster(x,y,hp,dmg){
+    return {x:x, y:y, fromX:x, fromY:y, spawnX:x, spawnY:y, hp:hp, maxHp:hp,
+            alive:true, moveCooldown:0, aniFrame:0, aniTimer:0, hitFlash:0,
+            dmg:dmg, aggro:false, frozen:0, respawnAt:0};
+  }
   var monsters = [
-    {x:15, y:2, fromX:15, fromY:2, hp:40, maxHp:40, alive:true, moveCooldown:0, aniFrame:0, aniTimer:0, hitFlash:0, dmg:8, aggro:false},
-    {x:11, y:8, fromX:11, fromY:8, hp:40, maxHp:40, alive:true, moveCooldown:0, aniFrame:0, aniTimer:0, hitFlash:0, dmg:8, aggro:false},
-    {x:21, y:12, fromX:21, fromY:12, hp:60, maxHp:60, alive:true, moveCooldown:0, aniFrame:0, aniTimer:0, hitFlash:0, dmg:12, aggro:false},
-    {x:3, y:11, fromX:3, fromY:11, hp:40, maxHp:40, alive:true, moveCooldown:0, aniFrame:0, aniTimer:0, hitFlash:0, dmg:8, aggro:false}
+    mkMonster(15, 2, 40, 8),
+    mkMonster(11, 8, 40, 8),
+    mkMonster(21, 12, 60, 12),
+    mkMonster(3, 11, 40, 8)
   ];
+  var RESPAWN_DELAY = 10000;
 
   var npcs = [
     {x:9, y:5, dir:'down', sprites:NPC_PURPLE, name:'Sage',
@@ -284,6 +290,7 @@
     popups.push({text:'-'+dmg, x:m.x, y:m.y, start:Date.now(), dur:800, color:'#ffeb3b'});
     if(m.hp <= 0){
       m.alive = false;
+      m.respawnAt = Date.now() + RESPAWN_DELAY;
       popups.push({text:'처치!', x:m.x, y:m.y, start:Date.now(), dur:1000, color:'#fff'});
       for(var i=0;i<8;i++){
         effects.push({type:'particle', x:m.x+0.5, y:m.y+0.5, vx:(Math.random()-0.5)*3, vy:(Math.random()-0.5)*3-1, start:Date.now(), dur:600, color:'#6bc457'});
@@ -380,6 +387,31 @@
     player.moving = true;
     player.moveStart = Date.now();
     player.frame = 1 - player.frame;
+  }
+
+  /* ===== Respawn ===== */
+  function updateRespawns(now){
+    for(var i=0;i<monsters.length;i++){
+      var m = monsters[i];
+      if(m.alive || !m.respawnAt) continue;
+      if(now < m.respawnAt) continue;
+      // Don't respawn if player is too close to spawn point
+      var dx = Math.abs(m.spawnX - player.x), dy = Math.abs(m.spawnY - player.y);
+      if(dx <= 2 && dy <= 2){ m.respawnAt = now + 2000; continue; }
+      // Don't respawn if another entity occupies spawn tile
+      if(entityAt(m.spawnX, m.spawnY)){ m.respawnAt = now + 1500; continue; }
+      m.x = m.spawnX; m.y = m.spawnY;
+      m.fromX = m.spawnX; m.fromY = m.spawnY;
+      m.hp = m.maxHp; m.alive = true; m.aggro = false;
+      m.frozen = 0; m.respawnAt = 0; m.moveCooldown = 500;
+      // Spawn effect
+      effects.push({type:'spawnFx', x:m.x, y:m.y, start:now, dur:500});
+      for(var k=0;k<6;k++){
+        effects.push({type:'particle', x:m.x+0.5, y:m.y+0.5,
+          vx:(Math.random()-0.5)*2, vy:-Math.random()*2-0.5,
+          start:now, dur:600, color:'#a8e088'});
+      }
+    }
   }
 
   /* ===== Monster AI ===== */
@@ -497,6 +529,7 @@
     var dt = now - lastFrame; lastFrame = now;
 
     if(player.hp > 0){
+      updateRespawns(now);
       updateMonsters(now);
       updateProjectiles(now);
       updateEffects(now);
@@ -664,6 +697,11 @@
         ctx.strokeStyle = 'rgba(255,245,120,'+(1-ep)+')';
         ctx.lineWidth = 2;
         ctx.beginPath(); ctx.arc(sp.x, sp.y, ep*40, 0, Math.PI*2); ctx.stroke();
+      } else if(e.type === 'spawnFx'){
+        var sp = worldToScreen(e.x+0.5, e.y+0.5);
+        ctx.strokeStyle = 'rgba(168,224,136,'+(1-ep)+')';
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(sp.x, sp.y, (1-ep)*28, 0, Math.PI*2); ctx.stroke();
       } else if(e.type === 'slash'){
         // Already drawn above for player
       }
@@ -867,7 +905,10 @@
     player.x=5; player.y=7; player.fromX=5; player.fromY=7;
     player.hp=player.maxHp; player.mp=player.maxMp;
     player.dir='down'; player.moving=false; player.attacking=false;
-    monsters.forEach(function(m){ m.hp=m.maxHp; m.alive=true; m.aggro=false; m.frozen=0; });
+    monsters.forEach(function(m){
+      m.x=m.spawnX; m.y=m.spawnY; m.fromX=m.spawnX; m.fromY=m.spawnY;
+      m.hp=m.maxHp; m.alive=true; m.aggro=false; m.frozen=0; m.respawnAt=0;
+    });
     projectiles.length=0; effects.length=0; popups.length=0;
     dialogue=null;
   }

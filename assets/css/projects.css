@@ -1506,6 +1506,13 @@
   image-rendering: crisp-edges;
   background: #000;
   outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+#hero-game:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.35);
+  cursor: default;
 }
 [data-theme="dark"] #hero-game {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);

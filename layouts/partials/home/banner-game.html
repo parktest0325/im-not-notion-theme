@@ -734,6 +734,17 @@
     // Dialogue
     if(dialogue) drawDialogue();
 
+    // Not focused overlay
+    if(!focused && player.hp > 0){
+      ctx.fillStyle = 'rgba(0,0,0,0.55)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 16px monospace'; ctx.textAlign = 'center';
+      ctx.fillText('▶ 클릭해서 플레이', canvas.width/2, canvas.height/2 - 4);
+      ctx.font = '11px monospace'; ctx.fillStyle = '#ccc';
+      ctx.fillText('Click to focus', canvas.width/2, canvas.height/2 + 16);
+    }
+
     // Game over
     if(player.hp <= 0){
       ctx.fillStyle='rgba(0,0,0,0.7)';
@@ -865,14 +876,13 @@
 
   /* ===== Input ===== */
   var heldKey = null;
-  function inView(){
-    var hero = document.querySelector('.hero'); if(!hero) return false;
-    var rect = hero.getBoundingClientRect();
-    return rect.bottom >= 0 && rect.top <= window.innerHeight;
-  }
+  var focused = false;
+  canvas.addEventListener('focus', function(){ focused = true; });
+  canvas.addEventListener('blur', function(){ focused = false; heldKey = null; });
+  canvas.addEventListener('click', function(){ canvas.focus(); });
 
   document.addEventListener('keydown', function(e){
-    if(!inView()) return;
+    if(!focused) return;
     var k = e.key;
     if(player.hp <= 0){
       if(k.toLowerCase() === 'r'){ resetGame(); e.preventDefault(); }

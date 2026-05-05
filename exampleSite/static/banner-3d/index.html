@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>3D Banner</title>
+<style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #87ceeb; font-family: 'D2Coding', Consolas, monospace; }
+  #c { display: block; width: 100%; height: 100%; outline: none; }
+  #overlay {
+    position: fixed; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 8px;
+    background: rgba(0,0,0,0.55); color: #fff; cursor: pointer;
+    user-select: none; transition: opacity 0.2s;
+  }
+  #overlay.hidden { opacity: 0; pointer-events: none; }
+  #overlay h2 { margin: 0; font-size: 18px; }
+  #overlay p { margin: 0; font-size: 12px; color: #ccc; }
+  #hud {
+    position: fixed; left: 8px; bottom: 8px; font-size: 11px;
+    color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+    pointer-events: none;
+  }
+  #info {
+    position: fixed; right: 8px; top: 8px; font-size: 10px;
+    color: rgba(255,255,255,0.6); pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<canvas id="c" tabindex="0"></canvas>
+<div id="overlay">
+  <h2>▶ 클릭해서 플레이</h2>
+  <p>WASD / 방향키로 이동 · Shift로 달리기</p>
+</div>
+<div id="hud">WASD 이동 · Shift 달리기</div>
+<div id="info"></div>
+
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+    "three/webgpu": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.webgpu.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+
+const canvas = document.getElementById('c');
+const overlay = document.getElementById('overlay');
+const info = document.getElementById('info');
+
+/* ===== Renderer (WebGPU → WebGL fallback) ===== */
+let renderer, rendererType = 'WebGL';
+async function makeRenderer(){
+  if(navigator.gpu){
+    try {
+      const mod = await import('three/webgpu');
+      renderer = new mod.WebGPURenderer({ canvas, antialias: true });
+      await renderer.init();
+      rendererType = 'WebGPU';
+      return;
+    } catch(e){ console.warn('WebGPU init failed, falling back to WebGL', e); }
+  }
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+}
+await makeRenderer();
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+info.textContent = rendererType;
+
+/* ===== Scene ===== */
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x87ceeb);
+scene.fog = new THREE.Fog(0x87ceeb, 30, 90);
+
+const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 200);
+
+/* ===== Lights ===== */
+const ambient = new THREE.AmbientLight(0xffffff, 0.6);
+scene.add(ambient);
+const sun = new THREE.DirectionalLight(0xffffff, 1.2);
+sun.position.set(20, 30, 10);
+sun.castShadow = true;
+sun.shadow.mapSize.set(1024, 1024);
+sun.shadow.camera.left = -40;
+sun.shadow.camera.right = 40;
+sun.shadow.camera.top = 40;
+sun.shadow.camera.bottom = -40;
+scene.add(sun);
+
+/* ===== Ground ===== */
+const groundGeo = new THREE.PlaneGeometry(200, 200, 1, 1);
+const groundMat = new THREE.MeshLambertMaterial({ color: 0x6fa847 });
+const ground = new THREE.Mesh(groundGeo, groundMat);
+ground.rotation.x = -Math.PI / 2;
+ground.receiveShadow = true;
+scene.add(ground);
+
+// Grid lines for visual reference
+const grid = new THREE.GridHelper(200, 50, 0x4d8a44, 0x4d8a44);
+grid.material.opacity = 0.3;
+grid.material.transparent = true;
+scene.add(grid);
+
+/* ===== Player ===== */
+const player = new THREE.Group();
+const skinMat = new THREE.MeshLambertMaterial({ color: 0xf4c2a1 });
+const shirtMat = new THREE.MeshLambertMaterial({ color: 0xc0392b });
+const pantsMat = new THREE.MeshLambertMaterial({ color: 0x34495e });
+const hairMat = new THREE.MeshLambertMaterial({ color: 0x3d2817 });
+
+// Body
+const body = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.9, 0.4), shirtMat);
+body.position.y = 1.0; body.castShadow = true;
+player.add(body);
+// Head
+const head = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.5), skinMat);
+head.position.y = 1.7; head.castShadow = true;
+player.add(head);
+// Hair
+const hair = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.2, 0.55), hairMat);
+hair.position.y = 1.95; hair.castShadow = true;
+player.add(hair);
+// Eyes
+const eyeMat = new THREE.MeshBasicMaterial({ color: 0x111 });
+const eyeL = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.06, 0.02), eyeMat);
+eyeL.position.set(-0.1, 1.72, 0.26); player.add(eyeL);
+const eyeR = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.06, 0.02), eyeMat);
+eyeR.position.set(0.1, 1.72, 0.26); player.add(eyeR);
+// Arms
+const armL = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.8, 0.2), shirtMat);
+armL.position.set(-0.45, 1.0, 0); armL.castShadow = true;
+player.add(armL);
+const armR = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.8, 0.2), shirtMat);
+armR.position.set(0.45, 1.0, 0); armR.castShadow = true;
+player.add(armR);
+// Legs
+const legL = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.7, 0.25), pantsMat);
+legL.position.set(-0.18, 0.35, 0); legL.castShadow = true;
+player.add(legL);
+const legR = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.7, 0.25), pantsMat);
+legR.position.set(0.18, 0.35, 0); legR.castShadow = true;
+player.add(legR);
+
+scene.add(player);
+
+/* ===== Scenery ===== */
+function makeTree(x, z){
+  const tree = new THREE.Group();
+  const trunk = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.3, 0.4, 1.5, 8),
+    new THREE.MeshLambertMaterial({ color: 0x5a3a1e })
+  );
+  trunk.position.y = 0.75; trunk.castShadow = true;
+  tree.add(trunk);
+  const leaves = new THREE.Mesh(
+    new THREE.ConeGeometry(1.2, 2.2, 8),
+    new THREE.MeshLambertMaterial({ color: 0x2d5a2a })
+  );
+  leaves.position.y = 2.5; leaves.castShadow = true;
+  tree.add(leaves);
+  tree.position.set(x, 0, z);
+  scene.add(tree);
+}
+function makeRock(x, z, scale){
+  const rock = new THREE.Mesh(
+    new THREE.IcosahedronGeometry(scale || 0.7, 0),
+    new THREE.MeshLambertMaterial({ color: 0x888, flatShading: true })
+  );
+  rock.position.set(x, (scale || 0.7) * 0.5, z);
+  rock.castShadow = true; rock.receiveShadow = true;
+  rock.rotation.y = Math.random() * Math.PI;
+  scene.add(rock);
+}
+function makeBox(x, z, color){
+  const box = new THREE.Mesh(
+    new THREE.BoxGeometry(1.5, 1.5, 1.5),
+    new THREE.MeshLambertMaterial({ color: color || 0xc0392b })
+  );
+  box.position.set(x, 0.75, z);
+  box.castShadow = true; box.receiveShadow = true;
+  scene.add(box);
+}
+
+// Random scatter
+const rng = (seed => () => (seed = (seed * 9301 + 49297) % 233280) / 233280)(42);
+for(let i=0;i<25;i++){
+  const angle = rng() * Math.PI * 2;
+  const dist = 8 + rng() * 35;
+  makeTree(Math.cos(angle) * dist, Math.sin(angle) * dist);
+}
+for(let i=0;i<15;i++){
+  const angle = rng() * Math.PI * 2;
+  const dist = 5 + rng() * 30;
+  makeRock(Math.cos(angle) * dist, Math.sin(angle) * dist, 0.4 + rng() * 0.6);
+}
+makeBox(5, 5, 0xc0392b);
+makeBox(-6, 4, 0xd4ac0d);
+makeBox(3, -7, 0x148f77);
+makeBox(-4, -5, 0x7d3c98);
+
+/* ===== Input ===== */
+const keys = {};
+let focused = false;
+canvas.addEventListener('focus', () => { focused = true; overlay.classList.add('hidden'); });
+canvas.addEventListener('blur', () => { focused = false; overlay.classList.remove('hidden'); for(const k in keys) keys[k]=false; });
+canvas.addEventListener('click', () => canvas.focus());
+overlay.addEventListener('click', () => canvas.focus());
+window.addEventListener('keydown', e => {
+  if(!focused) return;
+  keys[e.code] = true;
+  if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Space'].includes(e.code)) e.preventDefault();
+});
+window.addEventListener('keyup', e => { keys[e.code] = false; });
+
+/* ===== Camera follow ===== */
+const camOffset = new THREE.Vector3(0, 4, 6);
+camera.position.copy(player.position).add(camOffset);
+
+/* ===== Resize ===== */
+function resize(){
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  if(canvas.width !== w || canvas.height !== h){
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+}
+
+/* ===== Animation loop ===== */
+let walkTime = 0;
+let lastT = performance.now();
+function frame(now){
+  const dt = Math.min(0.05, (now - lastT) / 1000);
+  lastT = now;
+  resize();
+
+  // Movement
+  let dx = 0, dz = 0;
+  if(keys.KeyW || keys.ArrowUp) dz -= 1;
+  if(keys.KeyS || keys.ArrowDown) dz += 1;
+  if(keys.KeyA || keys.ArrowLeft) dx -= 1;
+  if(keys.KeyD || keys.ArrowRight) dx += 1;
+  const moving = dx !== 0 || dz !== 0;
+  const speed = (keys.ShiftLeft || keys.ShiftRight) ? 8 : 4;
+  if(moving){
+    const len = Math.hypot(dx, dz);
+    dx /= len; dz /= len;
+    player.position.x += dx * speed * dt;
+    player.position.z += dz * speed * dt;
+    // Rotate to face movement direction
+    const targetAngle = Math.atan2(dx, dz);
+    let diff = targetAngle - player.rotation.y;
+    while(diff > Math.PI) diff -= Math.PI * 2;
+    while(diff < -Math.PI) diff += Math.PI * 2;
+    player.rotation.y += diff * Math.min(1, dt * 12);
+    // Walk animation
+    walkTime += dt * speed * 1.5;
+    const bob = Math.sin(walkTime * 2) * 0.05;
+    body.position.y = 1.0 + bob;
+    head.position.y = 1.7 + bob;
+    hair.position.y = 1.95 + bob;
+    eyeL.position.y = 1.72 + bob;
+    eyeR.position.y = 1.72 + bob;
+    armL.rotation.x = Math.sin(walkTime) * 0.6;
+    armR.rotation.x = -Math.sin(walkTime) * 0.6;
+    legL.rotation.x = -Math.sin(walkTime) * 0.6;
+    legR.rotation.x = Math.sin(walkTime) * 0.6;
+  } else {
+    armL.rotation.x *= 0.85;
+    armR.rotation.x *= 0.85;
+    legL.rotation.x *= 0.85;
+    legR.rotation.x *= 0.85;
+  }
+
+  // Clamp to play area
+  player.position.x = Math.max(-50, Math.min(50, player.position.x));
+  player.position.z = Math.max(-50, Math.min(50, player.position.z));
+
+  // Camera smooth follow
+  const targetCam = new THREE.Vector3(
+    player.position.x - Math.sin(player.rotation.y) * 6,
+    player.position.y + 4,
+    player.position.z - Math.cos(player.rotation.y) * 6
+  );
+  camera.position.lerp(targetCam, Math.min(1, dt * 5));
+  const lookAt = new THREE.Vector3(player.position.x, player.position.y + 1.2, player.position.z);
+  camera.lookAt(lookAt);
+
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

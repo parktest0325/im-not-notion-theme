@@ -1487,43 +1487,33 @@
   opacity: 0.5;
 }
 
-/* ---- Hero Game Banner ---- */
-.hero-game-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-}
-#hero-game {
+/* ---- Hero Banner (iframe) ---- */
+.hero-banner-wrap {
   width: 100%;
-  max-width: 624px;
-  height: auto;
-  aspect-ratio: 416 / 320;
+  max-width: 720px;
+  display: flex;
+  justify-content: center;
+}
+.hero-banner-frame {
+  width: 100%;
+  aspect-ratio: 16 / 10;
   border: 2px solid var(--border-color);
   border-radius: 4px;
-  image-rendering: pixelated;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: crisp-edges;
   background: #000;
-  outline: none;
-  cursor: pointer;
+  display: block;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-#hero-game:focus {
+.hero-banner-frame:focus,
+.hero-banner-frame:focus-within {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.35);
-  cursor: default;
+  outline: none;
 }
-[data-theme="dark"] #hero-game {
+[data-theme="dark"] .hero-banner-frame {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
 }
-[data-theme="light"] #hero-game {
+[data-theme="light"] .hero-banner-frame {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-}
-.hero-game-hint {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  font-family: 'D2Coding', Consolas, monospace;
 }
 
 /* Hero buttons */

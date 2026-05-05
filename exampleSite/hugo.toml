@@ -24,9 +24,11 @@ pluralizeListTitles = false  # Prevent Hugo from pluralizing section titles (e.g
   github = "https://github.com/yourname"
 
   # --- Homepage Banner ---
-  # Choose the hero banner style on the homepage.
-  # "dragon" (default): interactive dragon terminal
-  # "game": bam-nara style 2D tile game (arrow keys to move)
+  # "dragon" (default): built-in interactive dragon terminal
+  # Or set to a URL path to embed any page as iframe banner.
+  # Example: place files in static/banner-game/, set:
+  #   homepageBanner = "/banner-game/"
+  # iframe is focused on click → captures keys; click outside → returns to browser.
   homepageBanner = "dragon"
 
   # --- Hero Section (homepage) ---

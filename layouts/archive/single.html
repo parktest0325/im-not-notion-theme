@@ -1,0 +1,36 @@
+{{ define "main" }}
+<article class="archive-single">
+  <header class="archive-single-header">
+    <h1>{{ .Title }}</h1>
+
+    <div class="archive-single-meta">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">Archived {{ .Date.Format "2006-01-02 15:04" }}</time>
+      {{ with .Params.category }} · <span class="archive-single-cat">{{ . }}</span>{{ end }}
+      {{ with .Params.source_domain }} · <span class="archive-single-domain">{{ . }}</span>{{ end }}
+    </div>
+
+    {{ with .Params.source_url }}
+      <p class="archive-single-source">
+        <span class="archive-single-label">Source:</span>
+        <a href="{{ . }}" target="_blank" rel="noopener">{{ . }}</a>
+      </p>
+    {{ end }}
+
+    {{ with .Params.tags }}
+      <div class="archive-single-tags">
+        {{ range . }}<span class="tag">{{ . }}</span>{{ end }}
+      </div>
+    {{ end }}
+
+    {{ with .Params.archive_path }}
+      <p class="archive-single-action">
+        <a href="{{ . }}" class="archive-snapshot-link">View Archived Snapshot &rarr;</a>
+      </p>
+    {{ end }}
+  </header>
+
+  <div class="archive-single-body content">
+    {{ .Content }}
+  </div>
+</article>
+{{ end }}

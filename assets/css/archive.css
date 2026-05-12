@@ -1,0 +1,188 @@
+/* Archive section — list of wayback snapshots */
+
+/* --- Page header --- */
+.archive-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.archive-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.archive-subtitle {
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+  font-size: 1rem;
+}
+
+.archive-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+/* --- List --- */
+.archive-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.archive-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.archive-item:first-child {
+  padding-top: 0;
+}
+
+.archive-item-title {
+  font-size: 1.1rem;
+  margin: 0 0 0.35rem;
+  border: none;
+  padding: 0;
+}
+.archive-item-title a {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+.archive-item-title a:hover {
+  color: var(--accent);
+}
+
+.archive-item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin: 0 0 0.3rem;
+}
+.archive-item-meta > * + *::before {
+  content: "·";
+  margin-right: 0.5rem;
+  opacity: 0.5;
+}
+
+.archive-item-cat {
+  text-transform: lowercase;
+  color: var(--accent);
+  opacity: 0.85;
+}
+
+.archive-item-domain {
+  font-family: D2Coding, Consolas, monospace;
+}
+
+.archive-item-source {
+  display: inline-block;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  word-break: break-all;
+  margin-bottom: 0.4rem;
+}
+.archive-item-source:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.archive-item-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.archive-empty {
+  color: var(--text-muted);
+  text-align: center;
+  padding: 3rem 0;
+}
+
+/* --- Single page --- */
+.archive-single {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.archive-single-header {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 1.5rem;
+}
+
+.archive-single-header h1 {
+  margin: 0 0 0.5rem;
+  font-size: 1.6rem;
+}
+
+.archive-single-meta {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+}
+
+.archive-single-cat {
+  color: var(--accent);
+}
+
+.archive-single-domain {
+  font-family: D2Coding, Consolas, monospace;
+}
+
+.archive-single-source {
+  font-size: 0.85rem;
+  margin: 0.4rem 0;
+  word-break: break-all;
+}
+.archive-single-source a {
+  color: var(--accent);
+}
+.archive-single-label {
+  color: var(--text-muted);
+  margin-right: 0.3rem;
+}
+
+.archive-single-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin: 0.6rem 0;
+}
+
+.archive-single-action {
+  margin-top: 1.2rem;
+}
+
+.archive-snapshot-link {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: rgba(var(--accent-rgb), 0.12);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 2px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: background 0.2s ease;
+}
+.archive-snapshot-link:hover {
+  background: rgba(var(--accent-rgb), 0.25);
+}
+
+.archive-single-body {
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 600px) {
+  .archive-page,
+  .archive-single {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

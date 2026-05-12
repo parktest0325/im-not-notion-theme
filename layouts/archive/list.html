@@ -1,0 +1,75 @@
+{{ define "main" }}
+<div class="archive-page">
+  <div class="archive-header">
+    <h1 class="section-title-glitch" data-text="{{ .Title | default "Archive" }}">{{ .Title | default "Archive" }}</h1>
+    {{ with .Description }}<p class="archive-subtitle">{{ . }}</p>{{ end }}
+
+    {{/* Collect every tag across all archived pages */}}
+    {{ $allTags := slice }}
+    {{ range .RegularPagesRecursive }}
+      {{ with .Params.tags }}
+        {{ range . }}{{ $allTags = $allTags | append . }}{{ end }}
+      {{ end }}
+    {{ end }}
+    {{ $uniqTags := uniq $allTags | sort }}
+
+    {{ if $uniqTags }}
+    <div class="archive-filters">
+      <button class="filter-btn filter-btn--tag active" data-tag="all">All</button>
+      {{ range $uniqTags }}
+        <button class="filter-btn filter-btn--tag" data-tag="{{ . }}">{{ . }}</button>
+      {{ end }}
+    </div>
+    {{ end }}
+  </div>
+
+  <div class="archive-list">
+    {{ range .RegularPagesRecursive.ByDate.Reverse }}
+      <article class="archive-item" data-tags="{{ delimit .Params.tags "," }}">
+        <h2 class="archive-item-title">
+          <a href="{{ .Params.archive_path | default .RelPermalink }}">{{ .Title }}</a>
+        </h2>
+
+        <div class="archive-item-meta">
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
+          {{ with .Params.category }}<span class="archive-item-cat">{{ . }}</span>{{ end }}
+          {{ with .Params.source_domain }}<span class="archive-item-domain">{{ . }}</span>{{ end }}
+        </div>
+
+        {{ with .Params.source_url }}
+          <a class="archive-item-source" href="{{ . }}" target="_blank" rel="noopener">{{ . }}</a>
+        {{ end }}
+
+        {{ with .Params.tags }}
+          <div class="archive-item-tags">
+            {{ range . }}<span class="tag">{{ . }}</span>{{ end }}
+          </div>
+        {{ end }}
+      </article>
+    {{ else }}
+      <p class="archive-empty">No archives yet.</p>
+    {{ end }}
+  </div>
+</div>
+
+<script>
+  (function() {
+    var activeTag = 'all';
+    function apply() {
+      document.querySelectorAll('.archive-item').forEach(function(item) {
+        var tags = (item.dataset.tags || '').split(',').filter(Boolean);
+        var match = activeTag === 'all' || tags.indexOf(activeTag) >= 0;
+        item.style.display = match ? '' : 'none';
+      });
+    }
+    document.querySelectorAll('.filter-btn--tag').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.filter-btn--tag').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        activeTag = btn.dataset.tag;
+        apply();
+      });
+    });
+  })();
+</script>
+{{ end }}

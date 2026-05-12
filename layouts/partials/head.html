@@ -80,3 +80,6 @@
 
 {{ $search := resources.Get "css/search.css" | minify | fingerprint }}
 <link rel="stylesheet" href="{{ $search.RelPermalink }}">
+
+{{ $archive := resources.Get "css/archive.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $archive.RelPermalink }}">

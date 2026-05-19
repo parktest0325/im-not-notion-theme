@@ -15,12 +15,23 @@
 
   <h1 class="visually-hidden">{{ .Site.Params.heroTitle | default .Site.Title }}</h1>
 
-  {{/* === Hero Banner (dragon | iframe URL) === */}}
+  {{/* === Hero Banner (dragon | iframe) ===
+       homepageBanner = "iframe" 이면 [params.iframe] 에서 속성을 읽어 구성.
+       지원 키: src(필수), allow, allowfullscreen, loading, referrerpolicy, ratio */}}
   {{ $banner := .Site.Params.homepageBanner | default "dragon" }}
-  {{ if ne $banner "dragon" }}
+  {{ if eq $banner "iframe" }}
+  {{ $if := .Site.Params.iframe }}
   <section class="hero">
     <div class="hero-banner-wrap">
-      <iframe src="{{ $banner }}" class="hero-banner-frame" loading="lazy" title="Banner" referrerpolicy="no-referrer"></iframe>
+      <iframe
+        src="{{ $if.src }}"
+        class="hero-banner-frame"
+        title="Banner"
+        loading="{{ $if.loading | default "lazy" }}"
+        referrerpolicy="{{ $if.referrerpolicy | default "no-referrer" }}"
+        {{ with $if.allow }}allow="{{ . }}"{{ end }}
+        {{ if $if.allowfullscreen }}allowfullscreen{{ end }}
+        {{ with $if.ratio }}style="aspect-ratio: {{ . }};"{{ end }}></iframe>
     </div>
     <div class="hero-links">
       <a href="/blog/" class="hero-btn">

@@ -29,14 +29,17 @@ pluralizeListTitles = false  # Prevent Hugo from pluralizing section titles (e.g
   homepageBanner = "dragon"
 
   # Used only when homepageBanner = "iframe".
-  # src is required; the rest are optional.
+  # basePath is required; the rest are optional.
+  #   basePath         — base URL (without query string)
+  #   params           — raw query string (no leading "?"), appended to basePath
   #   allow            — Permissions Policy (e.g. "fullscreen; webgpu")
   #   allowfullscreen  — true/false
   #   loading          — "lazy" (default) | "eager"
   #   referrerpolicy   — default "no-referrer"
   #   ratio            — CSS aspect-ratio override (e.g. "16/9"); default 16/10 from CSS
   # [params.iframe]
-  #   src = "http://127.0.0.1:5192/?embed=1&hideStatus=1&lightIntensity=1"
+  #   basePath = "http://127.0.0.1:5192/"
+  #   params = "embed=1&hideStatus=1&lightIntensity=1"
   #   allow = "fullscreen; webgpu"
   #   allowfullscreen = true
   #   loading = "lazy"

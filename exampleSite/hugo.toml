@@ -37,6 +37,7 @@ pluralizeListTitles = false  # Prevent Hugo from pluralizing section titles (e.g
   #   loading          — "lazy" (default) | "eager"
   #   referrerpolicy   — default "no-referrer"
   #   ratio            — CSS aspect-ratio override (e.g. "16/9"); default 16/10 from CSS
+  #   tabindex         — e.g. "0" to make the iframe tab-focusable
   # [params.iframe]
   #   basePath = "http://127.0.0.1:5192/"
   #   params = "embed=1&hideStatus=1&lightIntensity=1"
@@ -44,6 +45,7 @@ pluralizeListTitles = false  # Prevent Hugo from pluralizing section titles (e.g
   #   allowfullscreen = true
   #   loading = "lazy"
   #   ratio = "16/9"
+  #   tabindex = "0"
 
   # --- Hero Section (homepage) ---
   heroTitle = "Your Name"

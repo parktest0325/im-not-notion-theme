@@ -18,7 +18,7 @@
   {{/* === Hero Banner (dragon | iframe) ===
        homepageBanner = "iframe" 이면 [params.iframe] 에서 속성을 읽어 구성.
        지원 키: basePath(필수), params, allow, allowfullscreen, loading,
-       referrerpolicy, ratio */}}
+       referrerpolicy, ratio, tabindex */}}
   {{ $banner := .Site.Params.homepageBanner | default "dragon" }}
   {{ if eq $banner "iframe" }}
   {{ $if := .Site.Params.iframe }}
@@ -34,6 +34,7 @@
         referrerpolicy="{{ $if.referrerpolicy | default "no-referrer" }}"
         {{ with $if.allow }}allow="{{ . }}"{{ end }}
         {{ if $if.allowfullscreen }}allowfullscreen{{ end }}
+        {{ with $if.tabindex }}tabindex="{{ . }}"{{ end }}
         {{ with $if.ratio }}style="aspect-ratio: {{ . }};"{{ end }}></iframe>
     </div>
     <div class="hero-links">

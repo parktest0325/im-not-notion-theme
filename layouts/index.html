@@ -17,8 +17,11 @@
 
   {{/* === Hero Banner (dragon | iframe) ===
        homepageBanner = "iframe" 이면 [params.iframe] 에서 속성을 읽어 구성.
-       지원 키: basePath(필수), params, allow, allowfullscreen, loading,
-       referrerpolicy, ratio, tabindex */}}
+       지원 키:
+         basePath (필수) — base URL (쿼리 없음)
+         params           — raw 쿼리 문자열 (앞에 ? 있어도 됨)
+         opts             — iframe 추가 속성 문자열 그대로 삽입
+                            예: opts = 'title="Banner" allow="fullscreen; webgpu" tabindex="0"' */}}
   {{ $banner := .Site.Params.homepageBanner | default "dragon" }}
   {{ if eq $banner "iframe" }}
   {{ $if := .Site.Params.iframe }}
@@ -26,16 +29,7 @@
   {{ with $if.params }}{{ $src = printf "%s?%s" $if.basePath (trimPrefix "?" .) }}{{ end }}
   <section class="hero">
     <div class="hero-banner-wrap">
-      <iframe
-        src="{{ $src }}"
-        class="hero-banner-frame"
-        title="Banner"
-        loading="{{ $if.loading | default "lazy" }}"
-        referrerpolicy="{{ $if.referrerpolicy | default "no-referrer" }}"
-        {{ with $if.allow }}allow="{{ . }}"{{ end }}
-        {{ if $if.allowfullscreen }}allowfullscreen{{ end }}
-        {{ with $if.tabindex }}tabindex="{{ . }}"{{ end }}
-        {{ with $if.ratio }}style="aspect-ratio: {{ . }};"{{ end }}></iframe>
+      <iframe src="{{ $src }}" class="hero-banner-frame" {{ with $if.opts }}{{ . | safeHTMLAttr }}{{ end }}></iframe>
     </div>
     <div class="hero-links">
       <a href="/blog/" class="hero-btn">

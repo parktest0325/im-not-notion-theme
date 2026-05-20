@@ -30,22 +30,14 @@ pluralizeListTitles = false  # Prevent Hugo from pluralizing section titles (e.g
 
   # Used only when homepageBanner = "iframe".
   # basePath is required; the rest are optional.
-  #   basePath         — base URL (without query string)
-  #   params           — raw query string (no leading "?"), appended to basePath
-  #   allow            — Permissions Policy (e.g. "fullscreen; webgpu")
-  #   allowfullscreen  — true/false
-  #   loading          — "lazy" (default) | "eager"
-  #   referrerpolicy   — default "no-referrer"
-  #   ratio            — CSS aspect-ratio override (e.g. "16/9"); default 16/10 from CSS
-  #   tabindex         — e.g. "0" to make the iframe tab-focusable
+  #   basePath  — base URL (without query string)
+  #   params    — raw query string (leading "?" is fine), appended to basePath
+  #   opts      — extra iframe attributes inserted verbatim into the tag.
+  #               Use TOML single-quoted strings so you don't have to escape ".
   # [params.iframe]
   #   basePath = "http://127.0.0.1:5192/"
   #   params = "embed=1&hideStatus=1&lightIntensity=1"
-  #   allow = "fullscreen; webgpu"
-  #   allowfullscreen = true
-  #   loading = "lazy"
-  #   ratio = "16/9"
-  #   tabindex = "0"
+  #   opts = 'title="Banner" loading="lazy" referrerpolicy="no-referrer" allow="fullscreen; webgpu" allowfullscreen tabindex="0" style="aspect-ratio:16/9"'
 
   # --- Hero Section (homepage) ---
   heroTitle = "Your Name"

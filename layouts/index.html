@@ -26,7 +26,7 @@
   {{ if eq $banner "iframe" }}
   {{ $if := .Site.Params.iframe }}
   {{ $src := $if.basePath }}
-  {{ with $if.params }}{{ $src = printf "%s?%s" $if.basePath (trimPrefix "?" .) }}{{ end }}
+  {{ with $if.params }}{{ $src = printf "%s?%s" $if.basePath (strings.TrimPrefix "?" .) }}{{ end }}
   <section class="hero">
     <div class="hero-banner-wrap">
       <iframe src="{{ $src }}" class="hero-banner-frame" {{ with $if.opts }}{{ . | safeHTMLAttr }}{{ end }}></iframe>

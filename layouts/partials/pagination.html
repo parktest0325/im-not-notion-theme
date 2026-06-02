@@ -1,4 +1,7 @@
-{{ $pag := .Paginator }}
+{{/* Accepts a paginator object directly (preferred) OR a page context
+     (back-compat: falls back to .Paginator on the page). */}}
+{{ $pag := . }}
+{{ if not $pag.PageNumber }}{{ $pag = .Paginator }}{{ end }}
 {{ if gt $pag.TotalPages 1 }}
 <nav class="pagination" aria-label="Pagination">
   {{/* Prev arrow */}}

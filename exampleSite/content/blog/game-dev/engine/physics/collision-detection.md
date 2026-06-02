@@ -4,6 +4,7 @@ date: 2026-02-14
 description: "Spatial hashing for broad phase + SAT for narrow phase collision in a 2D engine"
 tags: ["physics", "game-dev", "algorithms"]
 weight: 1
+showList: true
 ---
 
 ## Two-Phase Approach

@@ -4,6 +4,7 @@ date: 2026-02-16
 description: "Setting up a Vulkan rendering pipeline from scratch in Rust using ash"
 tags: ["rust", "vulkan", "graphics"]
 weight: 1
+showList: true
 ---
 
 ## Vulkan vs OpenGL

@@ -4,6 +4,7 @@ date: 2026-02-13
 description: "Implementing velocity, forces, and collision response for 2D rigid bodies"
 tags: ["physics", "game-dev", "math"]
 weight: 2
+showList: true
 ---
 
 ## Physics Step

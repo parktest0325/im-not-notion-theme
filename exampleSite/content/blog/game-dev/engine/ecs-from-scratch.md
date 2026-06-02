@@ -4,6 +4,7 @@ date: 2026-02-15
 description: "Implementing an Entity Component System in Rust for a 2D game engine"
 tags: ["rust", "game-dev", "ecs"]
 weight: 1
+showList: true
 ---
 
 ## Why ECS?

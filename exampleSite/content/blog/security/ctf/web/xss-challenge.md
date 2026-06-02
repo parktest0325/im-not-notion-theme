@@ -4,6 +4,7 @@ date: 2026-02-08
 description: "Bypassing CSP and file upload filters to achieve stored XSS through SVG injection"
 tags: ["ctf", "xss", "web", "csp"]
 weight: 2
+showList: true
 ---
 
 ## Challenge: ArtGallery

@@ -4,6 +4,7 @@ date: 2026-02-10
 description: "Setting up a Rust project for game development — crates, window creation, game loop"
 tags: ["rust", "tutorial", "beginner"]
 weight: 1
+showList: true
 ---
 
 ## Prerequisites

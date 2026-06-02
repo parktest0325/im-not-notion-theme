@@ -4,6 +4,7 @@ date: 2026-01-26
 description: "Understanding the ELF format and loading kernel segments into memory"
 tags: ["os-dev", "elf", "bootloader"]
 weight: 2
+showList: true
 ---
 
 ## ELF Format Overview

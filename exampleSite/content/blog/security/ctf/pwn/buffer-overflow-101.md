@@ -4,6 +4,7 @@ date: 2026-02-06
 description: "Classic stack-based buffer overflow to overwrite the return address and call a win function"
 tags: ["ctf", "pwn", "buffer-overflow"]
 weight: 1
+showList: true
 ---
 
 ## Challenge: EasyPwn

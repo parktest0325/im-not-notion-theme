@@ -4,6 +4,7 @@ date: 2026-02-02
 description: "Setting up 4-level page tables for virtual address translation on x86-64"
 tags: ["os-dev", "kernel", "x86-64", "paging"]
 weight: 2
+showList: true
 ---
 
 ## Virtual Address Translation

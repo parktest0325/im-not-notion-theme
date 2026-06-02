@@ -4,6 +4,7 @@ date: 2026-02-21
 description: "How the system is designed — tech stack, data flow, and key design decisions"
 tags: ["docs", "architecture"]
 weight: 2
+showList: true
 ---
 
 ## Tech Stack

@@ -4,6 +4,7 @@ date: 2026-02-07
 description: "Using Return-Oriented Programming to execute arbitrary code when the stack is non-executable"
 tags: ["ctf", "pwn", "rop"]
 weight: 2
+showList: true
 ---
 
 ## Why ROP?

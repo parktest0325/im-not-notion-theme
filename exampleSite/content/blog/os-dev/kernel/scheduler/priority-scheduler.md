@@ -4,6 +4,7 @@ date: 2026-01-30
 description: "Implementing a Completely Fair Scheduler inspired by Linux CFS using a red-black tree"
 tags: ["os-dev", "kernel", "scheduler", "algorithms"]
 weight: 2
+showList: true
 ---
 
 ## Problem with Round-Robin

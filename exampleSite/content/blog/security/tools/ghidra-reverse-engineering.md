@@ -4,6 +4,7 @@ date: 2026-02-04
 description: "Using NSA's Ghidra to analyze stripped binaries — decompilation, patching, scripting"
 tags: ["reverse-engineering", "ghidra", "binary-analysis"]
 weight: 2
+showList: true
 ---
 
 ## Why Ghidra?

@@ -4,6 +4,7 @@ date: 2026-02-11
 description: "Frame-based animation with state machines for character sprites"
 tags: ["animation", "2d", "tutorial"]
 weight: 2
+showList: true
 ---
 
 ## Animation Data

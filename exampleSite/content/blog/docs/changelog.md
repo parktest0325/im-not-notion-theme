@@ -4,6 +4,7 @@ date: 2026-02-22
 description: "Version history and release notes"
 tags: ["docs", "changelog"]
 weight: 3
+showList: true
 ---
 
 ## v1.0.1 — 2026-02-22

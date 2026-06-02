@@ -4,6 +4,7 @@ date: 2026-02-22
 description: "What's coming next — planned features, improvements, and long-term goals"
 tags: ["docs", "roadmap"]
 weight: 1
+showList: true
 ---
 
 ## Current Status

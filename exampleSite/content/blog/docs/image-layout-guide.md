@@ -4,6 +4,7 @@ description: "이미지 렌더 훅 사용법 — 정렬, 크기 조절, float �
 date: 2026-02-22
 weight: 10
 tags: ["guide", "theme"]
+showList: true
 ---
 
 > **Deploy version: v3** — render-image hook 테스트 (2026-02-22)

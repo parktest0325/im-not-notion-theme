@@ -4,6 +4,7 @@ date: 2026-02-05
 description: "Finding crashes and vulnerabilities automatically using American Fuzzy Lop"
 tags: ["fuzzing", "afl", "security-tools"]
 weight: 1
+showList: true
 ---
 
 ## What is Fuzzing?

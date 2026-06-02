@@ -4,6 +4,7 @@ date: 2026-02-12
 description: "Walkthrough of a CTF challenge exploiting union-based SQL injection to dump the database"
 tags: ["ctf", "sqli", "web"]
 weight: 1
+showList: true
 ---
 
 ## Challenge: SecureNotes v2

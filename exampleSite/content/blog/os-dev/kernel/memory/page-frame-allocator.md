@@ -4,6 +4,7 @@ date: 2026-02-01
 description: "Bitmap-based physical memory allocator for 4KB page frames"
 tags: ["os-dev", "kernel", "memory"]
 weight: 1
+showList: true
 ---
 
 ## Physical Memory Layout

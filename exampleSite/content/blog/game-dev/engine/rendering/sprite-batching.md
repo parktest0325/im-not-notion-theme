@@ -4,6 +4,7 @@ date: 2026-02-18
 description: "Reducing draw calls from thousands to single digits with texture atlas batching"
 tags: ["graphics", "optimization", "2d"]
 weight: 3
+showList: true
 ---
 
 ## The Problem

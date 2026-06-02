@@ -4,6 +4,7 @@ date: 2026-01-28
 description: "Preemptive multitasking with timer interrupts and context switching"
 tags: ["os-dev", "kernel", "scheduler"]
 weight: 1
+showList: true
 ---
 
 ## Task Structure

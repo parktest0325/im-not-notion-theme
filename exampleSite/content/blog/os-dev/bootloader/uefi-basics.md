@@ -4,6 +4,7 @@ date: 2026-01-25
 description: "Loading a kernel ELF from disk using UEFI protocols — GOP, memory map, ExitBootServices"
 tags: ["os-dev", "uefi", "bootloader"]
 weight: 1
+showList: true
 ---
 
 ## UEFI vs Legacy BIOS

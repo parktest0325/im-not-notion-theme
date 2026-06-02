@@ -4,6 +4,7 @@ date: 2026-02-17
 description: "Compiling GLSL to SPIR-V and hot-reloading shaders at runtime"
 tags: ["vulkan", "shaders", "glsl"]
 weight: 2
+showList: true
 ---
 
 ## Why SPIR-V?

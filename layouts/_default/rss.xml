@@ -15,7 +15,8 @@
     {{ $pages := .Pages }}
     {{ if .IsHome }}{{ $pages = .Site.RegularPages }}{{ end }}
     {{ range $pages }}
-      {{ if and .Params.showList (not (and $privateRoot .File (hasPrefix .File.Dir $privateRoot))) }}
+      {{ $hidden := and $privateRoot .File (hasPrefix .File.Dir $privateRoot) }}
+      {{ if and .Params.showList (ne .Section "archive") (not $hidden) }}
       <item>
         <title>{{ .Title }}</title>
         <link>{{ .Permalink }}</link>

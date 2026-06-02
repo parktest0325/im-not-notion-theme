@@ -1,8 +1,15 @@
 {{ printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  {{ $privateRoot := .Site.Params.privateRoot }}
   {{ range .Data.Pages }}
-    {{ $parts := split (trim .RelPermalink "/") "/" }}{{ if and (or .Params.showMenu .Params.showList) .File (eq (len $parts) 2) }}
+    {{ $hidden := and $privateRoot .File (hasPrefix .File.Dir $privateRoot) }}
+    {{/* Public listing rules:
+         - explicit opt-in via showList or showMenu
+         - never include archive section (kept private)
+         - never include privateRoot-rooted hidden posts
+         - never include drafts (defensive — Hugo also excludes them by default) */}}
+    {{ if and (or .Params.showMenu .Params.showList) (ne .Section "archive") (not $hidden) (not .Draft) }}
     <url>
       <loc>{{ .Permalink }}</loc>
       {{ if not .Lastmod.IsZero }}<lastmod>{{ safeHTML ( .Lastmod.Format "2006-01-02T15:04:05-07:00" ) }}</lastmod>{{ end }}

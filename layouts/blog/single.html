@@ -20,18 +20,35 @@
 
       {{ .Content }}
 
-      {{/* Prev/Next navigation */}}
+      {{/* Prev/Next navigation —
+           .PrevInSection / .NextInSection walk every page in the section,
+           including hidden posts under privateRoot. Build a filtered slice
+           (showList + non-private) and locate self by index instead. */}}
+      {{ $privateRoot := .Site.Params.privateRoot }}
+      {{ $candidates := where .CurrentSection.RegularPagesRecursive ".Params.showList" true }}
+      {{ $sorted := slice }}
+      {{ range $candidates }}
+        {{ $hidden := and $privateRoot .File (hasPrefix .File.Dir $privateRoot) }}
+        {{ if not $hidden }}{{ $sorted = $sorted | append . }}{{ end }}
+      {{ end }}
+      {{ $sorted = sort $sorted "Date" "desc" }}
+      {{ $idx := -1 }}
+      {{ range $i, $p := $sorted }}
+        {{ if eq $p.RelPermalink $.RelPermalink }}{{ $idx = $i }}{{ end }}
+      {{ end }}
       <nav class="blog-post-nav">
-        {{ with .PrevInSection }}
-          <a href="{{ .RelPermalink }}" class="post-nav-link post-nav-prev">
+        {{ if and (ge $idx 0) (lt $idx (sub (len $sorted) 1)) }}
+          {{ $prev := index $sorted (add $idx 1) }}
+          <a href="{{ $prev.RelPermalink }}" class="post-nav-link post-nav-prev">
             <span class="post-nav-label">&larr; Previous</span>
-            <span class="post-nav-title">{{ .Title }}</span>
+            <span class="post-nav-title">{{ $prev.Title }}</span>
           </a>
         {{ end }}
-        {{ with .NextInSection }}
-          <a href="{{ .RelPermalink }}" class="post-nav-link post-nav-next">
+        {{ if gt $idx 0 }}
+          {{ $next := index $sorted (sub $idx 1) }}
+          <a href="{{ $next.RelPermalink }}" class="post-nav-link post-nav-next">
             <span class="post-nav-label">Next &rarr;</span>
-            <span class="post-nav-title">{{ .Title }}</span>
+            <span class="post-nav-title">{{ $next.Title }}</span>
           </a>
         {{ end }}
       </nav>

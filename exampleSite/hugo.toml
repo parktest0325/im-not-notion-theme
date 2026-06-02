@@ -12,6 +12,12 @@ paginate = 10                # Posts per page in list views
 enableRobotsTXT = true       # Use theme's robots.txt template
 pluralizeListTitles = false  # Prevent Hugo from pluralizing section titles (e.g. "blog" → "blogs")
 
+# Don't auto-generate /tags/, /categories/, or any other taxonomy pages.
+# Tags are still accessible inside post frontmatter (used by the projects /
+# archive filter UIs); we just don't want Hugo emitting public term pages
+# and per-term RSS feeds that would leak hidden / archive content.
+disableKinds = ["taxonomy", "term"]
+
 # =============================================================================
 # Site Parameters
 # =============================================================================

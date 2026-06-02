@@ -18,6 +18,22 @@ pluralizeListTitles = false  # Prevent Hugo from pluralizing section titles (e.g
 # and per-term RSS feeds that would leak hidden / archive content.
 disableKinds = ["taxonomy", "term"]
 
+# Archive section: direct URL access stays open, but suppress every
+# automated surface (per-section RSS, sitemap, parent-section listings).
+# Two cascades because path = "/archive/**" doesn't include /archive itself.
+[[cascade]]
+  [cascade._target]
+    path = "/archive"
+  outputs = ["HTML"]
+  [cascade.sitemap]
+    disable = true
+[[cascade]]
+  [cascade._target]
+    path = "/archive/**"
+  outputs = ["HTML"]
+  [cascade.sitemap]
+    disable = true
+
 # =============================================================================
 # Site Parameters
 # =============================================================================

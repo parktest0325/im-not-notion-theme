@@ -1,6 +1,10 @@
 User-agent: *
 Disallow: /
+{{/* Archive section is reachable by direct URL but should never be crawled. */}}
+Disallow: /archive/
+{{/* hidden posts under privateRoot are intentionally unlisted; deny the URL prefix too. */}}
+{{ with .Site.Params.privateRoot }}Disallow: /{{ . }}/{{ end }}
 
-{{ range .Site.Pages }}{{ $parts := split (trim .RelPermalink "/") "/" }}{{ if and (or .Params.showList .Params.showMenu) .File (eq (len $parts) 2) }}Allow: {{ .RelPermalink }}
+{{ range .Site.Pages }}{{ $parts := split (trim .RelPermalink "/") "/" }}{{ if and (or .Params.showList .Params.showMenu) .File (ne .Section "archive") (eq (len $parts) 2) }}Allow: {{ .RelPermalink }}
 {{ end }}{{ end }}
 Allow: /$

@@ -23,7 +23,7 @@
       {{ $isActive := or ($current.IsDescendant .) (eq $current.Page.RelPermalink .RelPermalink) }}
       {{ $isExact := eq $current.Page.RelPermalink .RelPermalink }}
       {{ $subSections := where .Pages "Kind" "section" }}
-      {{ $postCount := len .RegularPagesRecursive }}
+      {{ $postCount := len (where .RegularPagesRecursive ".Params.showList" true) }}
       <li class="tree-folder{{ if $isActive }} open{{ end }}">
         <div class="tree-row{{ if $isExact }} active{{ end }} tree-depth-{{ cond (ge $depth 2) "deep" (string $depth) }}">
           {{ if $subSections }}

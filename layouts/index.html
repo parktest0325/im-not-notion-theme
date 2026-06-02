@@ -1,17 +1,14 @@
 {{ define "main" }}
 <div class="home">
-  {{/* Precompute data */}}
+  {{/* Precompute data — $blogPosts is the PUBLIC count (showList: true)
+       so the about-section "Posts" stat doesn't include hidden / draft
+       entries that aren't reachable from public lists. */}}
   {{ $blogPosts := slice }}
-  {{ with .Site.GetPage "/blog" }}{{ $blogPosts = .RegularPagesRecursive }}{{ end }}
+  {{ with .Site.GetPage "/blog" }}{{ $blogPosts = where .RegularPagesRecursive ".Params.showList" true }}{{ end }}
   {{ $projects := where (where .Site.RegularPages "Section" "projects") ".Params.showList" true }}
   {{ $blogSections := 0 }}
   {{ with .Site.GetPage "/blog" }}{{ $blogSections = len .Sections }}{{ end }}
-  {{ $posts := slice }}
-  {{ with .Site.GetPage "/blog" }}
-    {{ $allPosts := .RegularPagesRecursive }}
-    {{ $visiblePosts := where $allPosts ".Params.showList" true }}
-    {{ $posts = sort $visiblePosts "Date" "desc" }}
-  {{ end }}
+  {{ $posts := sort $blogPosts "Date" "desc" }}
 
   <h1 class="visually-hidden">{{ .Site.Params.heroTitle | default .Site.Title }}</h1>
 

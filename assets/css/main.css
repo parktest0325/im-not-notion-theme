@@ -130,55 +130,6 @@ body {
   transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-/* --- Hero & Glitch Effects --- */
-.hero-title {
-  font-size: 3.5rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  position: relative;
-  display: inline-block;
-}
-
-/* Dark: Obsidian Glitch (White & Indigo) */
-[data-theme="dark"] .hero-title::before,
-[data-theme="dark"] .hero-title::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-[data-theme="dark"] .hero-title::before {
-  color: #ffffff;
-  z-index: -1;
-  animation: obsidian-glitch 3s infinite;
-}
-[data-theme="dark"] .hero-title::after {
-  color: var(--accent);
-  z-index: -2;
-  animation: obsidian-glitch 3s infinite reverse;
-}
-
-@keyframes obsidian-glitch {
-  0%, 90%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
-  92% { clip-path: inset(20% 0 40% 0); transform: translate(-3px, 1px); }
-  94% { clip-path: inset(60% 0 10% 0); transform: translate(3px, -1px); }
-  96% { clip-path: inset(10% 0 70% 0); transform: translate(-1px, 0); }
-  98% { clip-path: inset(50% 0 20% 0); transform: translate(1px, 1px); }
-}
-
-/* Light: clean title */
-[data-theme="light"] .hero-title {
-  color: var(--text-primary);
-}
-
-@keyframes crystal-shimmer {
-  0% { filter: drop-shadow(0 0 1px rgba(var(--accent-rgb),0.1)); }
-  100% { filter: drop-shadow(0 0 10px rgba(var(--accent-rgb),0.3)) drop-shadow(0 0 4px rgba(var(--neon-cyan-rgb),0.2)); }
-}
-
 /* --- Hero Buttons --- */
 [data-theme="light"] .hero-btn {
   background: #fff;

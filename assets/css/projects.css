@@ -357,13 +357,6 @@
 }
 
 /* --- Card Links --- */
-.card-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
 .card-link {
   display: inline-flex;
   align-items: center;
@@ -453,18 +446,6 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem;
-}
-
-.section-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  border: none;
-  padding: 0;
-}
-
-.section-label {
-  color: var(--accent-text);
 }
 
 .section-more {
@@ -677,107 +658,6 @@
 }
 
 /* ========================================
-   Stats Card (GoatCounter)
-   ======================================== */
-
-.stats-card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  padding: 2rem;
-}
-
-[data-theme="dark"] .stats-card {
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-}
-
-[data-theme="light"] .stats-card {
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 1.5rem;
-  text-align: center;
-}
-
-.stat-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.stat-value {
-  font-size: 2rem;
-  font-weight: 800;
-  font-family: Consolas, monospace;
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .stat-value {
-  color: var(--accent-text);
-  text-shadow: 0 0 10px rgba(var(--accent-rgb), 0.4);
-}
-
-[data-theme="light"] .stat-value {
-  color: var(--accent-text);
-}
-
-.stat-label {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.stats-footer {
-  text-align: center;
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--border-subtle);
-}
-
-.stats-dashboard-link {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  transition: color 0.2s ease;
-}
-
-.stats-dashboard-link:hover {
-  color: var(--accent);
-}
-
-@media (max-width: 480px) {
-  .stats-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  .stat-value {
-    font-size: 1.5rem;
-  }
-}
-
-/* ========================================
-   Guestbook Card (Giscus on home)
-   ======================================== */
-
-.guestbook-card {
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 4px;
-  padding: 1.5rem;
-}
-
-[data-theme="dark"] .guestbook-card {
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-}
-
-[data-theme="light"] .guestbook-card {
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-}
-
-/* ========================================
    Guestbook Page
    ======================================== */
 
@@ -817,18 +697,6 @@
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 
-.guestbook-notice {
-  color: var(--text-muted);
-  text-align: center;
-  padding: 3rem 1rem;
-}
-
-.guestbook-notice code {
-  background: var(--code-bg);
-  padding: 0.15em 0.35em;
-  border-radius: 2px;
-  font-size: 0.875em;
-}
 
 /* ========================================
    Blog Comments (Giscus on posts)
@@ -954,21 +822,6 @@
   color: var(--text-secondary);
   margin: 0 0 0.75rem;
   line-height: 1.6;
-}
-
-.about-detail {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  line-height: 1.7;
-  margin-bottom: 1rem;
-}
-
-.about-detail p {
-  margin-bottom: 0.5rem;
-}
-
-.about-detail strong {
-  color: var(--text-primary);
 }
 
 /* --- Career Timeline --- */
@@ -1415,9 +1268,6 @@
 }
 [data-theme="light"] .dragon-art {
   color: #2dd4bf;
-}
-[data-theme="light"] .dragon-eye {
-  box-shadow: 0 0 6px rgba(255,255,255,0.2);
 }
 [data-theme="light"] .dragon-eye::before {
   background: #0d0e12;

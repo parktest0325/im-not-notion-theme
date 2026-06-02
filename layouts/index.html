@@ -521,8 +521,14 @@
             .then(function(r) { return r.json(); })
             .then(function(comments) {
               var container = document.getElementById('recent-comments');
+              function mk(tag, cls, text) {
+                var e = document.createElement(tag);
+                if (cls) e.className = cls;
+                if (text != null) e.textContent = text;
+                return e;
+              }
               if (!comments || !comments.length) {
-                container.innerHTML = '<p class="no-comments">No comments yet.</p>';
+                container.replaceChildren(mk('p', 'no-comments', 'No comments yet.'));
                 return;
               }
               comments.forEach(function(c) {
@@ -533,20 +539,25 @@
                 var pageUrl = c.locator.url || '#';
                 var pageTitle = decodeURIComponent(pageUrl.replace(/\/$/, '').split('/').pop() || 'page').replace(/-/g, ' ');
                 var avatar = c.user.picture || (host + '/api/v1/avatar/' + encodeURIComponent(c.user.id) + '.image');
-                var el = document.createElement('a');
+
+                var el = mk('a', 'recent-comment-card');
                 el.href = pageUrl + '#remark42__comment-' + c.id;
-                el.className = 'recent-comment-card';
-                el.innerHTML =
-                  '<img class="comment-card-avatar" src="' + avatar + '" alt="" />' +
-                  '<div class="comment-card-body">' +
-                    '<div class="comment-card-meta">' +
-                      '<span class="comment-card-author">' + (c.user.name || 'Anonymous') + '</span>' +
-                      '<span class="comment-card-sep">on</span>' +
-                      '<span class="comment-card-source">' + pageTitle + '</span>' +
-                    '</div>' +
-                    '<p class="comment-card-text">' + text + '</p>' +
-                    '<time class="comment-card-date">' + dateStr + '</time>' +
-                  '</div>';
+
+                var img = document.createElement('img');
+                img.className = 'comment-card-avatar';
+                img.src = avatar;        // .src assignment parses URL, no attribute injection
+                img.alt = '';
+                el.appendChild(img);
+
+                var body = mk('div', 'comment-card-body');
+                var meta = mk('div', 'comment-card-meta');
+                meta.appendChild(mk('span', 'comment-card-author', c.user.name || 'Anonymous'));
+                meta.appendChild(mk('span', 'comment-card-sep', 'on'));
+                meta.appendChild(mk('span', 'comment-card-source', pageTitle));
+                body.appendChild(meta);
+                body.appendChild(mk('p', 'comment-card-text', text));
+                body.appendChild(mk('time', 'comment-card-date', dateStr));
+                el.appendChild(body);
                 container.appendChild(el);
               });
             })
